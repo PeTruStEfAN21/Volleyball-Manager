@@ -1095,7 +1095,7 @@ int main() {
     baza.adaugaEchipe(manager.get_echipa());
     echipe.push_back( manager.get_echipa());
 
-    for (auto const &e : echipe)
+    for (const Echipe* e : echipe)
         cout << *e;
 
     Liga liga(&baza,echipe);
