@@ -12,18 +12,19 @@
 using namespace std;
 
 class BazaDeDate;
+class Echipe;
 
 class jucator {
 protected:
-    string nume,pozitie;
-    int ovr, spike_power, receive, spike_accuracy, serve_power, serve_accuracy, vertical_jump, mobility, speed,pret, height;
+    string nume, pozitie;
+    int ovr, spike_power, receive, spike_accuracy, serve_power, serve_accuracy, vertical_jump, mobility, speed, pret, height;
     bool ales;
 
     virtual void overall() {
-        ovr = (spike_power + receive+spike_accuracy+serve_power+serve_accuracy+vertical_jump+mobility+speed + height) / 9;
+        ovr = (spike_power + receive + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility + speed + height) / 9;
     }
 
-    int set_val(int valoarea) {
+    int set_val(int valoarea) const {
         if (valoarea < 0) valoarea = 0;
         if (valoarea > 99) valoarea = 99;
         return valoarea;
@@ -31,91 +32,53 @@ protected:
 
     virtual void set_pret() {
         pret = ovr * 50;
-    }//imi va trebui mai tarziu functia
-
-
-
+    }
 
 public:
+    jucator(const string &nume, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
+            int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
+            bool ales)
+        : nume(nume), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
+          spike_accuracy(spike_accuracy), serve_power(serve_power), serve_accuracy(serve_accuracy),
+          vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
+          ales(ales) {}
 
+    jucator()
+        : ovr(0), spike_power(0), receive(0), spike_accuracy(0), serve_power(0), serve_accuracy(0),
+          vertical_jump(0), mobility(0), speed(0), pret(0), height(0), ales(false),
+          nume("Necunoscut"), pozitie("necunoscut") {}
 
-
-    void set_poz(string poz) {
+    void set_poz(const string &poz) { // Pass by const reference
         this->pozitie = poz;
     }
 
-  virtual void valori(vector<int> a) {
-        spike_power = a[0];
-        receive = a[1];
-        spike_accuracy = a[2];
-        serve_power = a[3];
-        serve_accuracy = a[4];
-        vertical_jump = a[5];
-        mobility = a[6];
-        height = a[7];
-        speed = a[8];
-
-        spike_power = set_val(spike_power);
-        receive = set_val(receive);
-        spike_accuracy = set_val(spike_accuracy);
-        serve_power = set_val(serve_power);
-        serve_accuracy = set_val(serve_accuracy);
-        vertical_jump = set_val(vertical_jump);
-        mobility = set_val(mobility);
-        height = set_val(height);
-        speed = set_val(speed);
-
-
+    virtual void valori(vector<int> a) {
+        spike_power = set_val(a[0]);
+        receive = set_val(a[1]);
+        spike_accuracy = set_val(a[2]);
+        serve_power = set_val(a[3]);
+        serve_accuracy = set_val(a[4]);
+        vertical_jump = set_val(a[5]);
+        mobility = set_val(a[6]);
+        height = set_val(a[7]);
+        speed = set_val(a[8]);
     }
 
-    int get_pret() const{
-        return pret;
-    }
-
+    int get_pret() const { return pret; }
     bool esteAles() const { return ales; }
     void setAles(bool val) { ales = val; }
-
-    jucator(const string &nume, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
-        int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
-        bool ales)
-        : nume(nume),
-          pozitie(pozitie),
-          ovr(ovr),
-          spike_power(spike_power),
-          receive(receive),
-          spike_accuracy(spike_accuracy),
-          serve_power(serve_power),
-          serve_accuracy(serve_accuracy),
-          vertical_jump(vertical_jump),
-          mobility(mobility),
-          speed(speed),
-          pret(pret),
-          height(height),
-          ales(ales) {
-    }
-
-    jucator() {
-        nume = "Necunoscut";
-        ovr = spike_power = receive = spike_accuracy = serve_power = serve_accuracy = vertical_jump = mobility = speed = 0;
-        pret = 0;
-        pozitie = "necunoscut";
-        ales = false;
-    }
-
-    int get_ovr() const{
-        return ovr;
-    }
+    int get_ovr() const { return ovr; }
 
     virtual void afiseaza() const {
         cout << nume << " (" << pozitie << ") - OVR: " << ovr << ", Pret: " << pret << endl;
     }
 
-    friend ostream& operator<<(ostream& out, const jucator& j) {
-        out << "Nume: " << j.nume <<", Pozitie: "<<j.pozitie<< ", OVR: " << j.ovr;
+    friend ostream &operator<<(ostream &out, const jucator &j) {
+        out << "Nume: " << j.nume << ", Pozitie: " << j.pozitie << ", OVR: " << j.ovr;
         return out;
     }
 
-    jucator& operator=(const jucator& j) {
+    jucator &operator=(const jucator &j) {
         if (this != &j) {
             nume = j.nume;
             ovr = j.ovr;
@@ -161,34 +124,36 @@ public:
         set_pret();
     }
 
-    string get_poz() {
+    /*string get_poz() {
         return pozitie;
-    }
+    }*/
+    //foarte util pentru depanare
 
-    void set_nume(string nume) {
+    void set_nume(const string &nume) {
       this->nume = nume;
   }
 
 
-    void get_nume() {
+    /*void get_nume() {
         cout<<nume<<endl;
-    }
+    }*/
+    //util pentru depanare
 
 };
+
 
 class OutsideHitter : public jucator {
     int explosiveness;
 
 
     public:
-    OutsideHitter(int explosiveness)
+    explicit OutsideHitter(int explosiveness)
         : explosiveness(explosiveness) {
     }
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        explosiveness = a[9];
-        set_val(explosiveness);
+        explosiveness = set_val(a[9]);
         overall();
     }
 
@@ -197,9 +162,6 @@ class OutsideHitter : public jucator {
         explosiveness = 0;
     }
 
-    void setExplosiveness(int e) {
-        explosiveness = set_val(e);
-    }
 
     void overall() override{
         ovr = ((spike_power * 2 + receive * 2 + spike_accuracy * 2 + serve_power + serve_accuracy + vertical_jump * 2 +
@@ -211,11 +173,11 @@ class OutsideHitter : public jucator {
     }
 
     void citeste(std::ifstream &in) override {
-        jucator::citeste(in); // acum aceasta nu mai citeste pozitia de 2 ori
+        jucator::citeste(in);
         in >> explosiveness;
         explosiveness = set_val(explosiveness);
-        overall(); // Recalculează overall-ul cu noul atribut
-        set_pret(); // Recalculează prețul
+        overall();
+        set_pret();
     }
 
 
@@ -228,9 +190,6 @@ class Setter : public jucator {
         : set_precision(set_precision),
           set_iq(set_iq) {
     }
-    void set_ovr() {
-        overall();
-    }
 
     Setter() {
         set_precision = set_iq = 0;
@@ -239,10 +198,8 @@ class Setter : public jucator {
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        set_precision = a[9];
-        set_iq = a[10];
-        set_val(set_iq);
-        set_val(set_precision);
+        set_precision = set_val(a[9]);
+        set_iq = set_val(a[10]);
         overall();
     }
 
@@ -256,20 +213,20 @@ class Setter : public jucator {
     }
 
     void citeste(std::ifstream &in) override {
-        jucator::citeste(in); // acum aceasta nu mai citeste pozitia de 2 ori
+        jucator::citeste(in);
         in >> set_iq;
         in>> set_precision;
         set_precision = set_val(set_precision);
         set_iq  = set_val(set_iq);
-        overall(); // Recalculează overall-ul cu noul atribut
-        set_pret(); // Recalculează prețul
+        overall();
+        set_pret();
     }
 };
 
 class Libero : public jucator {
     int reflexes;
     public:
-    Libero(int reflexes)
+    explicit Libero(int reflexes)
         : reflexes(reflexes) {
     }
 
@@ -278,9 +235,6 @@ class Libero : public jucator {
         pozitie = "Libero";
     }
 
-    void set_ovr() {
-        overall();
-    }
 
     void overall() override {
         ovr = (spike_power + receive * 3 + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
@@ -293,16 +247,15 @@ class Libero : public jucator {
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        reflexes = a[9];
-        set_val(reflexes);
+        reflexes = set_val(a[9]);
         overall();
     }
     void citeste(std::ifstream &in) override {
-        jucator::citeste(in); // acum aceasta nu mai citeste pozitia de 2 ori
+        jucator::citeste(in);
         in >> reflexes;
         reflexes = set_val(reflexes);
-        overall(); // Recalculează overall-ul cu noul atribut
-        set_pret(); // Recalculează prețul
+        overall();
+        set_pret();
     }
 };
 
@@ -310,7 +263,7 @@ class MiddleBlocker : public jucator {
     int blocking;
 
     public:
-    MiddleBlocker(int blocking)
+    explicit MiddleBlocker(int blocking)
         : blocking(blocking) {
     }
 
@@ -324,26 +277,21 @@ class MiddleBlocker : public jucator {
                speed * 2 + blocking * 3 + height * 4) / 17;
     }
 
-    void set_ovr() {
-        overall();
-    }
-
     void set_pret() override {
         pret = 7000 + ovr * 50 + blocking * 20 + height * 30 + speed * 10 + mobility * 10;
     }
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        blocking = a[9];
-        set_val(blocking);
+        blocking = set_val(a[9]);
         overall();
     }
     void citeste(std::ifstream &in) override {
-        jucator::citeste(in); // acum aceasta nu mai citeste pozitia de 2 ori
+        jucator::citeste(in);
         in >> blocking;
         blocking = set_val(blocking);
-        overall(); // Recalculează overall-ul cu noul atribut
-        set_pret(); // Recalculează prețul
+        overall();
+        set_pret();
     }
 
 };
@@ -352,7 +300,7 @@ class OppositeHitter : public jucator {
     int explosiveness;
 
     public:
-    OppositeHitter(int explosiveness)
+    explicit OppositeHitter(int explosiveness)
         : explosiveness(explosiveness) {
     }
 
@@ -370,25 +318,22 @@ class OppositeHitter : public jucator {
         pret = 10000 + ovr * 50 + spike_accuracy * 10 + spike_power * 10 + vertical_jump * 10 + explosiveness * 20 + receive * 10 + height * 10;;
     }
 
-    void set_ovr() {
-        overall();
-    }
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        explosiveness = a[9];
-        set_val(explosiveness);
+        explosiveness = set_val(a[9]);
         overall();
     }
     void citeste(std::ifstream &in) override {
-        jucator::citeste(in); // acum aceasta nu mai citeste pozitia de 2 ori
+        jucator::citeste(in);
         in >> explosiveness;
         explosiveness = set_val(explosiveness);
-        overall(); // Recalculează overall-ul cu noul atribut
-        set_pret(); // Recalculează prețul
+        overall();
+        set_pret();
     }
 
 };
+
 
 class Echipe {
 private:
@@ -397,10 +342,11 @@ private:
     float ovr;
     int punctaj, seturi;
 
-    void citireNume() {
+    /*void citireNume() {
         cout << "Dati numele echipei: ";
         cin >> nume;
-    }
+    }*/
+    //posibil util mai tarziu
 
 
 
@@ -445,7 +391,7 @@ public:
         return *this;
     }
 
-    Echipe(const string& nume) {
+    explicit Echipe(const string& nume) {
         ovr = 0;
         this->nume = nume;
         punctaj = 0;
@@ -577,6 +523,7 @@ public:
 
 };
 
+
 class Meci {
 protected:
     Echipe* echipa1;
@@ -653,12 +600,11 @@ protected:
 
 
 public:
-    Meci(Echipe* echipa1, Echipe* echipa2) {
-        this->echipa1 = echipa1;
-        this->echipa2 = echipa2;
+    Meci(Echipe* echipa1, Echipe* echipa2) : echipa1(echipa1), echipa2(echipa2) {
     }
 
-    Meci() = default;
+    Meci() : echipa1(nullptr), echipa2(nullptr) {
+    }
 
 
     Echipe* meci() {
@@ -687,25 +633,22 @@ public:
     }
 };
 
+
 class BazaDeDate {
 private:
     vector<jucator*> jucatori;
     vector<Echipe*> echipe_disponibile;
 
 public:
-    BazaDeDate(const vector<jucator *> &jucatori)
+    explicit BazaDeDate(const vector<jucator *> &jucatori) // Adăugat explicit
         : jucatori(jucatori) {
     }
 
     BazaDeDate() = default;
 
     ~BazaDeDate() {
-        // Eliberăm memoria alocată
         for (auto j : jucatori)
             delete j;
-
-        for (auto e : echipe_disponibile)
-            delete e;
     }
 
     void adaugaJucator(jucator* j) {
@@ -724,17 +667,18 @@ public:
         }
     }
 
-    void afiseazaEchipe() const {
+    /*void afiseazaEchipe() const {
         cout << "\n=== Lista echipelor inregistrate ===\n";
         for (size_t i = 0; i < echipe_disponibile.size(); i++) {
             cout << i + 1 << ". ";
             cout<< *echipe_disponibile[i];
         }
-    }
+    }*/
+    //functie utila pentru depanare si pentru a vedea ce echipe au fost adaugate in baza intr un anumit punct
 
-    size_t getNrJucatori() const { return jucatori.size(); }
-
-    jucator* getJucator(size_t index) const { return jucatori[index]; }
+    /*size_t getNrJucatori() const { return jucatori.size(); }
+    jucator* getJucator(size_t index) const { return jucatori[index]; } */
+    //functii utile pentru depanare
 
     Echipe* getEchipe(size_t index) const { return echipe_disponibile[index]; }
 
@@ -744,6 +688,7 @@ public:
 
     Echipe* alege_echipa_random() {
         if (echipe_disponibile.empty()) return nullptr;
+
         int idx = rand() % echipe_disponibile.size();
         return echipe_disponibile[idx];
     }
@@ -770,8 +715,6 @@ private:
     vector<vector<bool>> ales;
 
 
-
-
 public:
 
     void meci(Echipe* echipa) {
@@ -779,7 +722,7 @@ public:
         int n = lista.size();
 
         int index = -1;
-
+        int index_echipa_manager = n - 1; // Echipa managerului e ultima (index 11)
 
         while (true) {
             Echipe* adversar = baza->alege_echipa_random();
@@ -791,26 +734,26 @@ public:
             }
 
 
-            if (index == -1 || index == 11)
+            if (index == -1 || index == index_echipa_manager)
                 continue;
 
 
-            if (ales[0][index] == true)
+            if (ales[index_echipa_manager][index] == true)
                 continue;
 
 
             break;
         }
 
-        ales[11][index] = true;
-        ales[index][11] = true;
+        ales[index_echipa_manager][index] = true;
+        ales[index][index_echipa_manager] = true;
 
         Meci meci(echipa, lista[index]);
         Echipe* castigatoare = meci.meci();
 
         if (castigatoare == echipa) {
             cout << "Felicitari, echipa ta a castigat meciul, obtinand 3 puncte in clasament.\n";
-            punctaje[11] += 3;
+            punctaje[index_echipa_manager] += 3;
         } else {
             cout << "Din pacate ati pierdut meciul, nu ati obtinut niciun punct in clasament...\n";
             punctaje[index] += 3;
@@ -829,35 +772,36 @@ public:
     }
 
 
-    void adaugareEchipa(Echipe* echipa) {
-        baza->adaugaEchipe(echipa);
-        punctaje.push_back(0);
-    }
-
     void afisare_punctaje() {
         for (size_t i = 0; i < punctaje.size(); i++)
             cout << baza->getEchipe(i)->getNume() << ": " << punctaje[i] << "\n";
     }
 
-    void afisare_punctaj() {
-        cout<<baza->getEchipe(0)->getNume()<<punctaje[0]<<"\n";
-    }
+   /* void afisare_punctaj() {
+        cout << baza->getEchipe(baza->getListe().size() - 1)->getNume() << ": " << punctaje[baza->getListe().size() - 1] << "\n";
+    }*/
+    //functie pentru verificare punctaj
 
     void meciuri() {
         auto lista = baza->getListe();
         int n = lista.size();
         int index = -1;
+        int index_echipa_manager = n - 1;
 
         if (punctaje.size() != n)
             punctaje.resize(n, 0);
 
         for (int i = 0; i < n; i++) {
+            if (i == index_echipa_manager) continue;
+
             Echipe* adversar = baza->alege_echipa_random();
             for (size_t j = 0; j < size(baza->getListe()); j++) {
                 if (baza->getListe()[j] == adversar) {
                     index = j;
                 }
             }
+            if (index == index_echipa_manager || index == i) continue;
+
             if (!ales[i][index]) {
                 ales[i][index] = true;
                 ales[index][i] = true;
@@ -882,7 +826,9 @@ public:
     }
 };
 
+
 class manageri {
+private:
     int buget;
     Echipe* echipa;
     string nume;
@@ -896,22 +842,20 @@ public:
     }
 
     manageri(int buget, Echipe *echipa, const string &nume)
-        : buget(buget),
-          echipa(echipa),
-          nume(nume) {
+        : buget(buget), echipa(echipa), nume(nume), baza(nullptr), lista({}) {
     }
 
-    void alegere_jucator(int buget) {
+    /*void alegere_jucator(int buget) {
         buget = this->buget;
         echipa->adaugare_jucator(lista,buget);
-    }
+    }*/
+    //functie utila pentru tranferuri in viitor
 
     void set_overall() {
         echipa->Echipe::set_overall();
     }
 
-    manageri() {
-        echipa = new Echipe();
+    manageri() : buget(0), echipa(new Echipe()), nume("Necunoscut"), lista({}), baza(nullptr) {
     }
 
     /*void cariera() {
@@ -948,8 +892,8 @@ public:
             }
         }
 
-    }
-    */
+    }*/
+    //functie pentru a simula cariera utila pentru viitor
 
     friend ostream & operator<<(ostream &os, const manageri &obj) {
         return os
@@ -977,8 +921,19 @@ public:
         this->baza = baza;
     }
 
-
+    manageri(const manageri& other) : buget(other.buget), echipa(new Echipe(*other.echipa)), nume(other.nume), lista(other.lista), baza(other.baza) {}
+    manageri& operator=(const manageri& other) {
+        if (this != &other) {
+            delete echipa;
+            buget = other.buget; nume = other.nume; lista = other.lista; baza = other.baza;
+            echipa = new Echipe(*other.echipa);
+        }
+        return *this;
+    }
+    ~manageri() { delete echipa; }
 };
+
+
 
 
 int main() {
@@ -1015,80 +970,40 @@ int main() {
             if (!(fin >> pozitie)) break;
             vector<int> a;
             fin>>nume;
+
             if (pozitie == "Libero") {
                 j = new Libero();
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
                 j->valori(a);
             }
             else if (pozitie == "Setter") {
                 j = new Setter();
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
-                a.push_back(a11);
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
                 j->valori(a);
             }
             else if (pozitie == "OutsideHitter") {
                 j = new OutsideHitter();
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
                 j->valori(a);
             }
             else if (pozitie == "OppositeHitter") {
                 j = new OppositeHitter();
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
                 j->valori(a);
             }
             else if (pozitie == "MiddleBlocker") {
                 j = new MiddleBlocker();
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a[8]); a.push_back(a[9]); a.push_back(a[10]);
                 j->valori(a);
             }
             else continue;
@@ -1108,105 +1023,65 @@ int main() {
     fin.close();
 
 
-        ifstream finn("tastatura.txt");
-        if (!finn) {
-            cerr << "Nu s-a putut deschide fisierul text.txt\n";
-            return 1;
-        }
+    ifstream finn("tastatura.txt");
+    if (!finn) {
+        cerr << "Nu s-a putut deschide fisierul tastatura.txt\n";
+        return 1;
+    }
 
-    while(1) {
+    while(true) {
         string pozitie, nume;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
         jucator* j = nullptr;
-            if (!(finn >> pozitie)) break;
-            vector<int> a;
-            fin>>nume;
-            if (pozitie == "Libero") {
-                j = new Libero();
-                finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
-                j->valori(a);
-            }
-            else if (pozitie == "Setter") {
-                j = new Setter();
-                finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
-                a.push_back(a11);
-                j->valori(a);
-            }
-            else if (pozitie == "OutsideHitter") {
-                j = new OutsideHitter();
-                finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
-                j->valori(a);
-            }
-            else if (pozitie == "OppositeHitter") {
-                j = new OppositeHitter();
-                finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
-                j->valori(a);
-            }
-            else if (pozitie == "MiddleBlocker") {
-                j = new MiddleBlocker();
-                finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1);
-                a.push_back(a2);
-                a.push_back(a3);
-                a.push_back(a4);
-                a.push_back(a5);
-                a.push_back(a6);
-                a.push_back(a7);
-                a.push_back(a8);
-                a.push_back(a9);
-                a.push_back(a10);
-                j->valori(a);
-            }
-            else continue;
-            j->set_nume(nume);
-            j->set_poz(pozitie);
+        if (!(finn >> pozitie)) break;
+        vector<int> a;
+        finn>>nume;
 
-           baza_jucatori.adaugaJucator(j);
-
-
+        if (pozitie == "Libero") {
+            j = new Libero();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
         }
+        else if (pozitie == "Setter") {
+            j = new Setter();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
+            j->valori(a);
+        }
+        else if (pozitie == "OutsideHitter") {
+            j = new OutsideHitter();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else if (pozitie == "OppositeHitter") {
+            j = new OppositeHitter();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else if (pozitie == "MiddleBlocker") {
+            j = new MiddleBlocker();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else continue;
+        j->set_nume(nume);
+        j->set_poz(pozitie);
+
+       baza_jucatori.adaugaJucator(j);
+
+
+    }
     finn.close();
-    numeEchipe.emplace(numeEchipe.begin(), manager.get_nume());
+    numeEchipe.push_back( manager.get_nume());
 
     cout << "S-au citit toate echipele cu jucatorii.\n";
 
@@ -1222,27 +1097,24 @@ int main() {
     Liga liga(&baza,echipe);
 
     for (int i = 0; i < 12; i++) {
-
         string s;
 
-        liga.meci(echipe[11]);
+        int index_echipa_manager = echipe.size() - 1;
 
+        liga.meci(echipe[index_echipa_manager]);
 
+            liga.meciuri();
 
-        liga.meciuri();
+            liga.afisare_punctaje();
 
-        liga.afisare_punctaje();
+            cout<<"Doriti sa se contiune liga?(da/nu)";
+            cin>> s;
 
-        liga.afisare_punctaj();
-
-        cout<<"Doriti sa se contiune liga?(da/nu)";
-        cin>> s;
-
-        if (s == "da")
-            continue;
-        else
-            break;
-    }
+            if (s == "da")
+                continue;
+            else
+                break;
+        }
 
     for (auto &e : echipe)
         delete e;
