@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-INPUT_FILE=${INPUT_FILE:-tastatura.txt}
+INPUT_FILE=${INPUT_FILE:-input_test.txt}
 RUN_INTERACTIVE=${RUN_INTERACTIVE:-false}
 BUILD_DIR=${BUILD_DIR:-build}
 EXECUTABLE_NAME=${EXECUTABLE_NAME:-oop}
