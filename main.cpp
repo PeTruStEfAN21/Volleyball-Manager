@@ -43,6 +43,8 @@ public:
           vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
           ales(ales) {}
 
+    virtual ~jucator() = default;
+
     jucator()
         : ovr(0), spike_power(0), receive(0), spike_accuracy(0), serve_power(0), serve_accuracy(0),
           vertical_jump(0), mobility(0), speed(0), pret(0), height(0), ales(false),
@@ -152,6 +154,8 @@ class OutsideHitter : public jucator {
         : explosiveness(explosiveness) {
     }
 
+    ~OutsideHitter() override = default;
+
     void valori(vector <int> a) override {
         jucator::valori(a);
         explosiveness = set_val(a[9]);
@@ -197,6 +201,8 @@ class Setter : public jucator {
         pozitie = "Setter";
     }
 
+    ~Setter() override = default;
+
     void valori(vector <int> a) override {
         jucator::valori(a);
         set_precision = set_val(a[9]);
@@ -236,6 +242,9 @@ class Libero : public jucator {
         pozitie = "Libero";
     }
 
+    // ADAUGAT: Destructor explicit
+    ~Libero() override = default;
+
 
     void overall() override {
         ovr = (spike_power + receive * 3 + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
@@ -273,6 +282,8 @@ class MiddleBlocker : public jucator {
         pozitie = "MiddleBlocker";
     }
 
+    ~MiddleBlocker() override = default;
+
     void overall() override {
         ovr = (spike_power + receive + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
                speed * 2 + blocking * 3 + height * 4) / 17;
@@ -309,6 +320,9 @@ class OppositeHitter : public jucator {
         explosiveness = 0;
         pozitie = "OppositeHitter";
     }
+
+    // ADAUGAT: Destructor explicit
+    ~OppositeHitter() override = default;
 
     void overall() override {
         ovr = ((spike_power * 2 + receive * 2 + spike_accuracy * 2 + serve_power + serve_accuracy + vertical_jump * 2 +
@@ -348,10 +362,6 @@ private:
         cin >> nume;
     }*/
     //posibil util mai tarziu
-
-
-
-
 
 public:
 
@@ -643,7 +653,7 @@ private:
     vector<Echipe*> echipe_disponibile;
 
 public:
-    explicit BazaDeDate(const vector<jucator *> &jucatori) // Adăugat explicit
+    explicit BazaDeDate(const vector<jucator *> &jucatori)
         : jucatori(jucatori) {
     }
 
@@ -725,7 +735,7 @@ public:
         int n = lista.size();
 
         int index = -1;
-        int index_echipa_manager = n - 1; // Echipa managerului e ultima (index 11)
+        int index_echipa_manager = n - 1;
 
         while (true) {
            const Echipe* adversar = baza->alege_echipa_random();
@@ -924,16 +934,21 @@ public:
         this->baza = baza;
     }
 
-    manageri(const manageri& other) : buget(other.buget), echipa(new Echipe(*other.echipa)), nume(other.nume), lista(other.lista), baza(other.baza) {}
+    manageri(const manageri& other)
+        : buget(other.buget), echipa(new Echipe(*other.echipa)), nume(other.nume), lista(other.lista), baza(other.baza) {}
+
     manageri& operator=(const manageri& other) {
         if (this != &other) {
+            // CORECTAT: Daca operator= este chemat, trebuie sa distrugem obiectul vechi si sa copiem noul
+            // (pentru a preveni memory leak intern in manageri)
             delete echipa;
             buget = other.buget; nume = other.nume; lista = other.lista; baza = other.baza;
             echipa = new Echipe(*other.echipa);
         }
         return *this;
     }
-    ~manageri() { delete echipa; }
+
+    ~manageri() { }
 };
 
 
@@ -1016,6 +1031,8 @@ int main() {
             cout<<*j<<endl;
 
             jucatoriEchipa.push_back(j);
+            // CORECTAT: Adaugăm jucătorii în BazaDeDate care îi va șterge la final, prevenind Memory Leak
+            baza.adaugaJucator(j);
             i++;
         }
         echipa->adaugare_jucatori(jucatoriEchipa);
@@ -1032,6 +1049,7 @@ int main() {
         return 1;
     }
 
+    // In bucla de mai jos, jucătorii sunt adăugați în baza_jucatori, care îi va șterge la final. (Corect)
     while(true) {
         string pozitie, nume;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
@@ -1093,6 +1111,7 @@ int main() {
     manager.alegere_echipa();
     manager.set_overall();
     baza.adaugaEchipe(manager.get_echipa());
+
     echipe.push_back( manager.get_echipa());
 
     for (const Echipe* e : echipe)
