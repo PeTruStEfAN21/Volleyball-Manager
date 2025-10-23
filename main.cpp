@@ -64,7 +64,8 @@ public:
         speed = set_val(a[8]);
     }
 
-    int get_pret() const { return pret; }
+    /*int get_pret() const { return pret; }*/
+    //functie pentru transferuri...
     bool esteAles() const { return ales; }
     void setAles(bool val) { ales = val; }
     int get_ovr() const { return ovr; }
@@ -1094,7 +1095,7 @@ int main() {
     baza.adaugaEchipe(manager.get_echipa());
     echipe.push_back( manager.get_echipa());
 
-    for (const auto &e : echipe)
+    for (auto const &e : echipe)
         cout << *e;
 
     Liga liga(&baza,echipe);
