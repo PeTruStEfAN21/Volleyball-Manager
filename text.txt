@@ -1,0 +1,78 @@
+Setter Tudor 78 67 62 73 63 78 67 184 81 87 70
+Libero Ionescu 60 90 80 60 70 50 80 180 75 80
+OutsideHitter Marin 85 70 65 75 60 80 70 195 90 85
+OppositeHitter Georgescu 80 75 70 80 65 85 75 200 95 90
+MiddleBlocker Dumitrescu 78 65 60 70 55 75 70 198 90 88
+OutsideHitter Radu 82 72 68 78 63 83 71 192 88 85
+
+Setter Filip 79 68 63 74 64 79 68 185 82 88 72
+Libero Sandu 62 88 82 62 68 52 78 182 76 81
+OutsideHitter Vlad 84 71 66 76 62 82 71 193 87 86
+OppositeHitter Ene 81 76 71 81 66 86 76 199 94 91
+MiddleBlocker Petcu 77 66 61 71 56 76 71 197 91 89
+OutsideHitter Dima 83 73 69 77 64 84 72 191 89 86
+
+Setter Ionescu 78 67 62 73 63 78 67 184 81 87 71
+Libero Andrei 61 87 81 61 67 51 77 181 75 80
+OutsideHitter Mihai 83 70 65 75 61 81 70 192 86 84
+OppositeHitter Marian 80 75 70 80 65 85 75 198 93 89
+MiddleBlocker Radu 76 65 60 70 55 75 70 196 90 87
+OutsideHitter Nicu 82 72 68 76 63 83 71 190 88 85
+
+Setter Paul 79 68 63 74 64 79 68 185 82 88 70
+Libero Sorin 62 88 82 62 68 52 78 182 76 81
+OutsideHitter Florin 84 71 66 76 62 82 71 193 87 86
+OppositeHitter Alin 81 76 71 81 66 86 76 199 94 91
+MiddleBlocker Costin 77 66 61 71 56 76 71 197 91 89
+OutsideHitter Bogdan 83 73 69 77 64 84 72 191 89 86
+
+Setter Raul 78 67 62 73 63 78 67 184 81 87 69
+Libero Vlad 61 87 81 61 67 51 77 181 75 80
+OutsideHitter Dan 83 70 65 75 61 81 70 192 86 84
+OppositeHitter Alex 80 75 70 80 65 85 75 198 93 89
+MiddleBlocker George 76 65 60 70 55 75 70 196 90 87
+OutsideHitter Mihnea 82 72 68 76 63 83 71 190 88 85
+
+Setter Stefan 79 68 63 74 64 79 68 185 82 88 71
+Libero Luca 62 88 82 62 68 52 78 182 76 81
+OutsideHitter Andrei 84 71 66 76 62 82 71 193 87 86
+OppositeHitter Mihai 81 76 71 81 66 86 76 199 94 91
+MiddleBlocker Radu 77 66 61 71 56 76 71 197 91 89
+OutsideHitter Paul 83 73 69 77 64 84 72 191 89 86
+
+Setter Vlad 78 67 62 73 63 78 67 184 81 87 70
+Libero Mihnea 61 87 81 61 67 51 77 181 75 80
+OutsideHitter George 83 70 65 75 61 81 70 192 86 84
+OppositeHitter Alin 80 75 70 80 65 85 75 198 93 89
+MiddleBlocker Sorin 76 65 60 70 55 75 70 196 90 87
+OutsideHitter Florin 82 72 68 76 63 83 71 190 88 85
+
+Setter Nicolae 79 68 63 74 64 79 68 185 82 88 71
+Libero Robert 62 88 82 62 68 52 78 182 76 81
+OutsideHitter Adrian 84 71 66 76 62 82 71 193 87 86
+OppositeHitter Valentin 81 76 71 81 66 86 76 199 94 91
+MiddleBlocker Darius 77 66 61 71 56 76 71 197 91 89
+OutsideHitter Stefan 83 73 69 77 64 84 72 191 89 86
+
+Setter Cosmin 78 67 62 73 63 78 67 184 81 87 70
+Libero Ionut 61 87 81 61 67 51 77 181 75 80
+OutsideHitter Lucian 83 70 65 75 61 81 70 192 86 84
+OppositeHitter Razvan 80 75 70 80 65 85 75 198 93 89
+MiddleBlocker Andrei 76 65 60 70 55 75 70 196 90 87
+OutsideHitter Mihail 82 72 68 76 63 83 71 190 88 85
+
+Setter Claudiu 79 68 63 74 64 79 68 185 82 88 72
+Libero Daniel 62 88 82 62 68 52 78 182 76 81
+OutsideHitter Marian 84 71 66 76 62 82 71 193 87 86
+OppositeHitter Florin 81 76 71 81 66 86 76 199 94 91
+MiddleBlocker Bogdan 77 66 61 71 56 76 71 197 91 89
+OutsideHitter Andrei 83 73 69 77 64 84 72 191 89 86
+
+Setter Andrei 78 67 62 73 63 78 67 184 81 87 71
+Libero Bogdan 62 88 82 62 68 52 78 182 76 81
+OutsideHitter Cristian 84 71 66 76 62 82 71 193 87 86
+OppositeHitter Victor 81 76 71 81 66 86 76 199 94 91
+MiddleBlocker Mihai 77 66 61 71 56 76 71 197 91 89
+OutsideHitter Radu 83 73 69 77 64 84 72 191 89 86
+
+
