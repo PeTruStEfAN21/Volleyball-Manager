@@ -1,17 +1,25 @@
+
 cmake_minimum_required(VERSION 3.10)
+
 project(untitled2)
 
 set(CMAKE_CXX_STANDARD 20)
 
+
+set(BIN_DIR "bin") 
+
 add_executable(untitled2 main.cpp)
 
+
 install(
-    TARGETS untitled2  
-    DESTINATION bin    
+    TARGETS untitled2
+    DESTINATION ${BIN_DIR}  
 )
 
 install(
     FILES launcher.command
     DESTINATION ${BIN_DIR} 
-    PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+                GROUP_READ GROUP_EXECUTE
+                WORLD_READ WORLD_EXECUTE
 )
