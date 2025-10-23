@@ -446,7 +446,7 @@ public:
         }
     }
 
-    void adaugare_jucator(vector<jucator*>& lista, int buget) {
+   /* void adaugare_jucator(vector<jucator*>& lista, int buget) {
         int index;
         cout << "\n--- Creare echipa " << nume << " ---\n";
 
@@ -472,6 +472,8 @@ public:
             cout << "Jucator adaugat cu succes!\n";
         }
         }
+        */
+    //functie pentru transferuri pe viitor
 
     friend ostream& operator<<(ostream& os, const Echipe& e) {
         os << "\n=== Echipa: " << e.nume << " ===\n";
@@ -481,7 +483,7 @@ public:
         return os;
     }
 
-    void adaugare_jucatori(vector<jucator*>& lista) {
+    void adaugare_jucatori(const vector<jucator*>& lista) {
         for(auto j : lista){
             jucatori.push_back(j);
             j->setAles(true);
@@ -725,7 +727,7 @@ public:
         int index_echipa_manager = n - 1; // Echipa managerului e ultima (index 11)
 
         while (true) {
-            Echipe* adversar = baza->alege_echipa_random();
+           const Echipe* adversar = baza->alege_echipa_random();
             for (int i = 0; i < n; i++) {
                 if (lista[i] == adversar) {
                     index = i;
@@ -749,7 +751,7 @@ public:
         ales[index][index_echipa_manager] = true;
 
         Meci meci(echipa, lista[index]);
-        Echipe* castigatoare = meci.meci();
+        const Echipe* castigatoare = meci.meci();
 
         if (castigatoare == echipa) {
             cout << "Felicitari, echipa ta a castigat meciul, obtinand 3 puncte in clasament.\n";
@@ -794,7 +796,7 @@ public:
         for (int i = 0; i < n; i++) {
             if (i == index_echipa_manager) continue;
 
-            Echipe* adversar = baza->alege_echipa_random();
+            const Echipe* adversar = baza->alege_echipa_random();
             for (size_t j = 0; j < size(baza->getListe()); j++) {
                 if (baza->getListe()[j] == adversar) {
                     index = j;
@@ -809,7 +811,7 @@ public:
                 double scor1 = lista[i]->get_overall() + (rand() % 11 - 5) * 0.1;
                 double scor2 = lista[index]->get_overall() + (rand() % 11 - 5) * 0.1;
 
-                Echipe* castigatoare =
+               const Echipe* castigatoare =
                     (scor1 > scor2) ? lista[i] :
                     (scor2 > scor1 ? lista[index] :
                     ((rand() % 2 == 0) ? lista[i] : lista[index]));
@@ -1003,7 +1005,7 @@ int main() {
                 j = new MiddleBlocker();
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
                 a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-                a.push_back(a6); a.push_back(a7); a.push_back(a[8]); a.push_back(a[9]); a.push_back(a[10]);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
                 j->valori(a);
             }
             else continue;
@@ -1031,7 +1033,7 @@ int main() {
 
     while(true) {
         string pozitie, nume;
-        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
+        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
         jucator* j = nullptr;
         if (!(finn >> pozitie)) break;
         vector<int> a;
@@ -1045,6 +1047,7 @@ int main() {
             j->valori(a);
         }
         else if (pozitie == "Setter") {
+            int a11;
             j = new Setter();
             finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
@@ -1091,7 +1094,7 @@ int main() {
     baza.adaugaEchipe(manager.get_echipa());
     echipe.push_back( manager.get_echipa());
 
-    for (auto &e : echipe)
+    for (const auto &e : echipe)
         cout << *e;
 
     Liga liga(&baza,echipe);
