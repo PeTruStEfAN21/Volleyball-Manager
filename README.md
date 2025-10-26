@@ -1,5 +1,9 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# Volleyball Manager
+Volleyball Manager este un simulator captivant care te pune în rolul de manager al unei noi echipe profesioniste de volei. Misiunea ta este să construiești un lot de șase jucători talentați, să-ți înfrunți adversarii în campionat și să urci în clasament, dovedind că ești cel mai bun manager din ligă.
 
+Totul începe cu crearea echipei tale. Ai acces la o bază de date extinsă de jucători, fiecare evaluat printr-un scor Overall (OVR) și definit de atribute specifice poziției – de la precizia de setare a unui Setter și forța de atac a unui Outside Hitter, la reflexele cruciale ale unui Libero. Trebuie să alegi cu atenție componența lotului tău, având în vedere că fiecare jucător ales devine indisponibil pentru celelalte echipe. Odată ce ai format echipa, poți să-i dai un nume și să o înscrii în campionat.
+
+Adevărata provocare începe în ligă. Vei juca meciuri împotriva celorlalte echipe controlate de sistem, iar fiecare partidă este simulată set cu set, punct cu punct, în timp real. Vei urmări tabela de scor actualizându-se constant, reflectând lupta strânsă de pe teren. Performanța echipei tale pe parcursul campionatului va fi monitorizată în clasament, unde fiecare victorie aduce puncte prețioase. Obiectivul final este simplu: domină liga și dovedește că strategia și selecția ta au fost cele câștigătoare!
 ### Folosiți template-ul corespunzător grupei voastre!
 
 | Laborant  | Link template                                |
