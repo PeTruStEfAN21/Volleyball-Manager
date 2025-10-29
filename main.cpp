@@ -242,7 +242,6 @@ class Libero : public jucator {
         pozitie = "Libero";
     }
 
-    // ADAUGAT: Destructor explicit
     ~Libero() override = default;
 
 
@@ -939,8 +938,6 @@ public:
 
     manageri& operator=(const manageri& other) {
         if (this != &other) {
-            // CORECTAT: Daca operator= este chemat, trebuie sa distrugem obiectul vechi si sa copiem noul
-            // (pentru a preveni memory leak intern in manageri)
             delete echipa;
             buget = other.buget; nume = other.nume; lista = other.lista; baza = other.baza;
             echipa = new Echipe(*other.echipa);
@@ -1031,7 +1028,6 @@ int main() {
             cout<<*j<<endl;
 
             jucatoriEchipa.push_back(j);
-            // CORECTAT: Adaugăm jucătorii în BazaDeDate care îi va șterge la final, prevenind Memory Leak
             baza.adaugaJucator(j);
             i++;
         }
@@ -1049,7 +1045,6 @@ int main() {
         return 1;
     }
 
-    // In bucla de mai jos, jucătorii sunt adăugați în baza_jucatori, care îi va șterge la final. (Corect)
     while(true) {
         string pozitie, nume;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
