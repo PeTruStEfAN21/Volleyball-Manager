@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 
 set(PROJECT_NAME "oop")
-project(${PROJECT_NAME} CXX) # Adăugat CXX pentru a specifica limbajul
+project(${PROJECT_NAME} CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -9,15 +9,17 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
-
-target_compile_options(${PROJECT_NAME} PRIVATE 
-    $<$<CONFIG:Debug>:-Wall -Wextra -Werror>
+target_compile_options(${PROJECT_NAME} PRIVATE
+    $<$<AND:$<CONFIG:Debug>,$<NOT:$<BOOL:${MSVC}>>>:-Wall -Wextra -Werror>
+    
+    $<$<AND:$<CONFIG:Debug>,$<BOOL:${MSVC}>>:/W4 /WX>
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE 
+target_compile_options(${PROJECT_NAME} PRIVATE
     $<$<CONFIG:Release>:-O3>
 )
-set(BIN_DIR "bin") 
+
+set(BIN_DIR "bin")
 
 install(
     TARGETS ${PROJECT_NAME}
