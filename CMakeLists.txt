@@ -1,18 +1,18 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(untitled2)
+project(oop)
 
 set(CMAKE_CXX_STANDARD 20)
 
 
 set(BIN_DIR "bin") 
 
-add_executable(untitled2 main.cpp)
+add_executable(oop main.cpp)
 
 
 install(
-    TARGETS untitled2
+    TARGETS oop
     DESTINATION ${BIN_DIR}  
 )
 
