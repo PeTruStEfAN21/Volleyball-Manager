@@ -35,10 +35,10 @@ protected:
     }
 
 public:
-    jucator(const string &num, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
+    jucator(const string &nume, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
             int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
             bool ales)
-        : nume(num), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
+        : nume(nume), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
           spike_accuracy(spike_accuracy), serve_power(serve_power), serve_accuracy(serve_accuracy),
           vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
           ales(ales) {}
@@ -125,8 +125,8 @@ jucator()
         set_pret();
     }
 
-    void set_nume(const string &num) {
-      this->nume = num;
+    void set_nume(const string &nume) {
+      this->nume = nume;
     }
 };
 
@@ -395,7 +395,6 @@ public:
         this->seturi = 0;
     }
     
-    // Adăugat destructor pentru a șterge jucătorii deținuți de echipa AI
     ~Echipe() {
         for (auto j : jucatori) {
             delete j; 
@@ -445,7 +444,7 @@ public:
     friend ostream& operator<<(ostream& os, const Echipe& e) {
         os << "\n=== Echipa: " << e.nume << " ===\n";
         for (size_t i = 0; i < e.jucatori.size(); i++)
-            os << "- " << *e.jucatori[i] << "\n";
+            os << "- " << e.jucatori[i]->nume << " (" << e.jucatori[i]->pozitie << ") - OVR: " << e.jucatori[i]->ovr << "\n";
         os << "Overall-ul echipei este: " << e.ovr << "\n";
         return os;
     }
@@ -969,7 +968,7 @@ int main() {
 
     while(true) {
         string pozitie_local, nume_local;
-        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10; 
+        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
         jucator* j = nullptr;
         if (!(finn >> pozitie_local)) break; 
         vector<int> a;
@@ -1024,7 +1023,7 @@ int main() {
 
     cout << "S-au citit toate echipele cu jucatorii.\n";
 
-    manager.adaugare_jucatori_valabili(&baza_jucatori_valabili);
+    manager.adaugare_jucatori_valabili(&baza_jucatori_valabili); 
     manager.alegere_echipa(); 
     manager.set_overall();
     baza_echipe.adaugaEchipe(manager.get_echipa());
