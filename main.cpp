@@ -731,7 +731,7 @@ public:
 
 
     Echipe meci(Echipe* echipa) {
-    auto lista = baza->getListe();
+    auto lista = baza->getListe();
     size_t n = lista.size(); 
     size_t index = (size_t)-1; 
     size_t index_echipa_manager = n - 1;
