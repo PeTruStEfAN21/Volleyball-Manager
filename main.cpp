@@ -442,12 +442,12 @@ public:
     }
 
     friend ostream& operator<<(ostream& os, const Echipe& e) {
-        os << "\n=== Echipa: " << e.nume << " ===\n";
-        for (size_t i = 0; i < e.jucatori.size(); i++)
-            os << "- " << e.jucatori[i]->nume << " (" << e.jucatori[i]->pozitie << ") - OVR: " << e.jucatori[i]->ovr << "\n";
-        os << "Overall-ul echipei este: " << e.ovr << "\n";
-        return os;
-    }
+    os << "\n=== Echipa: " << e.nume << " ===\n";
+    for (size_t i = 0; i < e.jucatori.size(); i++)
+        os << "- " << *e.jucatori[i] << "\n";
+    os << "Overall-ul echipei este: " << e.ovr << "\n";
+    return os;
+}
 
     void adaugare_jucatori(const vector<jucator*>& lista) {
         for(auto j : lista){
