@@ -8,16 +8,14 @@
 #include <ctime>
 #include <cmath>
 #include <ostream>
-#include <memory> 
+#include <memory>
 
 using namespace std;
 
 class BazaDeDate;
 class Echipe;
+class Meci; 
 
-
-using JucatorPtr = shared_ptr<jucator>;
-using EchipaPtr = shared_ptr<Echipe>;
 
 class jucator {
 protected:
@@ -134,6 +132,10 @@ jucator()
       this->nume = nume;
     }
 };
+
+
+using JucatorPtr = shared_ptr<jucator>;
+using EchipaPtr = shared_ptr<Echipe>;
 
 
 class OutsideHitter : public jucator {
@@ -338,7 +340,6 @@ class OppositeHitter : public jucator {
 
 };
 
-
 class Echipe {
 private:
     string nume;
@@ -400,7 +401,6 @@ public:
         this->seturi = 0;
     }
     
-
     ~Echipe() = default;
 
     int get_overall() {
@@ -574,7 +574,7 @@ public:
     }
 
 
-    EchipaPtr meci() { // returnează shared_ptr
+    EchipaPtr meci() { 
         this->echipa1->resetSetur();
         this->echipa2->resetSetur();
         while (this->echipa1->getSeturi() < 3 && this->echipa2->getSeturi() < 3) {
@@ -604,7 +604,7 @@ public:
 class BazaDeDate {
 private:
     vector<JucatorPtr> jucatori;
-    vector<EchipaPtr> echipe_disponibile; 
+    vector<EchipaPtr> echipe_disponibile;
 
 public:
     explicit BazaDeDate(const vector<JucatorPtr> &jucatori)
@@ -613,13 +613,13 @@ public:
 
     BazaDeDate() = default;
 
-    ~BazaDeDate() = default; 
+    ~BazaDeDate() = default;
 
     void adaugaJucator(JucatorPtr j) {
         this->jucatori.push_back(j);
     }
 
-    void adaugaEchipe(EchipaPtr e) { 
+    void adaugaEchipe(EchipaPtr e) {
         this->echipe_disponibile.push_back(e);
     }
 
@@ -631,11 +631,11 @@ public:
         }
     }
 
-    EchipaPtr getEchipe(size_t index) const { return this->echipe_disponibile[index]; } 
+    EchipaPtr getEchipe(size_t index) const { return this->echipe_disponibile[index]; }
 
     const vector<JucatorPtr>& getLista() const { return this->jucatori; }
 
-    const vector<EchipaPtr>& getListe() const { return this->echipe_disponibile; } 
+    const vector<EchipaPtr>& getListe() const { return this->echipe_disponibile; }
 
     EchipaPtr alege_echipa_random() {
         if (this->echipe_disponibile.empty()) return nullptr;
@@ -674,7 +674,7 @@ public:
     size_t index_echipa_manager = n - 1;
 
     while (true) {
-        EchipaPtr adversar = this->baza->alege_echipa_random(); 
+        EchipaPtr adversar = this->baza->alege_echipa_random();
         for (size_t i = 0; i < n; i++) {
             if (lista[i] == adversar) {
                 index = i;
@@ -698,7 +698,7 @@ public:
     this->etapa_jucat[index_echipa_manager] = true;
 
     Meci meci_local(echipa, lista[index]);
-    EchipaPtr castigatoare = meci_local.meci(); 
+    EchipaPtr castigatoare = meci_local.meci();
 
     if (castigatoare == echipa) {
         cout << "Felicitari, echipa ta a castigat meciul, obtinand 3 puncte in clasament.\n";
@@ -708,7 +708,7 @@ public:
         this->punctaje[index] += 3;
     }
 
-    return castigatoare;
+    return castigatoare; 
 
 }
 
@@ -764,10 +764,13 @@ public:
                     this->etapa_jucat[index] = true;
                     progres_facut = true;
 
+                    double factor_aleator_1 = (rand() % 11 - 5) * 0.1;
+                    double factor_aleator_2 = (rand() % 11 - 5) * 0.1;
+
                     double scor1 = lista[i]->get_overall() + factor_aleator_1;
                     double scor2 = lista[index]->get_overall() + factor_aleator_2;
 
-                    EchipaPtr castigatoare; // shared_ptr
+                    EchipaPtr castigatoare;
 
                     if (scor1 > scor2)
                         castigatoare = lista[i];
@@ -813,13 +816,13 @@ public:
         return EchipaPtr(this->echipa.get());
     }
 
-    manageri(int buget, EchipaPtr echipa, const string &nume) = delete; 
+    manageri(int buget, EchipaPtr echipa, const string &nume) = delete;
 
     void set_overall() {
         this->echipa->Echipe::set_overall();
     }
 
-    manageri() : buget(0), echipa(make_unique<Echipe>()), nume("Necunoscut"), lista({}), baza(nullptr) {
+    manageri() : buget(0), echipa(make_unique<Echipe>()), nume("Necunoscut"), lista({}), baza(nullptr) { 
     }
 
     friend ostream & operator<<(ostream &os, const manageri &obj) {
@@ -869,7 +872,7 @@ int main() {
 
 
     for (const auto &nume : numeEchipe)
-        echipe.push_back(make_shared<Echipe>(nume)); 
+        echipe.push_back(make_shared<Echipe>(nume));
 
 
     ifstream fin("text.txt");
@@ -891,7 +894,7 @@ int main() {
             fin>>nume_local; 
 
             if (pozitie_local == "Libero") {
-                j = make_shared<Libero>();
+                j = make_shared<Libero>(); 
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
                 a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
                 a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
@@ -905,14 +908,14 @@ int main() {
                 j->valori(a);
             }
             else if (pozitie_local == "OutsideHitter") {
-                j = make_shared<OutsideHitter>();
+                j = make_shared<OutsideHitter>(); 
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
                 a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
                 a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
                 j->valori(a);
             }
             else if (pozitie_local == "OppositeHitter") {
-                j = make_shared<OppositeHitter>();
+                j = make_shared<OppositeHitter>(); 
                 fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
                 a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
                 a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
@@ -951,7 +954,7 @@ int main() {
     while(true) {
         string pozitie_local, nume_local;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
-        JucatorPtr j = nullptr; // shared_ptr
+        JucatorPtr j = nullptr; 
         if (!(finn >> pozitie_local)) break; 
         vector<int> a;
         finn>>nume_local; 
@@ -1008,9 +1011,9 @@ int main() {
     manager.adaugare_jucatori_valabili(&baza_jucatori_valabili); 
     manager.alegere_echipa(); 
     manager.set_overall();
-    baza_echipe.adaugaEchipe(manager.get_echipa()); 
+    baza_echipe.adaugaEchipe(manager.get_echipa());
 
-    echipe.push_back( manager.get_echipa()); 
+    echipe.push_back( manager.get_echipa());
 
     for (const auto& e : echipe)
         cout << *e;
@@ -1020,7 +1023,6 @@ int main() {
     for (int i = 0; i < 12; i++) {
         string s;
 
-        // Nu mai e necesar static_cast<int>
         size_t index_echipa_manager = echipe.size() - 1; 
 
         liga.meci(echipe[index_echipa_manager]);
@@ -1037,8 +1039,6 @@ int main() {
             else
                 break;
         }
-
-
 
     return 0;
 }
