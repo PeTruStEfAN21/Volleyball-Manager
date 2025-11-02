@@ -35,10 +35,10 @@ protected:
     }
 
 public:
-    jucator(const string &num, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
+    jucator(const string &nume, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
             int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
             bool ales)
-        : nume(num), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
+        : nume(nume), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
           spike_accuracy(spike_accuracy), serve_power(serve_power), serve_accuracy(serve_accuracy),
           vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
           ales(ales) {}
@@ -125,8 +125,8 @@ jucator()
         set_pret();
     }
 
-    void set_nume(const string &num) {
-      this->nume = num;
+    void set_nume(const string &nume) {
+      this->nume = nume;
     }
 };
 
@@ -550,8 +550,8 @@ protected:
         if (this->echipa1->getPunctaj() > this->echipa2->getPunctaj()) {
             cout << "\nSET CASTIGAT DE " << this->echipa1->getNume() << "!\n";
             return 'a';
-        } else
-        {
+        }
+        else {
             cout << "\nSET CASTIGAT DE " << this->echipa2->getNume() << "!\n";
             return 'b';
         }
@@ -760,9 +760,6 @@ public:
                     this->etapa_jucat[index] = true;
                     progres_facut = true;
 
-                    double factor_aleator_1 = (rand() % 11 - 5) * 0.1;
-                    double factor_aleator_2 = (rand() % 11 - 5) * 0.1;
-
                     double scor1 = lista[i]->get_overall() + factor_aleator_1;
                     double scor2 = lista[index]->get_overall() + factor_aleator_2;
 
@@ -869,7 +866,7 @@ public:
 
 int main() {
     srand(static_cast<unsigned int>(time(0))); 
-    BazaDeDate baza, baza_jucatori;
+    BazaDeDate baza_echipe, baza_jucatori_valabili; 
 
     manageri manager;
 
@@ -944,13 +941,12 @@ int main() {
             cout<<*j<<endl;
 
             jucatoriEchipa.push_back(j);
-            baza_jucatori.adaugaJucator(j); 
             i++;
         }
         echipa->adaugare_jucatori(jucatoriEchipa);
         jucatoriEchipa.clear();
         echipa->get_overall();
-        baza.adaugaEchipe(echipa);
+        baza_echipe.adaugaEchipe(echipa);
     }
     fin.close();
 
@@ -994,7 +990,7 @@ int main() {
         else if (pozitie_local == "OppositeHitter") {
             j = new OppositeHitter();
             finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a1); a.push_back(a[2]); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
@@ -1009,7 +1005,7 @@ int main() {
         j->set_nume(nume_local);
         j->set_poz(pozitie_local);
 
-        baza_jucatori.adaugaJucator(j);
+        baza_jucatori_valabili.adaugaJucator(j); 
 
 
     }
@@ -1018,17 +1014,17 @@ int main() {
 
     cout << "S-au citit toate echipele cu jucatorii.\n";
 
-    manager.adaugare_jucatori_valabili(&baza_jucatori);
+    manager.adaugare_jucatori_valabili(&baza_jucatori_valabili);
     manager.alegere_echipa();
     manager.set_overall();
-    baza.adaugaEchipe(manager.get_echipa());
+    baza_echipe.adaugaEchipe(manager.get_echipa());
 
     echipe.push_back( manager.get_echipa());
 
     for (const Echipe* e : echipe)
         cout << *e;
 
-    Liga liga(&baza,echipe);
+    Liga liga(&baza_echipe, echipe);
 
     for (int i = 0; i < 12; i++) {
         string s;
@@ -1050,14 +1046,20 @@ int main() {
                 break;
         }
 
-    for (auto j : baza_jucatori.getLista())
+    
+    for (auto j : baza_jucatori_valabili.getLista())
         delete j;
 
     size_t nr_echipe_ai = echipe.size() - 1;
-for (size_t i = 0; i < nr_echipe_ai; ++i) {
-    delete echipe[i];
-}
-echipe.resize(nr_echipe_ai);
+    for (size_t i = 0; i < nr_echipe_ai; ++i) {
+        // Obținem lista de jucători deținuți de echipa AI și îi ștergem
+        auto echipa_ai_ptr = echipe[i];
+        for (auto j : echipa_ai_ptr->jucatori) { 
+            
+        }
+        delete echipe[i]; 
+    }
+    echipe.resize(nr_echipe_ai);
 
     return 0;
 }
