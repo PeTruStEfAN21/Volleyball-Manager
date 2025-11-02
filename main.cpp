@@ -21,7 +21,8 @@ protected:
     bool ales;
 
     virtual void overall() {
-        ovr = (spike_power + receive + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility + speed + height) / 9;
+        // Toate variabilele membre folosesc this->
+        this->ovr = (this->spike_power + this->receive + this->spike_accuracy + this->serve_power + this->serve_accuracy + this->vertical_jump + this->mobility + this->speed + this->height) / 9;
     }
 
     int set_val(int valoarea) const {
@@ -31,7 +32,7 @@ protected:
     }
 
     virtual void set_pret() {
-        pret = ovr * 50;
+        this->pret = this->ovr * 50;
     }
 
 public:
@@ -55,25 +56,26 @@ jucator()
     }
 
     virtual void valori(vector<int> a) {
-        spike_power = set_val(a[0]);
-        receive = set_val(a[1]);
-        spike_accuracy = set_val(a[2]);
-        serve_power = set_val(a[3]);
-        serve_accuracy = set_val(a[4]);
-        vertical_jump = set_val(a[5]);
-        mobility = set_val(a[6]);
-        height = set_val(a[7]);
-        speed = set_val(a[8]);
+        this->spike_power = set_val(a[0]);
+        this->receive = set_val(a[1]);
+        this->spike_accuracy = set_val(a[2]);
+        this->serve_power = set_val(a[3]);
+        this->serve_accuracy = set_val(a[4]);
+        this->vertical_jump = set_val(a[5]);
+        this->mobility = set_val(a[6]);
+        this->height = set_val(a[7]);
+        this->speed = set_val(a[8]);
     }
 
     /*int get_pret() const { return pret; }*/
     //functie pentru transferuri...
-    bool esteAles() const { return ales; }
-    void setAles(bool val) { ales = val; }
-    int get_ovr() const { return ovr; }
+    bool esteAles() const { return this->ales; }
+    void setAles(bool val) { this->ales = val; }
+    int get_ovr() const { return this->ovr; }
 
     virtual void afiseaza() const {
-        cout << nume << " (" << pozitie << ") - OVR: " << ovr << ", Pret: " << pret << endl;
+        // Toate variabilele membre folosesc this->
+        cout << this->nume << " (" << this->pozitie << ") - OVR: " << this->ovr << ", Pret: " << this->pret << endl;
     }
 
     friend ostream &operator<<(ostream &out, const jucator &j) {
@@ -83,45 +85,49 @@ jucator()
 
     jucator &operator=(const jucator &j) {
         if (this != &j) {
-            nume = j.nume;
-            ovr = j.ovr;
-            spike_power = j.spike_power;
-            height = j.height;
-            receive = j.receive;
-            spike_accuracy = j.spike_accuracy;
-            serve_power = j.serve_power;
-            serve_accuracy = j.serve_accuracy;
-            vertical_jump = j.vertical_jump;
-            mobility = j.mobility;
-            speed = j.speed;
-            pret = j.pret;
-            pozitie = j.pozitie;
+            // Toate variabilele membre folosesc this->
+            this->nume = j.nume;
+            this->ovr = j.ovr;
+            this->spike_power = j.spike_power;
+            this->height = j.height;
+            this->receive = j.receive;
+            this->spike_accuracy = j.spike_accuracy;
+            this->serve_power = j.serve_power;
+            this->serve_accuracy = j.serve_accuracy;
+            this->vertical_jump = j.vertical_jump;
+            this->mobility = j.mobility;
+            this->speed = j.speed;
+            this->pret = j.pret;
+            this->pozitie = j.pozitie;
         }
         return *this;
     }
 
     virtual void citeste(ifstream &in) {
-        in >> this->nume; // CORECȚIE: this-> pentru a evita avertismentul C4458
+        // Citirea membrului nume folosește this->
+        in >> this->nume; 
 
-        in >> spike_power;
-        in >> receive;
-        in >> spike_accuracy;
-        in >> serve_power;
-        in >> serve_accuracy;
-        in >> vertical_jump;
-        in >> mobility;
-        in >> speed;
-        in >> height;
+        // Toate citirile de membri folosesc this->
+        in >> this->spike_power;
+        in >> this->receive;
+        in >> this->spike_accuracy;
+        in >> this->serve_power;
+        in >> this->serve_accuracy;
+        in >> this->vertical_jump;
+        in >> this->mobility;
+        in >> this->speed;
+        in >> this->height;
 
-        spike_power = set_val(spike_power);
-        receive = set_val(receive);
-        spike_accuracy = set_val(spike_accuracy);
-        serve_power = set_val(serve_power);
-        serve_accuracy = set_val(serve_accuracy);
-        vertical_jump = set_val(vertical_jump);
-        mobility = set_val(mobility);
-        speed = set_val(speed);
-        height = set_val(height);
+        // Toate set_val folosesc this->
+        this->spike_power = set_val(this->spike_power);
+        this->receive = set_val(this->receive);
+        this->spike_accuracy = set_val(this->spike_accuracy);
+        this->serve_power = set_val(this->serve_power);
+        this->serve_accuracy = set_val(this->serve_accuracy);
+        this->vertical_jump = set_val(this->vertical_jump);
+        this->mobility = set_val(this->mobility);
+        this->speed = set_val(this->speed);
+        this->height = set_val(this->height);
 
         overall();
         set_pret();
@@ -143,7 +149,6 @@ jucator()
     //util pentru depanare
 
 };
-
 
 class OutsideHitter : public jucator {
     int explosiveness;
