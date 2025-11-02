@@ -557,8 +557,8 @@ protected:
         float sansa_a = pow((float)echipa1->get_overall(), 3.0f) /
                 (pow((float)echipa1->get_overall(), 3.0f) + pow((float)echipa2->get_overall(), 3.0f));
 
-        float r = (float)rand() / RAND_MAX;
-
+float r = (float)rand() / (float)RAND_MAX;
+        
         if (r < sansa_a)
             return 'a';
         else
@@ -723,7 +723,7 @@ class Liga : public Meci {
 private:
     BazaDeDate* baza;
     vector<int> punctaje;
-    int nrEchipe = 0;
+    //int nrEchipe = 0;
     vector<vector<bool>> ales;
     vector<bool> etapa_jucat;
 
