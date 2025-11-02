@@ -45,10 +45,10 @@ public:
 
     virtual ~jucator() = default;
 
-    jucator()
-        : ovr(0), spike_power(0), receive(0), spike_accuracy(0), serve_power(0), serve_accuracy(0),
-          vertical_jump(0), mobility(0), speed(0), pret(0), height(0), ales(false),
-          nume("Necunoscut"), pozitie("necunoscut") {}
+ jucator()
+        :nume("Necunoscut"), pozitie("necunoscut"), ovr(0), spike_power(0), receive(0), spike_accuracy(0), serve_power(0), serve_accuracy(0),
+          vertical_jump(0), mobility(0), speed(0), pret(0), height(0), ales(false) {}
+
 
     void set_poz(const string &poz) { // Pass by const reference
         this->pozitie = poz;
@@ -733,7 +733,7 @@ public:
 
 
 
-    Echipe Liga::meci(Echipe* echipa) {
+    Echipe meci(Echipe* echipa) {
     auto lista = baza->getListe();
     int n = lista.size();
     int index = -1;
@@ -779,7 +779,7 @@ public:
 }
 
 
-    Liga(BazaDeDate* baza, const vector<Echipe*>& echipe) : baza(baza) {
+    Liga(BazaDeDate* baza, const vector<Echipe*>&) : baza(baza) {
         int n = baza->getListe().size();
         ales = vector<vector<bool>>(n, vector<bool>(n, false));
         punctaje.resize(n, 0);
@@ -799,12 +799,12 @@ public:
     }*/
     //functie pentru verificare punctaj
 
-    void Liga::meciuri() {
+    void meciuri() {
     auto lista = baza->getListe();
     int n = lista.size();
     int index_echipa_manager = n - 1;
 
-    if (punctaje.size() != n)
+    if (punctaje.size() != (size_t)n)
         punctaje.resize(n, 0);
 
 
@@ -887,7 +887,7 @@ public:
     }
 
     manageri(int buget, Echipe *echipa, const string &nume)
-        : buget(buget), echipa(echipa), nume(nume), baza(nullptr), lista({}) {
+        : buget(buget), echipa(echipa), nume(nume), lista({}), baza(nullptr) {
     }
 
     /*void alegere_jucator(int buget) {
