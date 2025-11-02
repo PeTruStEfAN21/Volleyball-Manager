@@ -1167,7 +1167,7 @@ int main() {
                 break;
         }
 
-    size_t nr_echipe_ai = echipe.size() - 1; // Presupunând că echipa managerului e ultima
+    size_t nr_echipe_ai = echipe.size() - 1;
 for (size_t i = 0; i < nr_echipe_ai; ++i) {
     delete echipe[i];
 }
