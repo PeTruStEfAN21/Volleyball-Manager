@@ -725,54 +725,59 @@ private:
     vector<int> punctaje;
     int nrEchipe = 0;
     vector<vector<bool>> ales;
+    vector<bool> etapa_jucat;
+
 
 
 public:
 
-    void meci(Echipe* echipa) {
-        auto lista = baza->getListe();
-        int n = lista.size();
 
-        int index = -1;
-        int index_echipa_manager = n - 1;
 
-        while (true) {
-           const Echipe* adversar = baza->alege_echipa_random();
-            for (int i = 0; i < n; i++) {
-                if (lista[i] == adversar) {
-                    index = i;
-                    break;
-                }
+    Echipe Liga::meci(Echipe* echipa) {
+    auto lista = baza->getListe();
+    int n = lista.size();
+    int index = -1;
+    int index_echipa_manager = n - 1; 
+
+    while (true) {
+       const Echipe* adversar = baza->alege_echipa_random();
+        for (int i = 0; i < n; i++) {
+            if (lista[i] == adversar) {
+                index = i;
+                break;
             }
-
-
-            if (index == -1 || index == index_echipa_manager)
-                continue;
-
-
-            if (ales[index_echipa_manager][index] == true)
-                continue;
-
-
-            break;
         }
 
-        ales[index_echipa_manager][index] = true;
-        ales[index][index_echipa_manager] = true;
+        if (index == -1 || index == index_echipa_manager)
+            continue;
 
-        Meci meci(echipa, lista[index]);
-        const Echipe* castigatoare = meci.meci();
+        if (ales[index_echipa_manager][index] == true || etapa_jucat[index] == true)
+            continue;
 
-        if (castigatoare == echipa) {
-            cout << "Felicitari, echipa ta a castigat meciul, obtinand 3 puncte in clasament.\n";
-            punctaje[index_echipa_manager] += 3;
-        } else {
-            cout << "Din pacate ati pierdut meciul, nu ati obtinut niciun punct in clasament...\n";
-            punctaje[index] += 3;
-        }
 
-        afisare_punctaje();
+        break;
     }
+
+    ales[index_echipa_manager][index] = true;
+    ales[index][index_echipa_manager] = true;
+    etapa_jucat[index] = true;
+    etapa_jucat[index_echipa_manager] = true;
+
+    Meci meci_local(echipa, lista[index]);
+    const Echipe* castigatoare = meci_local.meci();
+
+    if (castigatoare == echipa) {
+        cout << "Felicitari, echipa ta a castigat meciul, obtinand 3 puncte in clasament.\n";
+        punctaje[index_echipa_manager] += 3;
+    } else {
+        cout << "Din pacate ati pierdut meciul, nu ati obtinut niciun punct in clasament...\n";
+        punctaje[index] += 3;
+    }
+
+    return *castigatoare;
+
+}
+
 
     Liga(BazaDeDate* baza, const vector<Echipe*>& echipe) : baza(baza) {
         int n = baza->getListe().size();
@@ -794,49 +799,75 @@ public:
     }*/
     //functie pentru verificare punctaj
 
-    void meciuri() {
-        auto lista = baza->getListe();
-        int n = lista.size();
-        int index = -1;
-        int index_echipa_manager = n - 1;
+    void Liga::meciuri() {
+    auto lista = baza->getListe();
+    int n = lista.size();
+    int index_echipa_manager = n - 1;
 
-        if (punctaje.size() != n)
-            punctaje.resize(n, 0);
+    if (punctaje.size() != n)
+        punctaje.resize(n, 0);
+
+    bool progres_facut;
+
+    while (etapa_jucat != vector<bool>(n, true)) {
+
+        progres_facut = false;
 
         for (int i = 0; i < n; i++) {
-            if (i == index_echipa_manager) continue;
 
-            const Echipe* adversar = baza->alege_echipa_random();
-            for (size_t j = 0; j < size(baza->getListe()); j++) {
-                if (baza->getListe()[j] == adversar) {
-                    index = j;
+            if (i == index_echipa_manager || etapa_jucat[i])
+                continue;
+
+            for (int index = 0; index < n; index++) {
+
+                if (index == index_echipa_manager || index == i || etapa_jucat[index])
+                    continue;
+
+                if (!ales[i][index]) {
+
+
+                    ales[i][index] = true;
+                    ales[index][i] = true;
+
+                    etapa_jucat[i] = true;
+                    etapa_jucat[index] = true;
+                    progres_facut = true;
+
+                    double factor_aleator_1 = (rand() % 11 - 5) * 0.1;
+                    double factor_aleator_2 = (rand() % 11 - 5) * 0.1;
+
+                    double scor1 = lista[i]->get_overall() + factor_aleator_1;
+                    double scor2 = lista[index]->get_overall() + factor_aleator_2;
+
+                    const Echipe* castigatoare;
+
+                    if (scor1 > scor2)
+                        castigatoare = lista[i];
+                    else if (scor2 > scor1)
+                        castigatoare = lista[index];
+                    else
+                        castigatoare = (rand() % 2 == 0) ? lista[i] : lista[index];
+
+                    if (castigatoare == lista[i])
+                        punctaje[i] += 3;
+                    else
+                        punctaje[index] += 3;
+
+                    break;
                 }
-            }
-            if (index == index_echipa_manager || index == i) continue;
-
-            if (!ales[i][index]) {
-                ales[i][index] = true;
-                ales[index][i] = true;
-
-                double scor1 = lista[i]->get_overall() + (rand() % 11 - 5) * 0.1;
-                double scor2 = lista[index]->get_overall() + (rand() % 11 - 5) * 0.1;
-
-               const Echipe* castigatoare =
-                    (scor1 > scor2) ? lista[i] :
-                    (scor2 > scor1 ? lista[index] :
-                    ((rand() % 2 == 0) ? lista[i] : lista[index]));
-
-                if (castigatoare == lista[i])
-                    punctaje[i] += 3;
-                else
-                    punctaje[index] += 3;
             }
         }
 
 
-        cout << "S-a terminat o serie de partide";
+        if (!progres_facut && etapa_jucat != vector<bool>(n, true)) {
+             cout << "\nATENȚIE: S-au blocat meciurile AI. Etapa este incompletă. Nu se pot forma toate perechile. S-a jucat cu un număr impar de echipe AI.\n";
+             break;
+        }
     }
-};
+
+
+    cout << "S-a terminat o serie de partide";
+}
 
 
 class manageri {
