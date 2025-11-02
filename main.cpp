@@ -807,9 +807,10 @@ public:
     if (punctaje.size() != n)
         punctaje.resize(n, 0);
 
-    bool progres_facut;
 
     while (etapa_jucat != vector<bool>(n, true)) {
+            bool progres_facut;
+
 
         progres_facut = false;
 
