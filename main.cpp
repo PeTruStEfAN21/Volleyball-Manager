@@ -969,7 +969,7 @@ int main() {
 
     while(true) {
         string pozitie_local, nume_local;
-        int a1,a2,a3,a4,a5,a6,a7,a7,a8,a9,a10; // Variabila a7 dublata
+        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10; 
         jucator* j = nullptr;
         if (!(finn >> pozitie_local)) break; 
         vector<int> a;
