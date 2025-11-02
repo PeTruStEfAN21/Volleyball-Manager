@@ -14,8 +14,7 @@ using namespace std;
 
 class BazaDeDate;
 class Echipe;
-class Meci; 
-
+class Meci;
 
 class jucator {
 protected:
@@ -38,10 +37,10 @@ protected:
     }
 
 public:
-    jucator(const string &num, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
+    jucator(const string &nume, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
             int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
             bool ales)
-        : nume(num), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
+        : nume(nume), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
           spike_accuracy(spike_accuracy), serve_power(serve_power), serve_accuracy(serve_accuracy),
           vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
           ales(ales) {}
@@ -128,12 +127,12 @@ jucator()
         set_pret();
     }
 
-    void set_nume(const string &num) {
-      this->nume = num;
+    void set_nume(const string &nume) {
+      this->nume = nume;
     }
 };
 
-
+// CORECȚIE: Alias-uri definite după jucator
 using JucatorPtr = shared_ptr<jucator>;
 using EchipaPtr = shared_ptr<Echipe>;
 
@@ -340,6 +339,7 @@ class OppositeHitter : public jucator {
 
 };
 
+
 class Echipe {
 private:
     string nume;
@@ -401,6 +401,7 @@ public:
         this->seturi = 0;
     }
     
+    // Destructor implicit (shared_ptr se curăță automat)
     ~Echipe() = default;
 
     int get_overall() {
@@ -805,15 +806,15 @@ public:
 class manageri {
 private:
     int buget;
-    EchipaPtr echipa;
+    EchipaPtr echipa; // CORECȚIE: SharedPtr (EchipaPtr)
     string nume;
     vector<JucatorPtr> lista; 
     BazaDeDate* baza;
 
 public:
 
-    EchipaPtr get_echipa() const { 
-        return EchipaPtr(this->echipa.get());
+    EchipaPtr get_echipa() const {
+        return this->echipa; // Returnează shared_ptr
     }
 
     manageri(int buget, EchipaPtr echipa, const string &nume) = delete;
@@ -822,7 +823,7 @@ public:
         this->echipa->Echipe::set_overall();
     }
 
-    manageri() : buget(0), echipa(make_unique<Echipe>()), nume("Necunoscut"), lista({}), baza(nullptr) { 
+    manageri() : buget(0), echipa(make_shared<Echipe>()), nume("Necunoscut"), lista({}), baza(nullptr) { // make_shared
     }
 
     friend ostream & operator<<(ostream &os, const manageri &obj) {
@@ -854,7 +855,7 @@ public:
     manageri(const manageri& other) = delete; 
     manageri& operator=(const manageri& other) = delete; 
 
-~manageri() = default; 
+~manageri() = default; // shared_ptr se curăță automat
 };
 
 
