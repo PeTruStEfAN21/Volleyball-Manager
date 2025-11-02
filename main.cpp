@@ -127,8 +127,8 @@ jucator()
         set_pret();
     }
 
-    void set_num(const string &num) {
-      this->nume = nume;
+    void set_nume(const string &num) {
+      this->nume = num;
     }
 };
 
