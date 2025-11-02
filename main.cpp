@@ -101,7 +101,7 @@ jucator()
     }
 
     virtual void citeste(ifstream &in) {
-        in >> nume;
+        in >> this->nume; // CORECȚIE: this-> pentru a evita avertismentul C4458
 
         in >> spike_power;
         in >> receive;
@@ -557,7 +557,7 @@ protected:
         float sansa_a = pow((float)echipa1->get_overall(), 3.0f) /
                  (pow((float)echipa1->get_overall(), 3.0f) + pow((float)echipa2->get_overall(), 3.0f));
 
-float r = (float)rand() / (float)RAND_MAX;
+        float r = (float)rand() / (float)RAND_MAX;
         
         if (r < sansa_a)
             return 'a';
@@ -658,7 +658,7 @@ public:
 
     BazaDeDate() = default;
 
-    ~BazaDeDate() = default;
+    ~BazaDeDate() = default; // Corecție memorie: am eliminat `delete j` aici
 
     void adaugaJucator(jucator* j) {
         jucatori.push_back(j);
@@ -777,11 +777,11 @@ public:
 
 
     Liga(BazaDeDate* baza, const vector<Echipe*>&) : baza(baza) {
-        size_t n = baza->getListe().size(); // <--- size_t
+        size_t n = baza->getListe().size(); 
         ales = vector<vector<bool>>(n, vector<bool>(n, false));
-        etapa_jucat.resize(n, false);
+        etapa_jucat.resize(n, false); // CORECȚIE: Inițializarea lui etapa_jucat
         punctaje.resize(n, 0);
-        for (size_t i = 0; i < n; i++) { // <--- size_t
+        for (size_t i = 0; i < n; i++) { 
             ales[i][i] = true;
         }
     }
@@ -802,7 +802,7 @@ public:
     size_t n = lista.size();
     size_t index_echipa_manager = n - 1;
 
-    if (punctaje.size() != n)
+    if (punctaje.size() != n) 
         punctaje.resize(n, 0);
 
 
@@ -812,12 +812,12 @@ public:
 
         progres_facut = false;
 
-        for (size_t i = 0; i < n; i++) { // <--- size_t
+        for (size_t i = 0; i < n; i++) { 
 
             if (i == index_echipa_manager || etapa_jucat[i])
                 continue;
 
-            for (size_t index = 0; index < n; index++) { // <--- size_t
+            for (size_t index = 0; index < n; index++) { 
 
                 if (index == index_echipa_manager || index == i || etapa_jucat[index])
                     continue;
@@ -960,8 +960,8 @@ public:
       return  echipa->getNume();
     }
 
-    void adaugare_jucatori_valabili(BazaDeDate* baza) {
-        this->baza = baza;
+    void adaugare_jucatori_valabili(BazaDeDate* baza_ptr) { // CORECȚIE: Renumit 'baza' în 'baza_ptr'
+        this->baza = baza_ptr;
     }
 
     manageri(const manageri& other)
