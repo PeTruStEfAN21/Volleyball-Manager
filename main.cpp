@@ -978,7 +978,9 @@ public:
         return *this;
     }
 
-    ~manageri() { }
+~manageri() { 
+    delete echipa; 
+}
 };
 
 
