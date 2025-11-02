@@ -45,7 +45,7 @@ public:
 
     virtual ~jucator() = default;
 
- jucator()
+jucator()
         :nume("Necunoscut"), pozitie("necunoscut"), ovr(0), spike_power(0), receive(0), spike_accuracy(0), serve_power(0), serve_accuracy(0),
           vertical_jump(0), mobility(0), speed(0), pret(0), height(0), ales(false) {}
 
@@ -134,7 +134,7 @@ public:
 
     void set_nume(const string &nume) {
       this->nume = nume;
-  }
+    }
 
 
     /*void get_nume() {
@@ -212,7 +212,7 @@ class Setter : public jucator {
 
     void overall() override {
         ovr = (spike_power + receive + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
-               speed * 2 + set_precision * 3 + set_iq * 3 + height) / 17;
+                speed * 2 + set_precision * 3 + set_iq * 3 + height) / 17;
     }
 
     void set_pret() override {
@@ -247,7 +247,7 @@ class Libero : public jucator {
 
     void overall() override {
         ovr = (spike_power + receive * 3 + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
-               speed * 3 + reflexes * 3 + height) / 17;
+                speed * 3 + reflexes * 3 + height) / 17;
     }
 
     void set_pret() override {
@@ -285,7 +285,7 @@ class MiddleBlocker : public jucator {
 
     void overall() override {
         ovr = (spike_power + receive + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
-               speed * 2 + blocking * 3 + height * 4) / 17;
+                speed * 2 + blocking * 3 + height * 4) / 17;
     }
 
     void set_pret() override {
@@ -352,7 +352,7 @@ class OppositeHitter : public jucator {
 class Echipe {
 private:
     string nume;
-   vector< jucator*> jucatori;
+    vector< jucator*> jucatori;
     float ovr;
     int punctaj, seturi;
 
@@ -456,7 +456,7 @@ public:
         }
     }
 
-   /* void adaugare_jucator(vector<jucator*>& lista, int buget) {
+    /* void adaugare_jucator(vector<jucator*>& lista, int buget) {
         int index;
         cout << "\n--- Creare echipa " << nume << " ---\n";
 
@@ -482,7 +482,7 @@ public:
             cout << "Jucator adaugat cu succes!\n";
         }
         }
-        */
+         */
     //functie pentru transferuri pe viitor
 
     friend ostream& operator<<(ostream& os, const Echipe& e) {
@@ -543,19 +543,19 @@ protected:
 
     void tabelaScor() {
         cout << "_____________________________\n"
-             << "|       Tabela de scor       |\n"
+             << "|       Tabela de scor      |\n"
              << "-----------------------------\n"
-             << "|" << echipa1->getNume() << "  |  " << echipa2->getNume() << "|\n"
+             << "|" << echipa1->getNume() << " | " << echipa2->getNume() << "|\n"
              << "-----------------------------\n"
-             << "| Punctaj | " << echipa1->getPunctaj() << "  |  " << echipa2->getPunctaj() << " |\n"
+             << "| Punctaj | " << echipa1->getPunctaj() << " | " << echipa2->getPunctaj() << " |\n"
              << "-----------------------------\n"
-             << "| Seturi  | " << echipa1->getSeturi()  << "  |  " << echipa2->getSeturi()  << " |\n"
+             << "| Seturi  | " << echipa1->getSeturi()  << " | " << echipa2->getSeturi()  << " |\n"
              << "-----------------------------\n";
     }
 
     char punct() {
         float sansa_a = pow((float)echipa1->get_overall(), 3.0f) /
-                (pow((float)echipa1->get_overall(), 3.0f) + pow((float)echipa2->get_overall(), 3.0f));
+                 (pow((float)echipa1->get_overall(), 3.0f) + pow((float)echipa2->get_overall(), 3.0f));
 
 float r = (float)rand() / (float)RAND_MAX;
         
@@ -732,20 +732,20 @@ public:
 
     Echipe meci(Echipe* echipa) {
     auto lista = baza->getListe();
-    size_t n = lista.size(); 
-    size_t index = (size_t)-1; 
-    size_t index_echipa_manager = n - 1;
+    size_t n = lista.size(); 
+    size_t index = (size_t)-1; 
+    size_t index_echipa_manager = n - 1;
 
     while (true) {
-       const Echipe* adversar = baza->alege_echipa_random();
-        for (int i = 0; i < n; i++) {
+        const Echipe* adversar = baza->alege_echipa_random();
+        for (size_t i = 0; i < n; i++) {
             if (lista[i] == adversar) {
                 index = i;
                 break;
             }
         }
 
-        if (index == -1 || index == index_echipa_manager)
+        if (index == (size_t)-1 || index == index_echipa_manager)
             continue;
 
         if (ales[index_echipa_manager][index] == true || etapa_jucat[index] == true)
@@ -781,7 +781,7 @@ public:
         ales = vector<vector<bool>>(n, vector<bool>(n, false));
         etapa_jucat.resize(n, false);
         punctaje.resize(n, 0);
-        for (int i = 0; i < n; i++) {
+        for (size_t i = 0; i < n; i++) { // <--- size_t
             ales[i][i] = true;
         }
     }
@@ -792,18 +792,17 @@ public:
             cout << baza->getEchipe(i)->getNume() << ": " << punctaje[i] << "\n";
     }
 
-   /* void afisare_punctaj() {
+    /* void afisare_punctaj() {
         cout << baza->getEchipe(baza->getListe().size() - 1)->getNume() << ": " << punctaje[baza->getListe().size() - 1] << "\n";
     }*/
     //functie pentru verificare punctaj
 
     void meciuri() {
-    void meciuri() {
-    auto lista = baza->getListe();
-    size_t n = lista.size();
-    size_t index_echipa_manager = n - 1;
+    auto lista = baza->getListe();
+    size_t n = lista.size();
+    size_t index_echipa_manager = n - 1;
 
-    if (punctaje.size() != (size_t)n)
+    if (punctaje.size() != n)
         punctaje.resize(n, 0);
 
 
@@ -813,12 +812,12 @@ public:
 
         progres_facut = false;
 
-        for (int i = 0; i < n; i++) {
+        for (size_t i = 0; i < n; i++) { // <--- size_t
 
             if (i == index_echipa_manager || etapa_jucat[i])
                 continue;
 
-            for (int index = 0; index < n; index++) {
+            for (size_t index = 0; index < n; index++) { // <--- size_t
 
                 if (index == index_echipa_manager || index == i || etapa_jucat[index])
                     continue;
@@ -986,196 +985,196 @@ public:
 
 
 int main() {
-    srand(static_cast<unsigned int>(time(0))); 
-    BazaDeDate baza, baza_jucatori;
+    srand(static_cast<unsigned int>(time(0))); 
+    BazaDeDate baza, baza_jucatori;
 
-    manageri manager;
+    manageri manager;
 
-    manager.numeEchipa();
+    manager.numeEchipa();
 
-    vector<Echipe*> echipe;
-    vector<string> numeEchipe = {"Dinamo","Rapid","CFR","UCluj","Farul",
-                                 "Petrolul","UTA","FCSB","Voluntari","Botosani","Otelul"};
-
-
-    for (const auto &nume : numeEchipe)
-        echipe.push_back(new Echipe(nume));
+    vector<Echipe*> echipe;
+    vector<string> numeEchipe = {"Dinamo","Rapid","CFR","UCluj","Farul",
+                                 "Petrolul","UTA","FCSB","Voluntari","Botosani","Otelul"};
 
 
-    ifstream fin("text.txt");
-    if (!fin) {
-        cerr << "Nu s-a putut deschide fisierul text.txt\n";
-        return 1;
-    }
-
-    for (auto& echipa : echipe) {
-        vector<jucator*> jucatoriEchipa;
-
-        string pozitie_local, nume_local;
-        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
-        jucator* j = nullptr;
-        int i = 0;
-        while(i < 6) {
-            if (!(fin >> pozitie_local)) break; 
-            vector<int> a;
-            fin>>nume_local; 
-
-            if (pozitie_local == "Libero") {
-                j = new Libero();
-                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
-                j->valori(a);
-            }
-            else if (pozitie_local == "Setter") {
-                j = new Setter();
-                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
-                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
-                j->valori(a);
-            }
-            else if (pozitie_local == "OutsideHitter") {
-                j = new OutsideHitter();
-                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
-                j->valori(a);
-            }
-            else if (pozitie_local == "OppositeHitter") {
-                j = new OppositeHitter();
-                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
-                j->valori(a);
-            }
-            else if (pozitie_local == "MiddleBlocker") {
-                j = new MiddleBlocker();
-                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
-                j->valori(a);
-            }
-            else continue;
-            j->set_nume(nume_local);
-            j->set_poz(pozitie_local); 
-
-            cout<<*j<<endl;
-
-            jucatoriEchipa.push_back(j);
-            baza.adaugaJucator(j);
-            i++;
-        }
-        echipa->adaugare_jucatori(jucatoriEchipa);
-        jucatoriEchipa.clear();
-        echipa->get_overall();
-        baza.adaugaEchipe(echipa);
-    }
-    fin.close();
+    for (const auto &nume : numeEchipe)
+        echipe.push_back(new Echipe(nume));
 
 
-    ifstream finn("tastatura.txt");
-    if (!finn) {
-        cerr << "Nu s-a putut deschide fisierul tastatura.txt\n";
-        return 1;
-    }
+    ifstream fin("text.txt");
+    if (!fin) {
+        cerr << "Nu s-a putut deschide fisierul text.txt\n";
+        return 1;
+    }
 
-    while(true) {
-        string pozitie_local, nume_local;
-        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
-        jucator* j = nullptr;
-        if (!(finn >> pozitie_local)) break; 
-        vector<int> a;
-        finn>>nume_local; // FOLOSIT VARIABILA LOCALĂ
+    for (auto& echipa : echipe) {
+        vector<jucator*> jucatoriEchipa;
 
-        if (pozitie_local == "Libero") {
-            j = new Libero();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
-            j->valori(a);
-        }
-        else if (pozitie_local == "Setter") {
-            int a11;
-            j = new Setter();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
-            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
-            j->valori(a);
-        }
-        else if (pozitie_local == "OutsideHitter") {
-            j = new OutsideHitter();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
-            j->valori(a);
-        }
-        else if (pozitie_local == "OppositeHitter") {
-            j = new OppositeHitter();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
-            j->valori(a);
-        }
-        else if (pozitie_local == "MiddleBlocker") {
-            j = new MiddleBlocker();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
-            j->valori(a);
-        }
-        else continue;
-        j->set_nume(nume_local);
-        j->set_poz(pozitie_local);
+        string pozitie_local, nume_local;
+        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
+        jucator* j = nullptr;
+        int i = 0;
+        while(i < 6) {
+            if (!(fin >> pozitie_local)) break; 
+            vector<int> a;
+            fin>>nume_local; 
 
-       baza_jucatori.adaugaJucator(j);
+            if (pozitie_local == "Libero") {
+                j = new Libero();
+                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+                j->valori(a);
+            }
+            else if (pozitie_local == "Setter") {
+                j = new Setter();
+                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
+                j->valori(a);
+            }
+            else if (pozitie_local == "OutsideHitter") {
+                j = new OutsideHitter();
+                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+                j->valori(a);
+            }
+            else if (pozitie_local == "OppositeHitter") {
+                j = new OppositeHitter();
+                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+                j->valori(a);
+            }
+            else if (pozitie_local == "MiddleBlocker") {
+                j = new MiddleBlocker();
+                fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+                a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+                a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+                j->valori(a);
+            }
+            else continue;
+            j->set_nume(nume_local);
+            j->set_poz(pozitie_local); 
+
+            cout<<*j<<endl;
+
+            jucatoriEchipa.push_back(j);
+            baza.adaugaJucator(j);
+            i++;
+        }
+        echipa->adaugare_jucatori(jucatoriEchipa);
+        jucatoriEchipa.clear();
+        echipa->get_overall();
+        baza.adaugaEchipe(echipa);
+    }
+    fin.close();
 
 
-    }
-    finn.close();
-    numeEchipe.push_back( manager.get_nume());
+    ifstream finn("tastatura.txt");
+    if (!finn) {
+        cerr << "Nu s-a putut deschide fisierul tastatura.txt\n";
+        return 1;
+    }
 
-    cout << "S-au citit toate echipele cu jucatorii.\n";
+    while(true) {
+        string pozitie_local, nume_local;
+        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
+        jucator* j = nullptr;
+        if (!(finn >> pozitie_local)) break; 
+        vector<int> a;
+        finn>>nume_local; 
 
-    manager.adaugare_jucatori_valabili(&baza_jucatori);
-    manager.alegere_echipa();
-    manager.set_overall();
-    baza.adaugaEchipe(manager.get_echipa());
+        if (pozitie_local == "Libero") {
+            j = new Libero();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else if (pozitie_local == "Setter") {
+            int a11;
+            j = new Setter();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
+            j->valori(a);
+        }
+        else if (pozitie_local == "OutsideHitter") {
+            j = new OutsideHitter();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else if (pozitie_local == "OppositeHitter") {
+            j = new OppositeHitter();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else if (pozitie_local == "MiddleBlocker") {
+            j = new MiddleBlocker();
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else continue;
+        j->set_nume(nume_local);
+        j->set_poz(pozitie_local);
 
-    echipe.push_back( manager.get_echipa());
+        baza_jucatori.adaugaJucator(j);
 
-    for (const Echipe* e : echipe)
-        cout << *e;
 
-    Liga liga(&baza,echipe);
+    }
+    finn.close();
+    numeEchipe.push_back( manager.get_nume());
 
-    for (int i = 0; i < 12; i++) {
-        string s;
+    cout << "S-au citit toate echipele cu jucatorii.\n";
 
-        int index_echipa_manager = static_cast<int>(echipe.size() - 1); 
+    manager.adaugare_jucatori_valabili(&baza_jucatori);
+    manager.alegere_echipa();
+    manager.set_overall();
+    baza.adaugaEchipe(manager.get_echipa());
 
-        liga.meci(echipe[index_echipa_manager]);
+    echipe.push_back( manager.get_echipa());
 
-            liga.meciuri();
+    for (const Echipe* e : echipe)
+        cout << *e;
 
-            liga.afisare_punctaje();
+    Liga liga(&baza,echipe);
 
-            cout<<"Doriti sa se contiune liga?(da/nu)";
-            cin>> s;
+    for (int i = 0; i < 12; i++) {
+        string s;
 
-            if (s == "da")
-                continue;
-            else
-                break;
-        }
+        int index_echipa_manager = static_cast<int>(echipe.size() - 1); 
 
-    for (auto j : baza_jucatori.getLista())
-        delete j;
+        liga.meci(echipe[index_echipa_manager]);
 
-    size_t nr_echipe_ai = echipe.size() - 1;
+            liga.meciuri();
+
+            liga.afisare_punctaje();
+
+            cout<<"Doriti sa se contiune liga?(da/nu)";
+            cin>> s;
+
+            if (s == "da")
+                continue;
+            else
+                break;
+        }
+
+    for (auto j : baza_jucatori.getLista())
+        delete j;
+
+    size_t nr_echipe_ai = echipe.size() - 1;
 for (size_t i = 0; i < nr_echipe_ai; ++i) {
-    delete echipe[i];
+    delete echipe[i];
 }
 echipe.resize(nr_echipe_ai);
 
-    return 0;
+    return 0;
 }
