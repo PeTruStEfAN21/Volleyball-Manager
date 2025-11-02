@@ -805,7 +805,7 @@ public:
 class manageri {
 private:
     int buget;
-    unique_ptr<Echipe> echipa; 
+    EchipaPtr echipa;
     string nume;
     vector<JucatorPtr> lista; 
     BazaDeDate* baza;
