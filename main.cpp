@@ -36,10 +36,10 @@ protected:
     }
 
 public:
-    jucator(const string &nume, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
+    jucator(const string &num, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
             int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
             bool ales)
-        : nume(nume), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
+        : nume(num), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
           spike_accuracy(spike_accuracy), serve_power(serve_power), serve_accuracy(serve_accuracy),
           vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
           ales(ales) {}
@@ -133,8 +133,8 @@ jucator()
     }*/
     //foarte util pentru depanare
 
-    void set_nume(const string &nume) {
-      this->nume = nume;
+    void set_nume(const string &num) {
+      this->nume = num;
     }
 
 
