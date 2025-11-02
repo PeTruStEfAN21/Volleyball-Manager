@@ -779,6 +779,7 @@ public:
     Liga(BazaDeDate* baza, const vector<Echipe*>&) : baza(baza) {
         int n = baza->getListe().size();
         ales = vector<vector<bool>>(n, vector<bool>(n, false));
+        etapa_jucat.resize(n, false);
         punctaje.resize(n, 0);
         for (int i = 0; i < n; i++) {
             ales[i][i] = true;
