@@ -658,10 +658,7 @@ public:
 
     BazaDeDate() = default;
 
-    ~BazaDeDate() {
-        for (auto j : jucatori)
-            delete j;
-    }
+    ~BazaDeDate() = default;
 
     void adaugaJucator(jucator* j) {
         jucatori.push_back(j);
@@ -1168,6 +1165,9 @@ int main() {
             else
                 break;
         }
+
+    for (auto j : baza_jucatori.getLista())
+        delete j;
 
     size_t nr_echipe_ai = echipe.size() - 1;
 for (size_t i = 0; i < nr_echipe_ai; ++i) {
