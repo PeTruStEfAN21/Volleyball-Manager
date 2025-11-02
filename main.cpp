@@ -16,13 +16,12 @@ class Echipe;
 
 class jucator {
 protected:
-    std::string nume;
-    std::string pozitie;
+    string nume, pozitie;
     int ovr, spike_power, receive, spike_accuracy, serve_power, serve_accuracy, vertical_jump, mobility, speed, pret, height;
     bool ales;
 
     virtual void overall() {
-        ovr = (spike_power + receive + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility + speed + height) / 9;
+        this->ovr = (this->spike_power + this->receive + this->spike_accuracy + this->serve_power + this->serve_accuracy + this->vertical_jump + this->mobility + this->speed + this->height) / 9;
     }
 
     int set_val(int valoarea) const {
@@ -32,7 +31,7 @@ protected:
     }
 
     virtual void set_pret() {
-        pret = ovr * 50;
+        this->pret = this->ovr * 50;
     }
 
 public:
@@ -51,30 +50,28 @@ jucator()
           vertical_jump(0), mobility(0), speed(0), pret(0), height(0), ales(false) {}
 
 
-    void set_poz(const string &poz) { // Pass by const reference
+    void set_poz(const string &poz) { 
         this->pozitie = poz;
     }
 
     virtual void valori(vector<int> a) {
-        spike_power = set_val(a[0]);
-        receive = set_val(a[1]);
-        spike_accuracy = set_val(a[2]);
-        serve_power = set_val(a[3]);
-        serve_accuracy = set_val(a[4]);
-        vertical_jump = set_val(a[5]);
-        mobility = set_val(a[6]);
-        height = set_val(a[7]);
-        speed = set_val(a[8]);
+        this->spike_power = set_val(a[0]);
+        this->receive = set_val(a[1]);
+        this->spike_accuracy = set_val(a[2]);
+        this->serve_power = set_val(a[3]);
+        this->serve_accuracy = set_val(a[4]);
+        this->vertical_jump = set_val(a[5]);
+        this->mobility = set_val(a[6]);
+        this->height = set_val(a[7]);
+        this->speed = set_val(a[8]);
     }
 
-    /*int get_pret() const { return pret; }*/
-    //functie pentru transferuri...
-    bool esteAles() const { return ales; }
-    void setAles(bool val) { ales = val; }
-    int get_ovr() const { return ovr; }
+    bool esteAles() const { return this->ales; }
+    void setAles(bool val) { this->ales = val; }
+    int get_ovr() const { return this->ovr; }
 
     virtual void afiseaza() const {
-        cout << nume << " (" << pozitie << ") - OVR: " << ovr << ", Pret: " << pret << endl;
+        cout << this->nume << " (" << this->pozitie << ") - OVR: " << this->ovr << ", Pret: " << this->pret << endl;
     }
 
     friend ostream &operator<<(ostream &out, const jucator &j) {
@@ -84,19 +81,19 @@ jucator()
 
     jucator &operator=(const jucator &j) {
         if (this != &j) {
-           this-> nume = j.nume;
-            ovr = j.ovr;
-            spike_power = j.spike_power;
-            height = j.height;
-            receive = j.receive;
-            spike_accuracy = j.spike_accuracy;
-            serve_power = j.serve_power;
-            serve_accuracy = j.serve_accuracy;
-            vertical_jump = j.vertical_jump;
-            mobility = j.mobility;
-            speed = j.speed;
-            pret = j.pret;
-            pozitie = j.pozitie;
+            this->nume = j.nume;
+            this->ovr = j.ovr;
+            this->spike_power = j.spike_power;
+            this->height = j.height;
+            this->receive = j.receive;
+            this->spike_accuracy = j.spike_accuracy;
+            this->serve_power = j.serve_power;
+            this->serve_accuracy = j.serve_accuracy;
+            this->vertical_jump = j.vertical_jump;
+            this->mobility = j.mobility;
+            this->speed = j.speed;
+            this->pret = j.pret;
+            this->pozitie = j.pozitie;
         }
         return *this;
     }
@@ -104,45 +101,33 @@ jucator()
     virtual void citeste(ifstream &in) {
         in >> this->nume;
 
-        in >> spike_power;
-        in >> receive;
-        in >> spike_accuracy;
-        in >> serve_power;
-        in >> serve_accuracy;
-        in >> vertical_jump;
-        in >> mobility;
-        in >> speed;
-        in >> height;
+        in >> this->spike_power;
+        in >> this->receive;
+        in >> this->spike_accuracy;
+        in >> this->serve_power;
+        in >> this->serve_accuracy;
+        in >> this->vertical_jump;
+        in >> this->mobility;
+        in >> this->speed;
+        in >> this->height;
 
-        spike_power = set_val(spike_power);
-        receive = set_val(receive);
-        spike_accuracy = set_val(spike_accuracy);
-        serve_power = set_val(serve_power);
-        serve_accuracy = set_val(serve_accuracy);
-        vertical_jump = set_val(vertical_jump);
-        mobility = set_val(mobility);
-        speed = set_val(speed);
-        height = set_val(height);
+        this->spike_power = set_val(this->spike_power);
+        this->receive = set_val(this->receive);
+        this->spike_accuracy = set_val(this->spike_accuracy);
+        this->serve_power = set_val(this->serve_power);
+        this->serve_accuracy = set_val(this->serve_accuracy);
+        this->vertical_jump = set_val(this->vertical_jump);
+        this->mobility = set_val(this->mobility);
+        this->speed = set_val(this->speed);
+        this->height = set_val(this->height);
 
         overall();
         set_pret();
     }
 
-    /*string get_poz() {
-        return pozitie;
-    }*/
-    //foarte util pentru depanare
-
     void set_nume(const string &num) {
       this->nume = num;
     }
-
-
-    /*void get_nume() {
-        cout<<nume<<endl;
-    }*/
-    //util pentru depanare
-
 };
 
 
@@ -159,29 +144,29 @@ class OutsideHitter : public jucator {
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        explosiveness = set_val(a[9]);
+        this->explosiveness = set_val(a[9]);
         overall();
     }
 
     OutsideHitter() {
-        pozitie = "OutsideHitter";
-        explosiveness = 0;
+        this->pozitie = "OutsideHitter";
+        this->explosiveness = 0;
     }
 
 
     void overall() override{
-        ovr = ((spike_power * 2 + receive * 2 + spike_accuracy * 2 + serve_power + serve_accuracy + vertical_jump * 2 +
-                mobility + speed + explosiveness * 3 + height * 2) / 17);
+        this->ovr = ((this->spike_power * 2 + this->receive * 2 + this->spike_accuracy * 2 + this->serve_power + this->serve_accuracy + this->vertical_jump * 2 +
+                this->mobility + this->speed + this->explosiveness * 3 + this->height * 2) / 17);
     }
 
     void set_pret() override {
-        pret = 10000 + ovr * 50 + spike_accuracy * 10 + spike_power * 10 + vertical_jump * 10 + explosiveness * 20 + receive * 10 + height * 10;;
+        this->pret = 10000 + this->ovr * 50 + this->spike_accuracy * 10 + this->spike_power * 10 + this->vertical_jump * 10 + this->explosiveness * 20 + this->receive * 10 + this->height * 10;;
     }
 
     void citeste(std::ifstream &in) override {
         jucator::citeste(in);
-        in >> explosiveness;
-        explosiveness = set_val(explosiveness);
+        in >> this->explosiveness;
+        this->explosiveness = set_val(this->explosiveness);
         overall();
         set_pret();
     }
@@ -198,34 +183,34 @@ class Setter : public jucator {
     }
 
     Setter() {
-        set_precision = set_iq = 0;
-        pozitie = "Setter";
+        this->set_precision = this->set_iq = 0;
+        this->pozitie = "Setter";
     }
 
     ~Setter() override = default;
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        set_precision = set_val(a[9]);
-        set_iq = set_val(a[10]);
+        this->set_precision = set_val(a[9]);
+        this->set_iq = set_val(a[10]);
         overall();
     }
 
     void overall() override {
-        ovr = (spike_power + receive + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
-                speed * 2 + set_precision * 3 + set_iq * 3 + height) / 17;
+        this->ovr = (this->spike_power + this->receive + this->spike_accuracy + this->serve_power + this->serve_accuracy + this->vertical_jump + this->mobility * 2 +
+                this->speed * 2 + this->set_precision * 3 + this->set_iq * 3 + this->height) / 17;
     }
 
     void set_pret() override {
-        pret = 8000 + ovr * 50 + speed * 10 + set_precision * 20 + set_iq * 20 + mobility * 10;
+        this->pret = 8000 + this->ovr * 50 + this->speed * 10 + this->set_precision * 20 + this->set_iq * 20 + this->mobility * 10;
     }
 
     void citeste(std::ifstream &in) override {
         jucator::citeste(in);
-        in >> set_iq;
-        in>> set_precision;
-        set_precision = set_val(set_precision);
-        set_iq  = set_val(set_iq);
+        in >> this->set_iq;
+        in>> this->set_precision;
+        this->set_precision = set_val(this->set_precision);
+        this->set_iq  = set_val(this->set_iq);
         overall();
         set_pret();
     }
@@ -239,31 +224,31 @@ class Libero : public jucator {
     }
 
     Libero() {
-        reflexes = 0;
-        pozitie = "Libero";
+        this->reflexes = 0;
+        this->pozitie = "Libero";
     }
 
     ~Libero() override = default;
 
 
     void overall() override {
-        ovr = (spike_power + receive * 3 + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
-                speed * 3 + reflexes * 3 + height) / 17;
+        this->ovr = (this->spike_power + this->receive * 3 + this->spike_accuracy + this->serve_power + this->serve_accuracy + this->vertical_jump + this->mobility * 2 +
+                this->speed * 3 + this->reflexes * 3 + this->height) / 17;
     }
 
     void set_pret() override {
-        pret = 6000 + ovr * 50 + mobility * 10 + speed * 20 + reflexes * 20 + receive * 20;
+        this->pret = 6000 + this->ovr * 50 + this->mobility * 10 + this->speed * 20 + this->reflexes * 20 + this->receive * 20;
     }
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        reflexes = set_val(a[9]);
+        this->reflexes = set_val(a[9]);
         overall();
     }
     void citeste(std::ifstream &in) override {
         jucator::citeste(in);
-        in >> reflexes;
-        reflexes = set_val(reflexes);
+        in >> this->reflexes;
+        this->reflexes = set_val(this->reflexes);
         overall();
         set_pret();
     }
@@ -278,30 +263,30 @@ class MiddleBlocker : public jucator {
     }
 
     MiddleBlocker() {
-        blocking = 0;
-        pozitie = "MiddleBlocker";
+        this->blocking = 0;
+        this->pozitie = "MiddleBlocker";
     }
 
     ~MiddleBlocker() override = default;
 
     void overall() override {
-        ovr = (spike_power + receive + spike_accuracy + serve_power + serve_accuracy + vertical_jump + mobility * 2 +
-                speed * 2 + blocking * 3 + height * 4) / 17;
+        this->ovr = (this->spike_power + this->receive + this->spike_accuracy + this->serve_power + this->serve_accuracy + this->vertical_jump + this->mobility * 2 +
+                this->speed * 2 + this->blocking * 3 + this->height * 4) / 17;
     }
 
     void set_pret() override {
-        pret = 7000 + ovr * 50 + blocking * 20 + height * 30 + speed * 10 + mobility * 10;
+        this->pret = 7000 + this->ovr * 50 + this->blocking * 20 + this->height * 30 + this->speed * 10 + this->mobility * 10;
     }
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        blocking = set_val(a[9]);
+        this->blocking = set_val(a[9]);
         overall();
     }
     void citeste(std::ifstream &in) override {
         jucator::citeste(in);
-        in >> blocking;
-        blocking = set_val(blocking);
+        in >> this->blocking;
+        this->blocking = set_val(this->blocking);
         overall();
         set_pret();
     }
@@ -317,32 +302,31 @@ class OppositeHitter : public jucator {
     }
 
     OppositeHitter() {
-        explosiveness = 0;
-        pozitie = "OppositeHitter";
+        this->explosiveness = 0;
+        this->pozitie = "OppositeHitter";
     }
 
-    // ADAUGAT: Destructor explicit
     ~OppositeHitter() override = default;
 
     void overall() override {
-        ovr = ((spike_power * 2 + receive * 2 + spike_accuracy * 2 + serve_power + serve_accuracy + vertical_jump * 2 +
-                mobility + speed + explosiveness * 3 + height * 2) / 17);
+        this->ovr = ((this->spike_power * 2 + this->receive * 2 + this->spike_accuracy * 2 + this->serve_power + this->serve_accuracy + this->vertical_jump * 2 +
+                this->mobility + this->speed + this->explosiveness * 3 + this->height * 2) / 17);
     }
 
     void set_pret() override {
-        pret = 10000 + ovr * 50 + spike_accuracy * 10 + spike_power * 10 + vertical_jump * 10 + explosiveness * 20 + receive * 10 + height * 10;;
+        this->pret = 10000 + this->ovr * 50 + this->spike_accuracy * 10 + this->spike_power * 10 + this->vertical_jump * 10 + this->explosiveness * 20 + this->receive * 10 + this->height * 10;;
     }
 
 
     void valori(vector <int> a) override {
         jucator::valori(a);
-        explosiveness = set_val(a[9]);
+        this->explosiveness = set_val(a[9]);
         overall();
     }
     void citeste(std::ifstream &in) override {
         jucator::citeste(in);
-        in >> explosiveness;
-        explosiveness = set_val(explosiveness);
+        in >> this->explosiveness;
+        this->explosiveness = set_val(this->explosiveness);
         overall();
         set_pret();
     }
@@ -357,22 +341,16 @@ private:
     float ovr;
     int punctaj, seturi;
 
-    /*void citireNume() {
-        cout << "Dati numele echipei: ";
-        cin >> nume;
-    }*/
-    //posibil util mai tarziu
-
 public:
 
     void set_overall() {
         float suma = 0;
         int j = 0;
-        for (size_t i = 0; i < jucatori.size(); i++) {
-            suma = suma + jucatori[i]->get_ovr();
+        for (size_t i = 0; i < this->jucatori.size(); i++) {
+            suma = suma + this->jucatori[i]->get_ovr();
             j++;
         }
-        ovr = suma / j;
+        this->ovr = suma / j;
     }
 
     Echipe(const string &nume, const vector<jucator *> &jucatori, float ovr, int punctaj, int seturi)
@@ -394,43 +372,43 @@ public:
     Echipe & operator=(const Echipe &other) {
         if (this == &other)
             return *this;
-        nume = other.nume;
-        jucatori = other.jucatori;
-        ovr = other.ovr;
-        punctaj = other.punctaj;
-        seturi = other.seturi;
+        this->nume = other.nume;
+        this->jucatori = other.jucatori;
+        this->ovr = other.ovr;
+        this->punctaj = other.punctaj;
+        this->seturi = other.seturi;
         return *this;
     }
 
     explicit Echipe(const string& nume) {
-        ovr = 0;
+        this->ovr = 0;
         this->nume = nume;
-        punctaj = 0;
-        seturi = 0;
+        this->punctaj = 0;
+        this->seturi = 0;
 
 
     }
 
     Echipe() {
-        ovr = 0;
-        punctaj = 0;
-        seturi = 0;
+        this->ovr = 0;
+        this->punctaj = 0;
+        this->seturi = 0;
     }
 
     int get_overall() {
         float suma = 0;
         int j = 0;
-        for (size_t i = 0; i < jucatori.size(); i++) {
-            suma = suma + jucatori[i]->get_ovr();
+        for (size_t i = 0; i < this->jucatori.size(); i++) {
+            suma = suma + this->jucatori[i]->get_ovr();
             j++;
         }
-        ovr = suma / j;
-        return static_cast<int>(ovr);
+        this->ovr = suma / j;
+        return static_cast<int>(this->ovr);
     }
 
     void creare(const vector<jucator*>& lista) {
         int n = 0, index;
-        cout << "\n--- Creare echipa " << nume << " ---\n";
+        cout << "\n--- Creare echipa " << this->nume << " ---\n";
 
 
 
@@ -450,41 +428,12 @@ public:
                 continue;
             }
 
-            jucatori.push_back(jucatorAles);
-            jucatorAles->setAles(true); // marchez ca ales
+            this->jucatori.push_back(jucatorAles);
+            jucatorAles->setAles(true); 
             n++;
             cout << "Jucator adaugat cu succes!\n";
         }
     }
-
-    /* void adaugare_jucator(vector<jucator*>& lista, int buget) {
-        int index;
-        cout << "\n--- Creare echipa " << nume << " ---\n";
-
-            cout << "Alegeti un jucator din lista: ";
-            cin >> index;
-
-            if (index < 1 || index > (int)lista.size()) {
-                cout << "Index invalid! Alegeti intre 1 si " << lista.size() << endl;
-            }
-
-            jucator* jucatorAles = lista[index-1];
-
-
-            if (jucatorAles->esteAles()) {
-                cout << "Jucatorul a fost deja selectat! Alegeti altul.\n";
-            }
-
-        if (buget < jucatorAles->get_pret())
-            cout<< " Nu aveti destui bani pentru a contracta jucatorul ales";
-        else {
-            jucatori.push_back(jucatorAles);
-            jucatorAles->setAles(true); // marchez ca ales
-            cout << "Jucator adaugat cu succes!\n";
-        }
-        }
-         */
-    //functie pentru transferuri pe viitor
 
     friend ostream& operator<<(ostream& os, const Echipe& e) {
         os << "\n=== Echipa: " << e.nume << " ===\n";
@@ -496,44 +445,41 @@ public:
 
     void adaugare_jucatori(const vector<jucator*>& lista) {
         for(auto j : lista){
-            jucatori.push_back(j);
+            this->jucatori.push_back(j);
             j->setAles(true);
         }
     }
 
-    const string& getNume() const { return nume; }
+    const string& getNume() const { return this->nume; }
 
 
     int getPunctaj() {
-        return punctaj;
+        return this->punctaj;
     }
 
     int getSeturi() {
-        return seturi;
+        return this->seturi;
     }
 
     void modifPunctaj() {
-        punctaj++;
+        this->punctaj++;
     }
 
     void modifSetur() {
-        seturi++;
+        this->seturi++;
     }
 
     void resetPunctaj() {
-        punctaj = 0;
+        this->punctaj = 0;
     }
 
     void resetSetur() {
-        seturi = 0;
+        this->seturi = 0;
     }
 
     void set_nume() {
-        getline(cin, nume);
+        getline(cin, this->nume);
     }
-
-
-
 };
 
 
@@ -546,17 +492,17 @@ protected:
         cout << "_____________________________\n"
              << "|       Tabela de scor      |\n"
              << "-----------------------------\n"
-             << "|" << echipa1->getNume() << " | " << echipa2->getNume() << "|\n"
+             << "|" << this->echipa1->getNume() << " | " << this->echipa2->getNume() << "|\n"
              << "-----------------------------\n"
-             << "| Punctaj | " << echipa1->getPunctaj() << " | " << echipa2->getPunctaj() << " |\n"
+             << "| Punctaj | " << this->echipa1->getPunctaj() << " | " << this->echipa2->getPunctaj() << " |\n"
              << "-----------------------------\n"
-             << "| Seturi  | " << echipa1->getSeturi()  << " | " << echipa2->getSeturi()  << " |\n"
+             << "| Seturi  | " << this->echipa1->getSeturi()  << " | " << this->echipa2->getSeturi()  << " |\n"
              << "-----------------------------\n";
     }
 
     char punct() {
-        float sansa_a = pow((float)echipa1->get_overall(), 3.0f) /
-                 (pow((float)echipa1->get_overall(), 3.0f) + pow((float)echipa2->get_overall(), 3.0f));
+        float sansa_a = pow((float)this->echipa1->get_overall(), 3.0f) /
+                 (pow((float)this->echipa1->get_overall(), 3.0f) + pow((float)this->echipa2->get_overall(), 3.0f));
 
         float r = (float)rand() / (float)RAND_MAX;
         
@@ -567,16 +513,16 @@ protected:
     }
 
     char set() {
-        echipa1->resetPunctaj();
-        echipa2->resetPunctaj();
+        this->echipa1->resetPunctaj();
+        this->echipa2->resetPunctaj();
 
-        while (echipa1->getPunctaj() < 25 && echipa2->getPunctaj() < 25) {
+        while (this->echipa1->getPunctaj() < 25 && this->echipa2->getPunctaj() < 25) {
                 char castigator = punct();
 
                 if (castigator == 'a')
-                    echipa1->modifPunctaj();
+                    this->echipa1->modifPunctaj();
                 else
-                    echipa2->modifPunctaj();
+                    this->echipa2->modifPunctaj();
 
                 cout << string(50, '\n');
                 tabelaScor();
@@ -585,14 +531,14 @@ protected:
 
         }
 
-        if (echipa1->getPunctaj() >= 25 || echipa2->getPunctaj() >= 25) {
-            while (abs(echipa1->getPunctaj() - echipa2->getPunctaj()) <= 1){
+        if (this->echipa1->getPunctaj() >= 25 || this->echipa2->getPunctaj() >= 25) {
+            while (abs(this->echipa1->getPunctaj() - this->echipa2->getPunctaj()) <= 1){
                 char castigator = punct();
 
                 if (castigator == 'a')
-                    echipa1->modifPunctaj();
+                    this->echipa1->modifPunctaj();
                 else
-                    echipa2->modifPunctaj();
+                    this->echipa2->modifPunctaj();
 
                 cout << string(50, '\n');
                 tabelaScor();
@@ -601,12 +547,12 @@ protected:
             }
         }
 
-        if (echipa1->getPunctaj() > echipa2->getPunctaj()) {
-            cout << "\nSET CASTIGAT DE " << echipa1->getNume() << "!\n";
+        if (this->echipa1->getPunctaj() > this->echipa2->getPunctaj()) {
+            cout << "\nSET CASTIGAT DE " << this->echipa1->getNume() << "!\n";
             return 'a';
         } else
         {
-            cout << "\nSET CASTIGAT DE " << echipa2->getNume() << "!\n";
+            cout << "\nSET CASTIGAT DE " << this->echipa2->getNume() << "!\n";
             return 'b';
         }
     }
@@ -621,25 +567,25 @@ public:
 
 
     Echipe* meci() {
-        echipa1->resetSetur();
-        echipa2->resetSetur();
-        while (echipa1->getSeturi() < 3 && echipa2->getSeturi() < 3) {
+        this->echipa1->resetSetur();
+        this->echipa2->resetSetur();
+        while (this->echipa1->getSeturi() < 3 && this->echipa2->getSeturi() < 3) {
             char castigator = set();
             if (castigator == 'a')
-                echipa1->modifSetur();
+                this->echipa1->modifSetur();
             else
-                echipa2->modifSetur();
+                this->echipa2->modifSetur();
 
             this_thread::sleep_for(chrono::seconds(2));
         }
 
-        if (echipa1->getSeturi() == 3) {
-            cout << "\nEchipa " << echipa1->getNume() << " a castigat meciul! Felicitari!\n";
-            return echipa1;
+        if (this->echipa1->getSeturi() == 3) {
+            cout << "\nEchipa " << this->echipa1->getNume() << " a castigat meciul! Felicitari!\n";
+            return this->echipa1;
         }
         else {
-            cout << "\nEchipa " << echipa2->getNume() << " a castigat meciul! Felicitari!\n";
-            return echipa2;
+            cout << "\nEchipa " << this->echipa2->getNume() << " a castigat meciul! Felicitari!\n";
+            return this->echipa2;
         }
 
 
@@ -659,48 +605,35 @@ public:
 
     BazaDeDate() = default;
 
-    ~BazaDeDate() = default; // Corecție memorie: am eliminat `delete j` aici
+    ~BazaDeDate() = default;
 
     void adaugaJucator(jucator* j) {
-        jucatori.push_back(j);
+        this->jucatori.push_back(j);
     }
 
     void adaugaEchipe(Echipe* e) {
-        echipe_disponibile.push_back(e);
+        this->echipe_disponibile.push_back(e);
     }
 
     void afiseazaJucatori() const {
         cout << "\n=== Lista jucatorilor inregistrati ===\n";
-        for (size_t i = 0; i < jucatori.size(); i++) {
+        for (size_t i = 0; i < this->jucatori.size(); i++) {
             cout << i + 1 << ". ";
-            jucatori[i]->afiseaza();
+            this->jucatori[i]->afiseaza();
         }
     }
 
-    /*void afiseazaEchipe() const {
-        cout << "\n=== Lista echipelor inregistrate ===\n";
-        for (size_t i = 0; i < echipe_disponibile.size(); i++) {
-            cout << i + 1 << ". ";
-            cout<< *echipe_disponibile[i];
-        }
-    }*/
-    //functie utila pentru depanare si pentru a vedea ce echipe au fost adaugate in baza intr un anumit punct
+    Echipe* getEchipe(size_t index) const { return this->echipe_disponibile[index]; }
 
-    /*size_t getNrJucatori() const { return jucatori.size(); }
-    jucator* getJucator(size_t index) const { return jucatori[index]; } */
-    //functii utile pentru depanare
+    const vector<jucator*>& getLista() const { return this->jucatori; }
 
-    Echipe* getEchipe(size_t index) const { return echipe_disponibile[index]; }
-
-    const vector<jucator*>& getLista() const { return jucatori; }
-
-    const vector<Echipe*>& getListe() const { return echipe_disponibile; }
+    const vector<Echipe*>& getListe() const { return this->echipe_disponibile; }
 
     Echipe* alege_echipa_random() {
-        if (echipe_disponibile.empty()) return nullptr;
+        if (this->echipe_disponibile.empty()) return nullptr;
 
-        int idx = rand() % echipe_disponibile.size();
-        return echipe_disponibile[idx];
+        int idx = rand() % this->echipe_disponibile.size();
+        return this->echipe_disponibile[idx];
     }
 
     BazaDeDate(const BazaDeDate &other)
@@ -711,8 +644,8 @@ public:
     BazaDeDate & operator=(const BazaDeDate &other) {
         if (this == &other)
             return *this;
-        jucatori = other.jucatori;
-        echipe_disponibile = other.echipe_disponibile;
+        this->jucatori = other.jucatori;
+        this->echipe_disponibile = other.echipe_disponibile;
         return *this;
     }
 };
@@ -721,7 +654,6 @@ class Liga : public Meci {
 private:
     BazaDeDate* baza;
     vector<int> punctaje;
-    //int nrEchipe = 0;
     vector<vector<bool>> ales;
     vector<bool> etapa_jucat;
 
@@ -732,13 +664,13 @@ public:
 
 
     Echipe meci(Echipe* echipa) {
-    auto lista = baza->getListe();
+    auto lista = this->baza->getListe();
     size_t n = lista.size(); 
     size_t index = (size_t)-1; 
     size_t index_echipa_manager = n - 1;
 
     while (true) {
-        const Echipe* adversar = baza->alege_echipa_random();
+        const Echipe* adversar = this->baza->alege_echipa_random();
         for (size_t i = 0; i < n; i++) {
             if (lista[i] == adversar) {
                 index = i;
@@ -749,27 +681,27 @@ public:
         if (index == (size_t)-1 || index == index_echipa_manager)
             continue;
 
-        if (ales[index_echipa_manager][index] == true || etapa_jucat[index] == true)
+        if (this->ales[index_echipa_manager][index] == true || this->etapa_jucat[index] == true)
             continue;
 
 
         break;
     }
 
-    ales[index_echipa_manager][index] = true;
-    ales[index][index_echipa_manager] = true;
-    etapa_jucat[index] = true;
-    etapa_jucat[index_echipa_manager] = true;
+    this->ales[index_echipa_manager][index] = true;
+    this->ales[index][index_echipa_manager] = true;
+    this->etapa_jucat[index] = true;
+    this->etapa_jucat[index_echipa_manager] = true;
 
     Meci meci_local(echipa, lista[index]);
     const Echipe* castigatoare = meci_local.meci();
 
     if (castigatoare == echipa) {
         cout << "Felicitari, echipa ta a castigat meciul, obtinand 3 puncte in clasament.\n";
-        punctaje[index_echipa_manager] += 3;
+        this->punctaje[index_echipa_manager] += 3;
     } else {
         cout << "Din pacate ati pierdut meciul, nu ati obtinut niciun punct in clasament...\n";
-        punctaje[index] += 3;
+        this->punctaje[index] += 3;
     }
 
     return *castigatoare;
@@ -778,36 +710,31 @@ public:
 
 
     Liga(BazaDeDate* baza, const vector<Echipe*>&) : baza(baza) {
-        size_t n = baza->getListe().size(); 
-        ales = vector<vector<bool>>(n, vector<bool>(n, false));
-        etapa_jucat.resize(n, false); // CORECȚIE: Inițializarea lui etapa_jucat
-        punctaje.resize(n, 0);
+        size_t n = this->baza->getListe().size(); 
+        this->ales = vector<vector<bool>>(n, vector<bool>(n, false));
+        this->etapa_jucat.resize(n, false);
+        this->punctaje.resize(n, 0);
         for (size_t i = 0; i < n; i++) { 
-            ales[i][i] = true;
+            this->ales[i][i] = true;
         }
     }
 
 
     void afisare_punctaje() {
-        for (size_t i = 0; i < punctaje.size(); i++)
-            cout << baza->getEchipe(i)->getNume() << ": " << punctaje[i] << "\n";
+        for (size_t i = 0; i < this->punctaje.size(); i++)
+            cout << this->baza->getEchipe(i)->getNume() << ": " << this->punctaje[i] << "\n";
     }
 
-    /* void afisare_punctaj() {
-        cout << baza->getEchipe(baza->getListe().size() - 1)->getNume() << ": " << punctaje[baza->getListe().size() - 1] << "\n";
-    }*/
-    //functie pentru verificare punctaj
-
     void meciuri() {
-    auto lista = baza->getListe();
+    auto lista = this->baza->getListe();
     size_t n = lista.size();
     size_t index_echipa_manager = n - 1;
 
-    if (punctaje.size() != n) // CORECȚIE: n este deja size_t, deci comparația este corectă
-        punctaje.resize(n, 0);
+    if (this->punctaje.size() != n)
+        this->punctaje.resize(n, 0);
 
 
-    while (etapa_jucat != vector<bool>(n, true)) {
+    while (this->etapa_jucat != vector<bool>(n, true)) {
             bool progres_facut;
 
 
@@ -815,22 +742,22 @@ public:
 
         for (size_t i = 0; i < n; i++) { 
 
-            if (i == index_echipa_manager || etapa_jucat[i])
+            if (i == index_echipa_manager || this->etapa_jucat[i])
                 continue;
 
             for (size_t index = 0; index < n; index++) { 
 
-                if (index == index_echipa_manager || index == i || etapa_jucat[index])
+                if (index == index_echipa_manager || index == i || this->etapa_jucat[index])
                     continue;
 
-                if (!ales[i][index]) {
+                if (!this->ales[i][index]) {
 
 
-                    ales[i][index] = true;
-                    ales[index][i] = true;
+                    this->ales[i][index] = true;
+                    this->ales[index][i] = true;
 
-                    etapa_jucat[i] = true;
-                    etapa_jucat[index] = true;
+                    this->etapa_jucat[i] = true;
+                    this->etapa_jucat[index] = true;
                     progres_facut = true;
 
                     double factor_aleator_1 = (rand() % 11 - 5) * 0.1;
@@ -849,9 +776,9 @@ public:
                         castigatoare = (rand() % 2 == 0) ? lista[i] : lista[index];
 
                     if (castigatoare == lista[i])
-                        punctaje[i] += 3;
+                        this->punctaje[i] += 3;
                     else
-                        punctaje[index] += 3;
+                        this->punctaje[index] += 3;
 
                     break;
                 }
@@ -859,7 +786,7 @@ public:
         }
 
 
-        if (!progres_facut && etapa_jucat != vector<bool>(n, true)) {
+        if (!progres_facut && this->etapa_jucat != vector<bool>(n, true)) {
              cout << "\nATENȚIE: S-au blocat meciurile AI. Etapa este incompletă. Nu se pot forma toate perechile. S-a jucat cu un număr impar de echipe AI.\n";
              break;
         }
@@ -882,62 +809,19 @@ private:
 public:
 
     Echipe* get_echipa() const {
-        return echipa;
+        return this->echipa;
     }
 
     manageri(int buget, Echipe *echipa, const string &nume)
         : buget(buget), echipa(echipa), nume(nume), lista({}), baza(nullptr) {
     }
 
-    /*void alegere_jucator(int buget) {
-        buget = this->buget;
-        echipa->adaugare_jucator(lista,buget);
-    }*/
-    //functie utila pentru tranferuri in viitor
-
     void set_overall() {
-        echipa->Echipe::set_overall();
+        this->echipa->Echipe::set_overall();
     }
 
     manageri() : buget(0), echipa(new Echipe()), nume("Necunoscut"), lista({}), baza(nullptr) {
     }
-
-    /*void cariera() {
-        cout<< "Dati un nume pentru propria voastra echipa";
-        cin>> nume;
-        buget = 10000;
-
-        while (true) {
-            int k = 0;
-            cout<<"Alegeti ce doriti sa faceti in continuare(Scrieti doar numarul optiunii alese):\n"
-            <<"1. Jucati un meci amical.(Castigati o suma mica de bani)\n"
-            <<"2. Jucati un meci in liga.(Trebuie sa platiti fiecare jucator o suma pentru meci, dar castigati o suma bazata pe performanta)\n"
-            <<"3. Intrati intr-un turneu local.(Trebuie sa platiti atat pentru intrarea in turneu, cat si jucatorii pentru fiecare meci, dar aveti sansa sa castigati o suma mare daca castigati)\n"
-            <<"4. Faceti un antrenament cu toata echipa(scade performanta pentru urmatorul joc, dar creste permanent overall-ul fiecarui jucator)\n"
-            <<"5. Luati o zi libera.\n"
-            <<"6. Angajati un jucator.\n"
-            <<"7. Iesi la pensie.";
-
-            cin>>k;
-            if (k == 1) {
-                Echipe* adversar = baza->alege_echipa_random();
-                if (adversar != nullptr) {
-                    Meci meci(echipa, adversar);
-                    meci.meci();
-                    buget += 5000;
-
-                }
-
-
-            }
-
-            else if (k == 2) {
-
-            }
-        }
-
-    }*/
-    //functie pentru a simula cariera utila pentru viitor
 
     friend ostream & operator<<(ostream &os, const manageri &obj) {
         return os
@@ -948,20 +832,20 @@ public:
     }
 
     void alegere_echipa() {
-        baza->afiseazaJucatori();
-        echipa->creare(baza->getLista());
+        this->baza->afiseazaJucatori();
+        this->echipa->creare(this->baza->getLista());
     }
 
     void numeEchipa() {
         cout<<"Dati numele echipei voastre:\n";
-        echipa->set_nume();
+        this->echipa->set_nume();
     }
 
     string get_nume() const {
-      return  echipa->getNume();
+      return  this->echipa->getNume();
     }
 
-    void adaugare_jucatori_valabili(BazaDeDate* baza_ptr) { // CORECȚIE: Renumit 'baza' în 'baza_ptr'
+    void adaugare_jucatori_valabili(BazaDeDate* baza_ptr) {
         this->baza = baza_ptr;
     }
 
@@ -970,19 +854,17 @@ public:
 
     manageri& operator=(const manageri& other) {
         if (this != &other) {
-            delete echipa;
-            buget = other.buget; nume = other.nume; lista = other.lista; baza = other.baza;
-            echipa = new Echipe(*other.echipa);
+            delete this->echipa;
+            this->buget = other.buget; this->nume = other.nume; this->lista = other.lista; this->baza = other.baza;
+            this->echipa = new Echipe(*other.echipa);
         }
         return *this;
     }
 
 ~manageri() { 
-    delete echipa; 
+    delete this->echipa; 
 }
 };
-
-
 
 
 int main() {
@@ -1062,7 +944,7 @@ int main() {
             cout<<*j<<endl;
 
             jucatoriEchipa.push_back(j);
-            baza.adaugaJucator(j);
+            baza_jucatori.adaugaJucator(j); 
             i++;
         }
         echipa->adaugare_jucatori(jucatoriEchipa);
