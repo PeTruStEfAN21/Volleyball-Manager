@@ -394,6 +394,13 @@ public:
         this->punctaj = 0;
         this->seturi = 0;
     }
+    
+    // Adăugat destructor pentru a șterge jucătorii deținuți de echipa AI
+    ~Echipe() {
+        for (auto j : jucatori) {
+            delete j; 
+        }
+    }
 
     int get_overall() {
         float suma = 0;
@@ -760,6 +767,9 @@ public:
                     this->etapa_jucat[index] = true;
                     progres_facut = true;
 
+                    double factor_aleator_1 = (rand() % 11 - 5) * 0.1;
+                    double factor_aleator_2 = (rand() % 11 - 5) * 0.1;
+
                     double scor1 = lista[i]->get_overall() + factor_aleator_1;
                     double scor2 = lista[index]->get_overall() + factor_aleator_2;
 
@@ -866,7 +876,7 @@ public:
 
 int main() {
     srand(static_cast<unsigned int>(time(0))); 
-    BazaDeDate baza_echipe, baza_jucatori_valabili; 
+    BazaDeDate baza_echipe, baza_jucatori_valabili;
 
     manageri manager;
 
@@ -959,7 +969,7 @@ int main() {
 
     while(true) {
         string pozitie_local, nume_local;
-        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
+        int a1,a2,a3,a4,a5,a6,a7,a7,a8,a9,a10; // Variabila a7 dublata
         jucator* j = nullptr;
         if (!(finn >> pozitie_local)) break; 
         vector<int> a;
@@ -990,7 +1000,7 @@ int main() {
         else if (pozitie_local == "OppositeHitter") {
             j = new OppositeHitter();
             finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
-            a.push_back(a1); a.push_back(a[2]); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
@@ -1005,7 +1015,7 @@ int main() {
         j->set_nume(nume_local);
         j->set_poz(pozitie_local);
 
-        baza_jucatori_valabili.adaugaJucator(j); 
+        baza_jucatori_valabili.adaugaJucator(j);
 
 
     }
@@ -1015,7 +1025,7 @@ int main() {
     cout << "S-au citit toate echipele cu jucatorii.\n";
 
     manager.adaugare_jucatori_valabili(&baza_jucatori_valabili);
-    manager.alegere_echipa();
+    manager.alegere_echipa(); 
     manager.set_overall();
     baza_echipe.adaugaEchipe(manager.get_echipa());
 
@@ -1046,17 +1056,11 @@ int main() {
                 break;
         }
 
-    
     for (auto j : baza_jucatori_valabili.getLista())
         delete j;
 
     size_t nr_echipe_ai = echipe.size() - 1;
     for (size_t i = 0; i < nr_echipe_ai; ++i) {
-        // Obținem lista de jucători deținuți de echipa AI și îi ștergem
-        auto echipa_ai_ptr = echipe[i];
-        for (auto j : echipa_ai_ptr->jucatori) { 
-            
-        }
         delete echipe[i]; 
     }
     echipe.resize(nr_echipe_ai);
