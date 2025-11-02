@@ -13,6 +13,12 @@ configure() {
     SOURCE_DIR="."
     CMAKE_OPTS=()
 
+    
+sed -i 's/\xc2\xa0/ /g' main.cpp
+
+
+sed -i 's/\r//g' main.cpp
+
     while getopts ":b:c:e:g:i:s:" opt; do
       case "${opt}" in
         b) BUILD_DIR="${OPTARG}"
