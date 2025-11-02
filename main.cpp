@@ -868,6 +868,7 @@ public:
 
     cout << "S-a terminat o serie de partide";
 }
+};
 
 
 class manageri {
