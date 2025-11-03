@@ -674,6 +674,8 @@ public:
     size_t index = (size_t)-1; 
     size_t index_echipa_manager = n - 1;
 
+    this->etapa_jucat.assign(n, false); 
+
     while (true) {
         EchipaPtr adversar = this->baza->alege_echipa_random();
         for (size_t i = 0; i < n; i++) {
