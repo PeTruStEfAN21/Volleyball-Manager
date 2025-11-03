@@ -578,8 +578,8 @@ public:
     EchipaPtr meci() { 
         this->echipa1->resetSetur();
         this->echipa2->resetSetur();
-        while (this->echipa1->getSeturi() < 3 && this->echipa2->getSeturi() < 3) {
-            char castigator = set();
+        while (this->echipa1->getSeturi() < 1 && this->echipa2->getSeturi() < 1) {
+        char castigator = set();
             if (castigator == 'a')
                 this->echipa1->modifSetur();
             else
@@ -806,7 +806,7 @@ public:
 class manageri {
 private:
     int buget;
-    EchipaPtr echipa; // CORECȚIE: SharedPtr (EchipaPtr)
+    EchipaPtr echipa; 
     string nume;
     vector<JucatorPtr> lista; 
     BazaDeDate* baza;
@@ -814,7 +814,7 @@ private:
 public:
 
     EchipaPtr get_echipa() const {
-        return this->echipa; // Returnează shared_ptr
+        return this->echipa; 
     }
 
     manageri(int buget, EchipaPtr echipa, const string &nume) = delete;
