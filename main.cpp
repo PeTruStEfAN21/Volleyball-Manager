@@ -401,7 +401,6 @@ public:
         this->seturi = 0;
     }
     
-    // Destructor implicit (shared_ptr se curăță automat)
     ~Echipe() = default;
 
     int get_overall() {
@@ -588,7 +587,7 @@ public:
             this_thread::sleep_for(chrono::seconds(2));
         }
 
-        if (this->echipa1->getSeturi() == 3) {
+        if (this->echipa1->getSeturi() == 1) {
             cout << "\nEchipa " << this->echipa1->getNume() << " a castigat meciul! Felicitari!\n";
             return this->echipa1;
         }
