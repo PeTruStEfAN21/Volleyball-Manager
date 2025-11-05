@@ -1,0 +1,50 @@
+Setter Petrescu 88 75 80 85 78 80 85 185 88 90 85
+Libero Ionescu 60 95 85 55 70 60 90 182 92 95 
+OutsideHitter Albu 92 80 90 88 82 95 80 198 85 92 
+OppositeHitter Popa 95 75 85 90 80 92 75 205 82 95 
+MiddleBlocker Vasilescu 75 65 70 70 65 90 70 208 75 95 
+Setter Anghel 80 70 75 80 70 75 78 180 80 82 75
+Libero Tudor 50 88 75 50 65 55 85 178 85 88 
+OutsideHitter Marin 85 75 82 80 75 85 75 195 80 85 
+OppositeHitter Zamfir 88 70 80 85 75 82 70 200 78 88 
+MiddleBlocker Dragos 70 60 65 65 60 85 65 203 70 90 
+Setter Munteanu 65 55 60 65 55 60 63 175 65 68 60
+Libero Enache 40 75 60 40 55 45 70 170 72 75 
+OutsideHitter Popescu 70 65 60 65 60 70 65 190 70 75 
+OppositeHitter Gheorghe 72 60 68 70 63 72 60 195 68 75 
+MiddleBlocker Iliescu 55 50 55 50 45 65 50 198 55 70 
+Setter Georgescu 90 80 85 90 82 85 88 188 92 95 90
+Libero Stan 70 98 90 65 85 75 95 184 95 98 
+OutsideHitter Dobre 95 85 92 90 85 98 85 200 90 95 
+OppositeHitter Andrei 98 80 90 95 85 95 80 210 88 98 
+MiddleBlocker IonescuV 80 70 75 75 70 95 75 215 80 98 
+Setter Rares 50 50 50 50 50 50 50 170 50 50 50
+Libero AlinL 55 70 65 55 60 55 75 175 78 80 
+OutsideHitter MihaiN 80 60 70 75 65 80 70 190 75 80 
+OppositeHitter BogdanO 82 55 75 80 70 82 65 195 72 85 
+MiddleBlocker CostinQ 65 55 60 60 55 70 60 200 65 80 
+Setter Viorel 70 60 65 70 60 65 68 178 70 72 65
+Libero Denis 45 80 65 45 60 50 75 172 78 82 
+OutsideHitter HoriaX 75 70 70 72 68 75 70 192 75 78 
+OppositeHitter SorinW 78 65 72 75 70 78 68 198 73 80 
+MiddleBlocker MarcelU 60 55 60 55 50 70 55 200 60 75 
+Setter NicolaeT 75 65 70 75 68 70 73 179 75 78 70
+Libero SAdrian 60 90 80 55 70 60 85 180 88 90 
+OutsideHitter RCristi 90 80 85 85 78 90 80 195 85 90 
+OppositeHitter QVlad 92 75 82 88 75 88 75 200 82 92 
+MiddleBlocker PGeorge 78 68 72 73 68 92 72 205 78 92 
+Setter OAlex 60 50 55 60 50 55 58 172 60 62 55
+Libero NBogdan 35 70 55 35 50 40 65 168 68 70 
+OutsideHitter MRadu 65 55 58 60 55 65 60 188 65 70 
+OppositeHitter LMihai 68 50 62 65 58 68 55 193 63 70 
+MiddleBlocker KIonut 50 45 50 45 40 60 45 195 50 65 
+Setter JVasile 85 75 80 85 75 80 83 185 85 88 80
+Libero IElena 65 92 82 60 75 65 88 183 90 92 
+OutsideHitter HTeodor 90 78 88 85 80 92 78 197 82 90 
+OppositeHitter Mihnea 92 72 85 90 78 88 72 202 80 92 
+MiddleBlocker FCristian 72 62 68 68 62 88 68 210 72 88 
+Setter EDorin 55 55 50 55 50 55 55 170 55 58 55
+Libero DCătălin 40 70 55 40 50 45 65 165 68 70 
+OutsideHitter BMihai 60 60 55 60 55 60 60 185 65 70 
+OppositeHitter AGeorge 63 55 60 63 58 63 55 190 60 65 
+MiddleBlocker ZMarian 45 40 45 40 35 55 40 193 45 60

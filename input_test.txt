@@ -1,3 +1,5 @@
+petru
+Steaua
 Steaua
 1
 2
@@ -5,4 +7,4 @@ Steaua
 4
 5
 6
-nu
+4
