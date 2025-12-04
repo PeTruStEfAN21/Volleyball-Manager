@@ -15,15 +15,33 @@ if(NOT SFML_FOUND)
     message(STATUS "SFML 3 not found. Fetching SFML 3.0.0 from GitHub...")
     include(FetchContent)
     set(FETCHCONTENT_QUIET OFF)
-    # set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+
     FetchContent_Declare(
             sfml
             GIT_REPOSITORY https://github.com/SFML/SFML.git
-            # AICI E VERSUNEA PE CARE O VREI TU:
             GIT_TAG        3.0.0
             GIT_SHALLOW    1
+
+            # -----------------------------------------------------------------
+            # MODIFICĂRI PENTRU A REZOLVA DEPENDENȚELE LIPSĂ (X11)
+            # Aceste argumente sunt transmise direct la CMake-ul intern al SFML.
+            # -----------------------------------------------------------------
+            CMAKE_ARGS
+            # Dezactiveaza cautarea X11. SFML va trebui sa se bazeze pe alte metode (Wayland/etc.)
+            # sau sa treaca peste eroarea de configurare.
+            -DSFML_SKIP_MANDATORY_DEPENDENCY_SEARCH=TRUE
+
+            # Dezactivam modulele si testele care pot cere si mai multe dependinte.
+            -DSFML_BUILD_EXAMPLES=OFF
+            -DSFML_BUILD_TESTS=OFF
+            -DSFML_BUILD_NETWORK=OFF # Nu ai cerut network, dezactivam explicit
+            -DSFML_BUILD_GRAPHICS=ON
+            -DSFML_BUILD_WINDOW=ON
+            -DSFML_BUILD_SYSTEM=ON
+            -DSFML_BUILD_AUDIO=ON
     )
-    # SFML 3 necesită uneori setarea asta pentru a construi exemplele/testele dacă nu le vrei
+
+    # Reconfirmam setarile pentru build-ul intern al SFML:
     set(SFML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
     set(SFML_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
@@ -96,8 +114,6 @@ if(WIN32 AND TARGET SFML::Graphics)
             $<TARGET_FILE:SFML::Window>
             $<TARGET_FILE:SFML::System>
             $<TARGET_FILE:SFML::Audio>
-            # SFML 3 poate avea nevoie si de alte DLL-uri externe (ex: freetype)
-            # CMake ar trebui sa le gestioneze, dar daca lipsesc, trebuie adaugate aici.
             $<TARGET_FILE_DIR:VoleiManager_GUI>
             COMMENT "Copiere DLL-uri SFML 3 langa executabil..."
     )
