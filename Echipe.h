@@ -3,8 +3,11 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <SFML/Graphics.hpp>
+#include <map>
 
 #include "jucator.h"
+
 using namespace std;
 
 class BazaDeDate;
@@ -15,6 +18,7 @@ using jucatorptr = std::shared_ptr<jucator>;
 using Echipeptr = std::shared_ptr<Echipe>;
 
 class Echipe: public std::enable_shared_from_this<Echipe>{
+private:
     string nume;
     vector<jucatorptr> jucatori;
     array<jucatorptr, 6> jucatori_fixi;
@@ -22,9 +26,51 @@ class Echipe: public std::enable_shared_from_this<Echipe>{
     int punctaj, seturi;
     int buget;
     bool serve;
+    float momentumFactor;
 
 
 public:
+//FUNCTII PENTRU GUI
+    float valideaza_si_set_start_6(const std::vector<jucatorptr>& selection);
+
+    static const std::map<std::string, int> REGULI_START_6;
+
+    static bool verificaReguliStart6(const std::vector<jucatorptr>& selection);
+
+    void creare_in_gui(const vector<jucatorptr>& lista);
+
+    void achizitioneaza_pentru_draft(jucatorptr jucatorAles, const std::vector<jucatorptr>& jucatoriDisponibili);
+
+[[nodiscard]] bool poate_achizitiona_si_finaliza(
+    jucatorptr jucatorNou,
+    const std::vector<jucatorptr>& totiJucatoriiDisponibili
+) const;
+
+    bool adaugare_jucatorGUI(jucatorptr jucator) ;
+
+
+    std::vector<jucatorptr> get_jucatori_pe_teren() const;
+
+    std::vector<jucatorptr> get_jucatori_de_pe_banca() const;
+
+    void schimba_jucator_pe_teren(jucatorptr out, jucatorptr in);
+
+
+
+
+
+    //FUNCTII PENTRU CONSOLA
+
+    static const float MOMENTUM_POINT_WIN;
+    static const float MOMENTUM_POINT_LOSS;
+    static const float MOMENTUM_SET_WIN;
+    static const float MOMENTUM_SET_LOSS;
+    static const float MOMENTUM_MIN;
+    static const float MOMENTUM_MAX;
+
+    float getMomentum() const;
+    void resetMomentum();
+    void updateMomentum(float change);
 
     void vinde(jucatorptr j);
 

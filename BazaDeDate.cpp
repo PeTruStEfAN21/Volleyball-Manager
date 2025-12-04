@@ -5,8 +5,29 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
+#include <SFML/Graphics.hpp>
+
 
 using namespace std;
+
+float BazaDeDate::globalMarketModifier = 1.0f;
+const float BazaDeDate::INFLATION_STEP = 0.015f;
+const float BazaDeDate::MAX_INFLATION = 1.50f;  // Se opreste la 50% inflatie
+
+float BazaDeDate::getGlobalMarketModifier() {
+    return globalMarketModifier;
+}
+
+void BazaDeDate::applyInflation(float step) {
+    globalMarketModifier += step;
+    if (globalMarketModifier > MAX_INFLATION) {
+        globalMarketModifier = MAX_INFLATION;
+    }
+}
+
+float BazaDeDate::getStep() {
+    return INFLATION_STEP;
+}
 
 
 BazaDeDate::BazaDeDate(const vector<jucatorptr> &jucatori)
@@ -52,8 +73,7 @@ void BazaDeDate::eliminaEchipa(Echipeptr e) {
 void BazaDeDate::afiseazaJucatori() const {
     cout << "\n=== Lista jucatorilor inregistrati ===\n";
     for (size_t i = 0; i < jucatori.size(); i++) {
-        cout << i + 1 << ". ";
-        jucatori[i]->afiseaza();
+        cout << i + 1 << ". "<<*jucatori[i] << endl;
         cout<< endl;
     }
 }
@@ -64,7 +84,6 @@ void BazaDeDate::afisare_jucatori_necontractati() {
     for (size_t i = 0; i < jucatori.size(); i++) {
         if (jucatori[i]->get_transferabil() == true){
             cout << i + 1 << ". ";
-            jucatori[i]->afiseaza();
             cout<< endl;
         }
     }

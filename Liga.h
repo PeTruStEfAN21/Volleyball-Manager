@@ -12,6 +12,12 @@ using BazaDeDateptr = std::shared_ptr<BazaDeDate>;
 using jucatorptr = std::shared_ptr<jucator>;
 using Echipeptr = std::shared_ptr<Echipe>;
 
+
+struct TeamScore {
+    std::string nume;
+    int puncte;
+};
+
 class Liga : public Meci {
 private:
     BazaDeDateptr baza;
@@ -24,6 +30,16 @@ private:
 public:
     void reset_etapa();
 
+    void meciGUI();
+
+    void registerMatchResult(Echipeptr echipaAdversa, Echipeptr castigator);
+
+    bool isSeasonFinished() const;
+
+    std::vector<TeamScore> getSortedClasament() const;
+
+    Echipeptr getNextAdversarPentruManager() const;
+
     Liga(BazaDeDateptr baza);
 
     Liga();
@@ -34,7 +50,11 @@ public:
 
     Echipeptr meci();
     void afisare_punctaje();
+    const std::vector<Echipeptr>& getEchipe() const;
     void meciuri();
     int liga();
     void adaugare_echipa(Echipeptr echipa);
+
+    void resetSeason();
+    void finalizeSeason(Echipeptr echipa);
 };

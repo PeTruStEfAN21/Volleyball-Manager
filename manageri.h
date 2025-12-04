@@ -30,6 +30,14 @@ public:
 
     int citire_jucatori_liberi();
 
+    void schimba_ovr(float ovr);
+
+    BazaDeDateptr getBazaDeDate();
+
+    Echipeptr getEchipaManager();
+
+    int citire_baza_managerGUI();
+
     int citire_baza_manager();
 
     BazaDeDateptr get_baza_manager();

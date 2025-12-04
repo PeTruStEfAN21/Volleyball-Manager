@@ -18,7 +18,15 @@ protected:
     char punct();
     char set();
 
+    float calculeaza_scor_echipa_ponderea_activa(Echipeptr echipa) const;
+
 public:
+    //FUNCTIE GUI
+    void simuleazaUrmatoareActiune();
+
+
+
+
     Meci(Echipeptr echipa1, Echipeptr echipa2);
     Meci();
     

@@ -7,10 +7,232 @@
 #include <vector>
 #include <array>
 #include <algorithm>
+#include "Exceptii.h"
 
 using namespace std;
 
+//FUNCTII PT GUI
 
+const float Echipe::MOMENTUM_POINT_WIN = 0.02f;
+const float Echipe::MOMENTUM_POINT_LOSS = -0.01f;
+const float Echipe::MOMENTUM_SET_WIN = 0.15f;
+const float Echipe::MOMENTUM_SET_LOSS = -0.10f;
+const float Echipe::MOMENTUM_MIN = 0.80f;
+const float Echipe::MOMENTUM_MAX = 1.30f;
+
+
+float Echipe::getMomentum() const {
+    return momentumFactor;
+}
+
+void Echipe::resetMomentum() {
+    momentumFactor = 1.0f;
+}
+
+void Echipe::updateMomentum(float change) {
+    momentumFactor += change;
+
+    if (momentumFactor < MOMENTUM_MIN) {
+        momentumFactor = MOMENTUM_MIN;
+    } else if (momentumFactor > MOMENTUM_MAX) {
+        momentumFactor = MOMENTUM_MAX;
+    }
+}
+
+const std::map<std::string, int> Echipe::REGULI_START_6 = {
+    {"Setter", 1},
+    {"OutsideHitter", 2},
+    {"MiddleBlocker", 1},
+    {"OppositeHitter", 1},
+    {"Libero", 1}
+};
+
+
+bool Echipe::adaugare_jucatorGUI(jucatorptr jucator) {
+
+    string input;
+    int index;
+
+
+
+
+        if (jucator->esteAles()) {
+            throw std::runtime_error("Eroare: JUCATORUL ESTE DEJA CONTRACTAT DE O ALTA ECHIPA, DE ACEEA ESTE MARCAT CU ROSU.");
+        }
+
+        if (get_buget() < jucator->get_pret()) {
+            throw BugetDepasitException("Nu puteti achizitiona acest jucator deoarece este prea scump.");
+        }
+
+
+        jucatori.push_back(jucator);
+        set_buget(get_buget() - jucator->get_pret());
+        jucator->setAles(true);
+
+        BazaDeDate::applyInflation(BazaDeDate::getStep());
+
+        return true;
+    }
+
+
+
+
+float Echipe::valideaza_si_set_start_6(const std::vector<jucatorptr>& selection) {
+
+    if (selection.size() != 6) {
+        throw CompozitieInvalidaException("Trebuie selectati exact 6 jucatori.");
+    }
+
+    float suma_ovr = 0;
+    std::map<std::string, int> counts;
+
+    for (const auto& jucatorAles : selection) {
+        counts[jucatorAles->get_poz()]++;
+        suma_ovr += jucatorAles->get_ovr();
+    }
+
+    for (const auto& pair : REGULI_START_6) {
+        const std::string& pozitie = pair.first;
+        const int necesar = pair.second;
+        const int actual = counts[pozitie];
+
+        if (actual != necesar) {
+            std::string msg = "Sunt necesari exact " + std::to_string(necesar) + " " + pozitie +
+                              "i. Detectat: " + std::to_string(actual) + ".";
+            throw CompozitieInvalidaException(msg);
+        }
+    }
+
+    jucatori_fixi = std::array<jucatorptr, 6>();
+
+    for (size_t i = 0; i < 6; ++i) {
+        jucatori_fixi[i] = selection[i];
+    }
+
+    ovr_primii_6 = suma_ovr / 6;
+
+    return ovr_primii_6;
+}
+[[nodiscard]] bool Echipe::poate_achizitiona_si_finaliza(
+    jucatorptr jucatorNou,
+    const std::vector<jucatorptr>& totiJucatoriiDisponibili
+) const {
+
+    if (jucatorNou == nullptr || jucatorNou->get_echipe() != nullptr) {
+        return false;
+    }
+    if (buget < jucatorNou->get_pret()) {
+        return false;
+    }
+
+    std::string pozitieNoua = jucatorNou->get_poz();
+
+    int nr_outside = 0, nr_setter = 0, nr_libero = 0, nr_oppo = 0, nr_middle = 0;
+
+    for (const auto& j : jucatori) {
+        std::string poz = j->get_poz();
+        if (poz == "OutsideHitter") nr_outside++;
+        else if (poz == "Setter") nr_setter++;
+        else if (poz == "Libero") nr_libero++;
+        else if (poz == "OppositeHitter") nr_oppo++;
+        else if (poz == "MiddleBlocker") nr_middle++;
+    }
+
+    if (pozitieNoua == "OutsideHitter") nr_outside++;
+    else if (pozitieNoua == "Setter") nr_setter++;
+    else if (pozitieNoua == "Libero") nr_libero++;
+    else if (pozitieNoua == "OppositeHitter") nr_oppo++;
+    else if (pozitieNoua == "MiddleBlocker") nr_middle++;
+
+    if (nr_outside > 2 || nr_setter > 1 || nr_libero > 1 || nr_oppo > 1 || nr_middle > 1) {
+        return false;
+    }
+
+    int locuri_ramase = 6 - (int)jucatori.size() - 1;
+
+    if (locuri_ramase <= 0) {
+        return true;
+    }
+
+    std::vector<jucatorptr> min_preturi;
+    for (const auto& j : totiJucatoriiDisponibili) {
+        if (j->get_echipe() == nullptr && std::find(jucatori.begin(), jucatori.end(), j) == jucatori.end()) {
+            min_preturi.push_back(j);
+        }
+    }
+
+    std::sort(min_preturi.begin(), min_preturi.end(),
+        [](const jucatorptr& a, const jucatorptr& b) {
+            return a->get_pret() < b->get_pret();
+        });
+
+    long long suma_min_necesara = 0;
+
+    for (int i = 0; i < locuri_ramase; i++) {
+        if (i < (int)min_preturi.size()) {
+             suma_min_necesara += min_preturi[i]->get_pret();
+        } else {
+             return false;
+        }
+    }
+
+    if (buget - jucatorNou->get_pret() < suma_min_necesara) {
+        return false;
+    }
+
+    return true;
+}
+
+void Echipe::creare_in_gui(const std::vector<jucatorptr>& selectie_finala) {
+
+    if (selectie_finala.size() != 6) {
+        throw CompozitieInvalidaException("Echipa trebuie sa contina exact 6 jucatori in faza initiala de creare.");    }
+
+    long long cost_total = 0;
+    int nr_outside = 0, nr_setter = 0, nr_libero = 0, nr_oppo = 0, nr_middle = 0;
+
+    for (const auto& jucatorAles : selectie_finala) {
+
+        if (jucatorAles == nullptr) {
+            throw CompozitieInvalidaException("Un jucator selectat este invalid.");
+        }
+
+        cost_total += jucatorAles->get_pret();
+        std::string pozitie = jucatorAles->get_poz();
+
+        if (pozitie == "OutsideHitter") nr_outside++;
+        else if (pozitie == "Setter") nr_setter++;
+        else if (pozitie == "Libero") nr_libero++;
+        else if (pozitie == "OppositeHitter") nr_oppo++;
+        else if (pozitie == "MiddleBlocker") nr_middle++;
+    }
+
+    if (nr_outside != 2 || nr_setter != 1 || nr_libero != 1 || nr_oppo != 1 || nr_middle != 1) {
+        std::string msg = "Eroare de compozitie. Structura necesara: 2 OH, 1 S, 1 L, 1 Opp, 1 MB.\n";
+        msg += "Detectat: OH=" + std::to_string(nr_outside) + ", S=" + std::to_string(nr_setter) + ", L=" + std::to_string(nr_libero) +
+               ", Opp=" + std::to_string(nr_oppo) + ", MB=" + std::to_string(nr_middle) + ".";
+        throw CompozitieInvalidaException(msg);
+    }
+
+    if (cost_total > buget) {
+        std::string err_msg = "Buget depasit! Costul total este " + std::to_string(cost_total) +
+                              " lei, dar aveti doar " + std::to_string(buget) + " lei.";
+        throw BugetDepasitException(err_msg);
+    }
+
+    jucatori.clear();
+    for (const auto& j : selectie_finala) {
+        jucatori.push_back(j);
+        j->adaugare_echipe(shared_from_this());
+        j->transferabil(false);
+        j->setAles(true);
+    }
+
+    set_buget(buget - (int)cost_total);
+    set_overall();
+}
+
+//FUNCTII PENTRU CONSOLA
 Echipe::Echipe(const string &nume, const vector<jucatorptr> &jucatori, float ovr, int punctaj, int seturi,int buget, array<jucatorptr, 6> jucatori_fixi)
     : nume(nume),
       jucatori(jucatori),
@@ -19,9 +241,10 @@ Echipe::Echipe(const string &nume, const vector<jucatorptr> &jucatori, float ovr
       punctaj(punctaj),
       seturi(seturi),
       buget(buget){
+    momentumFactor = 1.0f;
 }
 
-    void Echipe::construire_echipa_primii_6() {
+void Echipe::construire_echipa_primii_6() {
     int index;
 
     float suma = 0;
@@ -188,6 +411,7 @@ Echipe::Echipe(const string& nume) {
     seturi = 0;
     buget = 200000;
     ovr_primii_6 = 0;
+    momentumFactor = 1.0f;
 }
 
 Echipe::Echipe() {
@@ -196,6 +420,7 @@ Echipe::Echipe() {
     seturi = 0;
     buget = 200000;
     ovr_primii_6 = 0;
+    momentumFactor = 1.0f;
 }
 
 
@@ -217,6 +442,70 @@ void Echipe::set_overall() {
 
 vector<jucatorptr> Echipe::get_jucatori() const {
     return jucatori;
+}
+
+
+std::vector<jucatorptr> Echipe::get_jucatori_pe_teren() const {
+    std::vector<jucatorptr> teren;
+    for (const auto& j : jucatori_fixi) {
+        if (j != nullptr) {
+            teren.push_back(j);
+        }
+    }
+    return teren;
+}
+
+std::vector<jucatorptr> Echipe::get_jucatori_de_pe_banca() const {
+    std::vector<jucatorptr> banca;
+
+    const auto& toti_jucatorii = get_jucatori();
+
+    for (const auto& j_contractat : toti_jucatorii) {
+
+        bool este_pe_teren = false;
+        for (const auto& j_teren : jucatori_fixi) {
+            if (j_contractat == j_teren) {
+                este_pe_teren = true;
+                break;
+            }
+        }
+
+        if (!este_pe_teren) {
+            banca.push_back(j_contractat);
+        }
+    }
+    return banca;
+}
+
+void Echipe::schimba_jucator_pe_teren(jucatorptr out, jucatorptr in) {
+
+    if (!out || !in) {
+        throw SchimbareInvalidaException("Jucatorii OUT sau IN sunt invalizi.");
+    }
+
+    if (out->get_poz() != in->get_poz()) {
+        throw SchimbareInvalidaException("Pozitiile jucatorilor nu se potrivesc (" + out->get_poz() + " vs " + in->get_poz() + ").");
+    }
+
+    size_t index_out = 6;
+    for (size_t i = 0; i < jucatori_fixi.size(); ++i) {
+        if (jucatori_fixi[i] == out) {
+            index_out = i;
+            break;
+        }
+    }
+
+    if (index_out >= 6) {
+        throw SchimbareInvalidaException("Jucatorul OUT (" + out->get_nume() + ") nu a fost gasit in echipa de start.");    }
+
+    jucatori_fixi[index_out] = in;
+
+    float suma_ovr = 0;
+    for (const auto& j : jucatori_fixi) {
+        suma_ovr += j->get_ovr();
+    }
+    ovr_primii_6 = suma_ovr / 6;
+
 }
 
 int Echipe::get_overall() {
@@ -398,7 +687,6 @@ void Echipe::adaugaJucatorExistent(jucatorptr j) {
         this->set_overall();
     }
 }
-
 void Echipe::adaugare_jucator(BazaDeDateptr baza) {
     cout << "Alegeti jucatorul dorit din urmatoarea lista:\n";
     baza->afiseazaJucatori();

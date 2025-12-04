@@ -10,35 +10,42 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <fstream>
 
 #include "Transferuri.h"
-
 
 using namespace std;
 
 
-manageri::manageri(int buget, Echipeptr echipa, const string &nume)
-    : echipa(echipa), nume(nume), baza(make_shared<BazaDeDate>()), lista({}) {
-    this->echipa->set_buget(buget);
-    transferuri_manager = make_shared<Transferuri>(baza, echipa);
+manageri::manageri()
+    :  nume("Necunoscut"),
+       lista({}),
+       baza(make_shared<BazaDeDate>()),
+       echipa(make_shared<Echipe>())
+{
+    this->echipa->set_buget(250000);
+    transferuri_manager = make_shared<Transferuri>(baza, this->echipa);
+}
+
+
+manageri::manageri(const manageri& other)
+    :  nume(other.nume),
+       lista(other.lista),
+       baza(other.baza),
+       echipa(make_shared<Echipe>(*other.echipa))
+{
 
 }
 
-manageri::manageri() :  echipa(std::make_shared<Echipe>()), nume("Necunoscut"), lista({}), baza(make_shared<BazaDeDate>()) {
-    echipa->Echipe::set_buget(250000);
-    transferuri_manager = make_shared<Transferuri>(baza, echipa);
-}
 
-manageri::manageri(const manageri& other) 
-    : echipa(new Echipe(*other.echipa)), nume(other.nume), lista(other.lista), baza(other.baza) {
-}
 
 int manageri::get_buget() const {
+    if (!echipa) return 0;
     return echipa->get_buget();
 }
 
 void manageri::set_buget(int buget) {
-    echipa->set_buget(buget);
+    if (echipa) echipa->set_buget(buget);
 }
 
 manageri& manageri::operator=(const manageri& other) {
@@ -47,10 +54,9 @@ manageri& manageri::operator=(const manageri& other) {
         nume = other.nume;
         lista = other.lista;
         baza = other.baza;
-        transferuri_manager = other.transferuri_manager;
 
         echipa = make_shared<Echipe>(*other.echipa);
-
+        transferuri_manager = other.transferuri_manager;
     }
     return *this;
 }
@@ -63,21 +69,24 @@ Echipeptr manageri::get_echipa() const {
 }
 
 void manageri::set_overall() {
-    echipa->Echipe::set_overall();
+    if (echipa) echipa->set_overall();
 }
 
 void manageri::alegere_echipa() {
+    if (!baza || !echipa) return;
     baza->afiseazaJucatori();
     echipa->creare(baza->getLista());
 }
 
 void manageri::numeEchipa() {
+    if (!echipa) return;
     cout<<"Dati numele echipei voastre:\n";
     echipa->set_nume();
 }
 
 string manageri::get_nume() const {
-  return  echipa->getNume();
+    if (!echipa) return "Echipa Invalida";
+    return echipa->getNume();
 }
 
 void manageri::adaugare_jucatori_valabili(BazaDeDateptr baza) {
@@ -85,12 +94,19 @@ void manageri::adaugare_jucatori_valabili(BazaDeDateptr baza) {
 }
 
 ostream & operator<<(ostream &os, const manageri &obj) {
-    return os
-           << "buget: " << obj.get_buget()
-           << " echipa: " << obj.echipa
-           << " nume: " << obj.nume
-           << " jucator: " << &obj.lista;
+    os << "buget: " << obj.get_buget() << "\n";
+    if (obj.echipa) os << "echipa: " << *obj.echipa << "\n";
+    os << "nume manager: " << obj.nume << "\n";
+    os << "adresa lista: " << &obj.lista;
+    return os;
 }
+
+
+void manageri::schimba_ovr(float ovr) {
+    if (echipa) this->echipa->set_overall(ovr);
+}
+
+
 
 int manageri::citire_toti_jucatorii_si_echipe(){
 
@@ -102,7 +118,6 @@ int manageri::citire_toti_jucatorii_si_echipe(){
     for (const auto& nume_echipa_curenta : numeEchipe) {
         cout<<nume_echipa_curenta<<endl;
         echipe_ai.push_back(make_shared<Echipe>(nume_echipa_curenta));
-        cout<<*echipe_ai.back()<<endl;
     }
 
      ifstream fin("text.txt");
@@ -111,10 +126,7 @@ int manageri::citire_toti_jucatorii_si_echipe(){
         return 1;
     }
 
-
-
     for (auto& e : echipe_ai) {
-
         string pozitie, nume;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
         jucatorptr j = nullptr;
@@ -171,9 +183,6 @@ int manageri::citire_toti_jucatorii_si_echipe(){
 
             j->set_nume(nume);
             j->set_poz(pozitie);
-
-            cout<<*j<<endl;
-
             j->transferabil(false);
             j->adaugare_echipe(e);
 
@@ -192,11 +201,76 @@ int manageri::citire_toti_jucatorii_si_echipe(){
         cout << *e;
 
     return 0;
-    }
+}
 
 BazaDeDateptr manageri::get_baza_manager() {
     return baza;
 }
+
+
+int manageri::citire_baza_managerGUI() {
+     ifstream finn("tastatura.txt");
+    if (!finn) {
+        cerr << "Nu s-a putut deschide fisierul tastatura.txt\n";
+        return 1;
+    }
+
+    while(true) {
+        string pozitie, nume;
+        int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
+        jucatorptr j = nullptr;
+        if (!(finn >> pozitie)) break;
+        vector<int> a;
+        finn>>nume;
+
+        if (pozitie == "Libero") {
+            j = make_shared <Libero>();
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else if (pozitie == "Setter") {
+            int a11;
+            j = make_shared <Setter>();
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10>>a11;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
+            j->valori(a);
+        }
+        else if (pozitie == "OutsideHitter") {
+            j = make_shared <OutsideHitter>();
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else if (pozitie == "OppositeHitter") {
+            j = make_shared <OppositeHitter>();
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else if (pozitie == "MiddleBlocker") {
+            j = make_shared <MiddleBlocker>();
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
+            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            j->valori(a);
+        }
+        else continue;
+        j->set_nume(nume);
+        j->set_poz(pozitie);
+
+       baza->adaugaJucator(j);
+
+
+    }
+    finn.close();
+    return 0;
+}
+
 
 int manageri::citire_baza_manager() {
      ifstream finn("tastatura.txt");
@@ -223,28 +297,28 @@ int manageri::citire_baza_manager() {
         else if (pozitie == "Setter") {
             int a11;
             j = make_shared <Setter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10>>a11;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
             j->valori(a);
         }
         else if (pozitie == "OutsideHitter") {
             j = make_shared <OutsideHitter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "OppositeHitter") {
             j = make_shared <OppositeHitter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "MiddleBlocker") {
             j = make_shared <MiddleBlocker>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
@@ -254,6 +328,7 @@ int manageri::citire_baza_manager() {
         j->set_poz(pozitie);
 
        baza->adaugaJucator(j);
+        cout<<*j<<endl;
 
 
 
@@ -294,30 +369,30 @@ int manageri::citire_jucatori_liberi() {
         else if (pozitie == "Setter") {
             int a11;
             j = make_shared <Setter>();
-            fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
+            fin>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10>>a11;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
+            a.push_back(a5); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
             j->valori(a);
         }
         else if (pozitie == "OutsideHitter") {
             j = make_shared <OutsideHitter>();
-            fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            fin>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            a.push_back(a5); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "OppositeHitter") {
             j = make_shared <OppositeHitter>();
-            fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            fin>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            a.push_back(a5); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "MiddleBlocker") {
             j = make_shared <MiddleBlocker>();
-            fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
+            fin>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
-            a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
+            a.push_back(a5); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else continue;
@@ -338,20 +413,27 @@ int manageri::citire_jucatori_liberi() {
 
 
 
+BazaDeDateptr manageri::getBazaDeDate() {
+    return baza;
+}
 
+
+Echipeptr manageri::getEchipaManager() {
+    return echipa;
+}
 
 
 void manageri::meci_amical() {
-
-
+    if (!echipa || !baza) return;
 
     Echipeptr adversar = baza->alege_echipa_random();
+    if (!adversar) {
+         cout<<"Nu sunt echipe adverse disponibile.\n";
+         return;
+    }
 
     Meci meci_amical(echipa, adversar);
     meci_amical.meci();
-
-
-
 
     cout<<"Felicitari, ati primit suma de 20000 de lei.";
     echipa->adaugare_buget(20000);
@@ -359,6 +441,11 @@ void manageri::meci_amical() {
 
 int manageri::cariera() {
     string pref;
+    if (!echipa || !baza) {
+         cerr << "Eroare: Echipa sau Baza de Date nu este initializata corect.\n";
+         return 1;
+    }
+
     cout<<"Felicitari! A inceput cariera dumneavoastra de manager al unei echipe de volei!\n"
     <<"Primul pas este sa imi spuneti numele dumneavoastra:\n";
     cin>> this->nume;
@@ -378,7 +465,6 @@ int manageri::cariera() {
     else {
         cout<<"Buna alegere...\n";
         echipa->set_buget(250000);
-
     }
 
     this_thread::sleep_for(chrono::seconds(5));
@@ -446,12 +532,9 @@ int manageri::cariera() {
 
     }
 
-
-
 return 0;
-
-
-
-
-
 }
+
+
+
+

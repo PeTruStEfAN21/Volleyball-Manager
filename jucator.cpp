@@ -6,8 +6,59 @@
 #include <fstream>
 #include <ostream>
 #include <algorithm>
+#include "BazaDeDate.h"
 
 using namespace std;
+
+Persoana::Persoana(const std::string& nume) : nume(nume) {}
+
+Persoana::Persoana() : nume("Necunoscut") {}
+
+float Persoana::obtine_rating_risc_total() const {
+    return 0.1f * calculeaza_indice_risc_financiar();
+}
+
+const std::string Persoana::get_nume() const {
+    return nume;
+}
+
+void Persoana::set_nume(const std::string& nume) {
+    this->nume = nume;
+}
+
+std::ostream& operator<<(std::ostream& os, const Persoana& p) {
+    os << "Nume: " << p.nume << ", ";
+    p.afiseaza_detalii_specifice(os);
+    return os;
+}
+
+
+float jucator::calculeaza_indice_risc_financiar() const {
+    return (float)std::max(0, pret) / 1000.0f;
+}
+
+void jucator::afiseaza_detalii_specifice(std::ostream& os) const {
+    os << "Pozitie: " << pozitie << ", OVR: " << ovr << ", Pret: " << pret << " lei.";
+    if (get_transferabil() == true) {
+        os << " [Disponibil]";
+    }
+}
+
+float Persoana::obtine_scor_tactica_final() const {
+
+    const jucator* j = dynamic_cast<const jucator*>(this);
+
+    if (j) {
+
+        float impact_specific = j->calculeaza_impact_meci();
+        float ovr_pondere = j->get_ovr();
+
+        return (impact_specific * 0.8f) + (ovr_pondere * 0.2f);
+
+    } else {
+        return 0.0f;
+    }
+}
 
 
 void jucator::overall() {
@@ -27,18 +78,21 @@ void jucator::set_pret() {
         pret = (int)(pret * 1.5);
 }
 
-jucator::jucator(const string &nume, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
+jucator::jucator(const string &nume_pers, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
         int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
         bool ales, Echipeptr echipa)
-    : nume(nume), pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
+    : Persoana(nume_pers),
+      pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
       spike_accuracy(spike_accuracy), serve_power(serve_power), serve_accuracy(serve_accuracy),
       vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
-      ales(ales),  echipa_curenta(echipa){}
+      ales(ales),  echipa_curenta(echipa)
+      {}
 
 jucator::jucator()
-    : ovr(0), spike_power(0), receive(0), spike_accuracy(0), serve_power(0), serve_accuracy(0),
+    : Persoana("Necunoscut"),
+      ovr(0), spike_power(0), receive(0), spike_accuracy(0), serve_power(0), serve_accuracy(0),
       vertical_jump(0), mobility(0), speed(0), pret(0), height(0), ales(false),
-      nume("Necunoscut"), pozitie("necunoscut"), lista_transferuri(true) {}
+      pozitie("necunoscut"), lista_transferuri(true) {}
 
 
 void jucator::adaugare_echipe(Echipeptr echipa) {
@@ -58,9 +112,6 @@ Echipeptr jucator::get_echipe() {
     return echipa_curenta;
 }
 
-const string jucator::get_nume() const {
-    return nume;
-}
 
 
 void jucator::set_poz(const string &poz) {
@@ -68,7 +119,8 @@ void jucator::set_poz(const string &poz) {
 }
 
 int jucator::get_pret() const {
-    return pret;
+    float modifier = BazaDeDate::getGlobalMarketModifier();
+    return (int)(this->pret * modifier);
 }
 
 void jucator::valori(vector<int> a) {
@@ -92,20 +144,18 @@ void jucator::setAles(bool val) {
 
 int jucator::get_ovr() const { return ovr; }
 
-void jucator::afiseaza() const {
-    cout << nume << " (" << pozitie << ") - OVR: " << ovr << ", Pret: " << pret;
+std::string jucator::to_string() const {
+    std::string s = get_nume() + " (" + pozitie + ") - OVR: " + std::to_string(ovr) + ", Pret: " + std::to_string(pret);
     if (get_transferabil() == true)
-        cout<<"     Disponibil.\n";
+        s += " Disponibil.";
+    return s;
 }
 
-ostream &operator<<(ostream &out, const jucator &j) {
-    out << "Nume: " << j.nume << ", Pozitie: " << j.pozitie << ", OVR: " << j.ovr;
-    return out;
-}
 
 jucator &jucator::operator=(const jucator &j) {
     if (this != &j) {
-        nume = j.nume;
+        Persoana::operator=(j);
+
         ovr = j.ovr;
         spike_power = j.spike_power;
         height = j.height;
@@ -124,7 +174,9 @@ jucator &jucator::operator=(const jucator &j) {
 }
 
  void jucator::citeste(ifstream &in) {
-    in >> nume;
+    std::string temp_nume;
+    in >> temp_nume;
+    set_nume(temp_nume);
 
     in >> spike_power;
     in >> receive;
@@ -151,9 +203,6 @@ jucator &jucator::operator=(const jucator &j) {
     transferabil(false);
 }
 
-void jucator::set_nume(const string &nume) {
-  this->nume = nume;
-}
 
 
 
@@ -176,6 +225,22 @@ OutsideHitter::OutsideHitter() {
 void OutsideHitter::overall(){
     ovr = ((spike_power * 2 + receive * 2 + spike_accuracy * 2 + serve_power + serve_accuracy + vertical_jump * 2 +
             mobility + speed + explosiveness * 3 + height * 2) / 17);
+}
+
+
+
+float OutsideHitter::calculeaza_impact_meci() const {
+    float impact = (
+        (float)spike_power * 0.40f +
+        (float)receive * 0.30f +
+        (float)explosiveness * 0.30f
+    );
+    return impact;
+}
+
+Persoanaptr OutsideHitter::clone() const {
+
+    return std::make_shared<OutsideHitter>(*this);
 }
 
 void OutsideHitter::set_pret() {
@@ -228,6 +293,20 @@ void Setter::overall() {
            speed * 2 + set_precision * 3 + set_iq * 3 + height) / 17;
 }
 
+Persoanaptr Setter::clone() const {
+    return std::make_shared<Setter>(*this);
+}
+
+float Setter::calculeaza_impact_meci() const {
+
+    float impact = (
+        (float)set_precision * 0.45f +
+        (float)set_iq * 0.35f +
+        (float)mobility * 0.20f
+    );
+    return impact;
+}
+
 void Setter::set_pret() {
     long long ovr_elite_bonus = 0;
     int ovr_peste_80 = max(0, ovr - 80);
@@ -276,6 +355,17 @@ void Libero::overall() {
            speed * 3 + reflexes * 3 + height) / 17;
 }
 
+
+float Libero::calculeaza_impact_meci() const {
+
+    float impact = (
+        (float)receive * 0.50f +
+        (float)reflexes * 0.30f +
+        (float)speed * 0.20f
+    );
+    return impact;
+}
+
 void Libero::set_pret() {
     long long ovr_elite_bonus = 0;
     int ovr_peste_80 = max(0, ovr - 80);
@@ -291,6 +381,11 @@ void Libero::set_pret() {
     pret = (int)(8000 + ovr * 70 + cost_critic + ovr_elite_bonus);
 
     if (ales == true) pret = (int)(pret * 1.5);
+}
+
+
+Persoanaptr Libero::clone() const {
+    return std::make_shared<Libero>(*this);
 }
 
 void Libero::valori(vector <int> a) {
@@ -321,6 +416,17 @@ void MiddleBlocker::overall() {
            speed * 2 + blocking * 3 + height * 4) / 17;
 }
 
+
+float MiddleBlocker::calculeaza_impact_meci() const {
+    float impact = (
+        (float)blocking * 0.40f +
+        (float)height * 0.30f +
+        (float)spike_power * 0.20f +
+        (float)vertical_jump * 0.10f
+    );
+    return impact;
+}
+
 void MiddleBlocker::set_pret() {
     long long ovr_elite_bonus = 0;
     int ovr_peste_80 = max(0, ovr - 80);
@@ -336,6 +442,10 @@ void MiddleBlocker::set_pret() {
     pret = (int)(10000 + ovr * 90 + cost_critic + ovr_elite_bonus);
 
     if (ales == true) pret = (int)(pret * 1.5);
+}
+
+Persoanaptr MiddleBlocker::clone() const {
+    return std::make_shared<MiddleBlocker>(*this);
 }
 
 void MiddleBlocker::valori(vector <int> a) {
@@ -367,6 +477,17 @@ void OppositeHitter::overall() {
             mobility + speed + explosiveness * 3 + height * 2) / 17);
 }
 
+
+float OppositeHitter::calculeaza_impact_meci() const {
+
+    float impact = (
+        (float)spike_power * 0.50f +
+        (float)explosiveness * 0.30f +
+        (float)spike_accuracy * 0.20f
+    );
+    return impact;
+}
+
 void OppositeHitter::set_pret() {
     long long ovr_elite_bonus = 0;
     int ovr_peste_80 = max(0, ovr - 80);
@@ -383,6 +504,10 @@ void OppositeHitter::set_pret() {
     pret = (int)(15000 + ovr * 100 + cost_critic + ovr_elite_bonus);
 
     if (ales == true) pret = (int)(pret * 1.5);
+}
+
+Persoanaptr OppositeHitter::clone() const {
+    return std::make_shared<OppositeHitter>(*this);
 }
 
 void OppositeHitter::valori(vector <int> a) {

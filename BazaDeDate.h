@@ -15,12 +15,23 @@ private:
     std::vector<jucatorptr> jucatori;
     std::vector<Echipeptr> echipe_disponibile;
 
+    static float globalMarketModifier;
+    static const float MAX_INFLATION;
+    static const float INFLATION_STEP;
+
+
 public:
     void eliminaEchipa(Echipeptr e);
     explicit BazaDeDate(const std::vector<jucatorptr> &jucatori);
     BazaDeDate();
 
+    static float getStep() ;
+
+
     void afisare_jucatori_necontractati();
+
+    static float getGlobalMarketModifier() ;
+    static void applyInflation(float step);
 
     ~BazaDeDate();
 

@@ -29,9 +29,38 @@ void Meci::tabelaScor() {
          << "-----------------------------\n";
 }
 
+
+float Meci::calculeaza_scor_echipa_ponderea_activa(Echipeptr echipa) const {
+    if (!echipa) return 0.0f;
+
+    float impact_total = 0.0f;
+    const auto& titulari = echipa->get_jucatori_pe_teren();
+
+    if (titulari.size() != 6) {
+        return (float)echipa->get_overall();
+    }
+
+    for (const auto& titular : titulari) {
+        if (titular) {
+            impact_total += titular->obtine_scor_tactica_final();
+        }
+    }
+
+    return impact_total / 6.0f;
+}
+
+
 char Meci::punct() {
-    float sansa_a = pow((float)echipa1->get_overall(), 2.5f) /
-            (pow((float)echipa1->get_overall(), 2.5f) + pow((float)echipa2->get_overall(), 2.5f));
+
+    float scor_ponderat_a = calculeaza_scor_echipa_ponderea_activa(echipa1);
+    float scor_ponderat_b = calculeaza_scor_echipa_ponderea_activa(echipa2);
+
+    if (scor_ponderat_a < 10.0f) scor_ponderat_a = 10.0f;
+    if (scor_ponderat_b < 10.0f) scor_ponderat_b = 10.0f;
+
+
+    float sansa_a = pow(scor_ponderat_a, 2.5f) /
+            (pow(scor_ponderat_a, 2.5f) + pow(scor_ponderat_b, 2.5f));
 
     float r = (float)rand() / RAND_MAX;
 
@@ -56,7 +85,7 @@ char Meci::set() {
             cout << string(50, '\n');
             tabelaScor();
 
-            this_thread::sleep_for(chrono::seconds((1)));
+         //   this_thread::sleep_for(chrono::seconds((1)));
 
     }
 
@@ -73,7 +102,7 @@ char Meci::set() {
             cout << string(50, '\n');
             tabelaScor();
 
-            this_thread::sleep_for(chrono::seconds((1)));
+          //  this_thread::sleep_for(chrono::seconds((1)));
         }
     }
 
@@ -100,7 +129,7 @@ Echipeptr Meci::meci() {
         else
             echipa2->modifSetur();
 
-        this_thread::sleep_for(chrono::seconds(2));
+      //  this_thread::sleep_for(chrono::seconds(2));
     }
 
     if (echipa1->getSeturi() == 1) {
@@ -111,4 +140,37 @@ Echipeptr Meci::meci() {
         cout << "\nEchipa " << echipa2->getNume() << " a castigat meciul! Felicitari!\n";
         return echipa2;
     }
+}
+
+
+void Meci::simuleazaUrmatoareActiune() {
+    while (echipa1->getPunctaj() < 25 && echipa2->getPunctaj() < 25) {
+        char castigator = punct();
+
+        if (castigator == 'a')
+            echipa1->modifPunctaj();
+        else
+            echipa2->modifPunctaj();
+
+
+       // this_thread::sleep_for(chrono::seconds((1)));
+
+    }
+
+    if (echipa1->getPunctaj() >= 25 || echipa2->getPunctaj() >= 25) {
+        // Tie-break (diferență de 2 puncte)
+        while (abs(echipa1->getPunctaj() - echipa2->getPunctaj()) <= 1){
+            char castigator = punct();
+
+            if (castigator == 'a')
+                echipa1->modifPunctaj();
+            else
+                echipa2->modifPunctaj();
+
+
+           // this_thread::sleep_for(chrono::seconds((1)));
+        }
+    }
+
+
 }
