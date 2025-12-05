@@ -5,7 +5,6 @@
 
 class MainMenuScreen : public Screen {
 private:
-    sf::Font& font;
 
     Button transferButton;
     Button ligaButton;

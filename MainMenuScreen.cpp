@@ -3,8 +3,7 @@
 #include <optional>
 
 MainMenuScreen::MainMenuScreen(sf::Font& f)
-    : font(f),
-      transferButton(300.0f, 120.0f, 200.0f, 50.0f, "Transferuri", f),
+    :transferButton(300.0f, 120.0f, 200.0f, 50.0f, "Transferuri", f),
       ligaButton(300.0f, 210.0f, 200.0f, 50.0f, "Start Liga", f),
       matchButton(300.0f, 300.0f, 200.0f, 50.0f, "Meci Test", f),
       firstSixButton(300.0f, 390.0f, 200.0f, 50.0f, "Alegere Echipa", f),
