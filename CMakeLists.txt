@@ -39,6 +39,19 @@ FetchContent_Declare(
     # GIT_TAG        7f1162dfea4969bc17417563ac55d93b72e84c1e # 3.0.0
     # GIT_TAG        origin/master
     GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
+
+    CMAKE_ARGS 
+               
+                -DCMAKE_POLICY_VERSION_MINIMUM=3.5 
+                -DSFML_SKIP_MANDATORY_DEPENDENCY_SEARCH=TRUE
+                
+                -DSFML_BUILD_EXAMPLES=OFF
+                -DSFML_BUILD_TESTS=OFF
+                -DSFML_BUILD_NETWORK=OFF 
+                -DSFML_BUILD_GRAPHICS=ON
+                -DSFML_BUILD_WINDOW=ON
+                -DSFML_BUILD_SYSTEM=ON
+                -DSFML_BUILD_AUDIO=ON
 )
 
 FetchContent_MakeAvailable(SFML)
