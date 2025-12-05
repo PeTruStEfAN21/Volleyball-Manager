@@ -10,7 +10,6 @@
 
 LigaScreen::LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam,  sf::Font& font, sf::RenderWindow& window)
     : echipaMea(playerTeam),
-      fontRef(font),
       liga(currentLiga),
       windowRef(window),
 

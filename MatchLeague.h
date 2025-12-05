@@ -13,7 +13,6 @@ class MatchLeague : public Screen {
 private:
     Echipeptr echipaMea;
     Echipeptr echipaAdversa;
-    sf::Font& fontRef;
 
     TableScore tablaScor;
     sf::Text statusText;

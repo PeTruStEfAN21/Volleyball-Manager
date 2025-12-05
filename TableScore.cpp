@@ -10,7 +10,6 @@ TableScore::TableScore(sf::Font &font, Echipeptr teamA, Echipeptr teamB, float x
 : echipa1(teamA),
   echipa2(teamB),
   position(x, y),
-  fontRef(font),
   numeEchipa1(font),
   scorEchipa1Puncte(font),
   scorEchipa1Seturi(font),

@@ -18,7 +18,7 @@ const int PUNCTE_NECESARE_SET = 25;
 const int SETURI_NECESARE_MECI = 3;
 const float RITM_SIMULARE_SEC = 0.5f;
 MatchScreen::MatchScreen(Echipeptr myTeam, Echipeptr opponent, sf::Font& font)
-    : echipaMea(myTeam), echipaAdversa(opponent), fontRef(font),
+    : echipaMea(myTeam), echipaAdversa(opponent),
       tablaScor(font, myTeam, opponent, 30.0f, 50.0f),
       statusText(font),
       timeoutButton(50.0f, 600.0f, 200.0f, 50.0f, "Cere Timeout", font),

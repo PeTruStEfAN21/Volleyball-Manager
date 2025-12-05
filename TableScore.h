@@ -9,7 +9,6 @@ class TableScore {
 private:
     Echipeptr echipa1, echipa2;
     sf::Vector2f position;
-    sf::Font& fontRef;
 
 
 

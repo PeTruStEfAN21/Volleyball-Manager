@@ -23,7 +23,6 @@ private:
 
     Echipeptr echipaMea;
 
-    sf::Font& fontRef;
     std::shared_ptr<Liga> liga;
     sf::RenderWindow& windowRef;
 

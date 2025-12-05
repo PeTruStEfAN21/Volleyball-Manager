@@ -13,7 +13,6 @@
 class FirstSixScreen : public Screen {
 private:
     Echipeptr echipaMea;
-    sf::Font& fontRef;
 
     std::vector<jucatorptr> titulariSelectati;
 

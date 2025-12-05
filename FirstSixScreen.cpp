@@ -11,7 +11,6 @@ const sf::Vector2f INFO_POS(800.0f, 100.0f);
 
 FirstSixScreen::FirstSixScreen(Echipeptr echipa, sf::Font& font)
     : echipaMea(echipa),
-      fontRef(font),
       listaVizuala(font, echipaMea->get_jucatori(), LIST_POS.x, LIST_POS.y),
       startMatchButton(800.0f, 600.0f, 220.0f, 50.0f, "Start Meci", font),
       titluText(font), statusText(font), infoText(font)

@@ -13,7 +13,6 @@
 TimeoutScreen::TimeoutScreen(Echipeptr echipa, BazaDeDateptr db, sf::Font& font)
     : echipaMea(echipa),
       baza(db),
-      fontRef(font),
 
       listaTeren(font, echipaMea->get_jucatori_pe_teren(), TEREN_X_START, LISTA_Y_START),
       listaBanca(font, echipaMea->get_jucatori_de_pe_banca(), BANCA_X_START, LISTA_Y_START),

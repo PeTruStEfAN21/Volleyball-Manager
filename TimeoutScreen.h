@@ -17,7 +17,6 @@ class TimeoutScreen : public Screen {
 private:
     Echipeptr echipaMea;
     BazaDeDateptr baza;
-    sf::Font& fontRef;
     ListaJucatoriGui listaTeren;
     ListaJucatoriGui listaBanca;
 
