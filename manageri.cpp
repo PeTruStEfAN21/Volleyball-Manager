@@ -136,7 +136,7 @@ int manageri::citire_toti_jucatorii_si_echipe(){
     }
 
     for (auto& e : echipe_ai) {
-        string pozitie, nume;
+        string pozitie, numeCitit;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
         jucatorptr j = nullptr;
         int i = 0;
@@ -146,7 +146,7 @@ int manageri::citire_toti_jucatorii_si_echipe(){
                 break;
             }
             vector<int> a;
-            fin>>nume;
+            fin>>numeCitit;
 
             if (pozitie == "Libero") {
                 j = make_shared<Libero>();
@@ -190,7 +190,7 @@ int manageri::citire_toti_jucatorii_si_echipe(){
                 break;
             }
 
-            j->set_nume(nume);
+            j->set_nume(numeCitit);
             j->set_poz(pozitie);
             j->transferabil(false);
             j->adaugare_echipe(e);
@@ -225,16 +225,16 @@ int manageri::citire_baza_managerGUI() {
     }
 
     while(true) {
-        string pozitie, nume;
+        string pozitie, numeCitit;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
         jucatorptr j = nullptr;
         if (!(finn >> pozitie)) break;
         vector<int> a;
-        finn>>nume;
+        finn>>numeCitit;
 
         if (pozitie == "Libero") {
             j = make_shared <Libero>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
@@ -242,34 +242,34 @@ int manageri::citire_baza_managerGUI() {
         else if (pozitie == "Setter") {
             int a11;
             j = make_shared <Setter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10>>a11;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
             j->valori(a);
         }
         else if (pozitie == "OutsideHitter") {
             j = make_shared <OutsideHitter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "OppositeHitter") {
             j = make_shared <OppositeHitter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "MiddleBlocker") {
             j = make_shared <MiddleBlocker>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else continue;
-        j->set_nume(nume);
+        j->set_nume(numeCitit);
         j->set_poz(pozitie);
 
        baza->adaugaJucator(j);
@@ -289,12 +289,12 @@ int manageri::citire_baza_manager() {
     }
 
     while(true) {
-        string pozitie, nume;
+        string pozitie, numeCitit;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
         jucatorptr j = nullptr;
         if (!(finn >> pozitie)) break;
         vector<int> a;
-        finn>>nume;
+        finn>>numeCitit;
 
         if (pozitie == "Libero") {
             j = make_shared <Libero>();
@@ -306,34 +306,34 @@ int manageri::citire_baza_manager() {
         else if (pozitie == "Setter") {
             int a11;
             j = make_shared <Setter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10>>a11;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
             j->valori(a);
         }
         else if (pozitie == "OutsideHitter") {
             j = make_shared <OutsideHitter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "OppositeHitter") {
             j = make_shared <OppositeHitter>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "MiddleBlocker") {
             j = make_shared <MiddleBlocker>();
-            finn>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            finn>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a6); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else continue;
-        j->set_nume(nume);
+        j->set_nume(numeCitit);
         j->set_poz(pozitie);
 
        baza->adaugaJucator(j);
@@ -361,12 +361,12 @@ int manageri::citire_jucatori_liberi() {
     }
 
      while(true) {
-        string pozitie, nume;
+        string pozitie, numeCitit;
         int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
         jucatorptr j = nullptr;
         if (!(fin >> pozitie)) break;
         vector<int> a;
-        fin>>nume;
+        fin>>numeCitit;
 
         if (pozitie == "Libero") {
             j = make_shared <Libero>();
@@ -378,34 +378,34 @@ int manageri::citire_jucatori_liberi() {
         else if (pozitie == "Setter") {
             int a11;
             j = make_shared <Setter>();
-            fin>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10>>a11;
+            fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10>>a11;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a5); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10); a.push_back(a11);
             j->valori(a);
         }
         else if (pozitie == "OutsideHitter") {
             j = make_shared <OutsideHitter>();
-            fin>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a5); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "OppositeHitter") {
             j = make_shared <OppositeHitter>();
-            fin>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a5); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else if (pozitie == "MiddleBlocker") {
             j = make_shared <MiddleBlocker>();
-            fin>>a1>>a2>>a3>>a4>>a5>>a5>>a7>>a8>>a9>>a10;
+            fin>>a1>>a2>>a3>>a4>>a5>>a6>>a7>>a8>>a9>>a10;
             a.push_back(a1); a.push_back(a2); a.push_back(a3); a.push_back(a4); a.push_back(a5);
             a.push_back(a5); a.push_back(a7); a.push_back(a8); a.push_back(a9); a.push_back(a10);
             j->valori(a);
         }
         else continue;
-        j->set_nume(nume);
+        j->set_nume(numeCitit);
         j->set_poz(pozitie);
 
        baza->adaugaJucator(j);
