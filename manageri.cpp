@@ -103,8 +103,8 @@ string manageri::get_nume() const {
 
 
 // cppcheck-suppress unusedFunction
-void manageri::adaugare_jucatori_valabili(BazaDeDateptr baza) {
-    this->baza = baza;
+void manageri::adaugare_jucatori_valabili(BazaDeDateptr bazalocal) {
+    this->baza = bazalocal;
 }
 
 

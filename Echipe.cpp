@@ -726,10 +726,10 @@ void Echipe::adaugare_jucator(BazaDeDateptr baza) {
 
             index = stoi(input);
 
-        } catch (const std::invalid_argument& e) {
+        } catch (const std::invalid_argument& /*e*/) {
             cout << "Input invalid! Va rog introduceti un numar sau 'back'.\n";
             continue;
-        } catch (const std::out_of_range& e) {
+        } catch (const std::out_of_range& /*e*/) {
             cout << "Numar prea mare. Va rog introduceti un index valid.\n";
             continue;
         }
