@@ -67,7 +67,7 @@ int main() {
     screens[MATCH_SCREEN] = std::make_shared<MatchScreen>(echipaMea, echipaAdversaProvizorie, globalFont);
     screens[SCREEN_MATCH_LEAGUE] =  std::make_shared<MatchLeague>(echipaMea, echipaAdversaProvizorie, globalFont);
 
-    screens[SCREEN_LIGA] = std::make_shared<LigaScreen>(ligaProgres, echipaMea, baza, globalFont, window);
+    screens[SCREEN_LIGA] = std::make_shared<LigaScreen>(ligaProgres, echipaMea, globalFont, window);
     screens[SCREEN_SCOREBOARD] = std::make_shared<ScoreboardScreen>(ligaProgres, globalFont);
 
     screens[SCREEN_TIMEOUT] = std::make_shared<TimeoutScreen>(echipaMea, baza, globalFont);
