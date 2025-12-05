@@ -20,7 +20,7 @@ private:
     void render(sf::RenderWindow& window) override;
 
 public:
-    MainMenuScreen(sf::Font& f);
+    explicit MainMenuScreen(sf::Font& f);
     
     int run(sf::RenderWindow& window) override;
 };

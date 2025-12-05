@@ -53,8 +53,7 @@ void ScoreboardScreen::handleInput(const sf::Event& event, sf::RenderWindow& win
     }
 }
 
-void ScoreboardScreen::update() {
-}
+
 
 void ScoreboardScreen::render(sf::RenderWindow& window) {
     window.clear(sf::Color(20, 20, 50)); 

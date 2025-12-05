@@ -59,7 +59,7 @@ void Liga::reset_etapa() {
     etapa_jucat = vector<bool>(n, false);
 }
 
-Echipeptr Liga::meci() {
+Echipeptr Liga::meciliga() {
     int n = echipe.size();
 
     int index_echipa_manager = n - 1;

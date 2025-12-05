@@ -153,8 +153,7 @@ void TimeoutScreen::handleFinalizeButton() {
 }
 
 
-void TimeoutScreen::update() {
-}
+
 
 void TimeoutScreen::render(sf::RenderWindow& window) {
     window.clear(sf::Color(30, 30, 40));

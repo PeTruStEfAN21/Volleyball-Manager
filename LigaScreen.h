@@ -35,16 +35,16 @@ private:
     sf::Text titleText;
 
     void updateButtonText();
-    void handleInput(const sf::Event& event, sf::RenderWindow& window);
+    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
 
-    std::string formatScoreboard() const;
+   // std::string formatScoreboard() const;
 
     sf::RenderWindow& windowRef;
 
 public:
     LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam, BazaDeDateptr db, sf::Font& font, sf::RenderWindow& window);
     int run(sf::RenderWindow& window) override;
-    void render(sf::RenderWindow& window);
-    void update();
+    void render(sf::RenderWindow& window) override;
+    void update() override;
     void notifyMatchFinished() ;
 };

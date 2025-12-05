@@ -76,10 +76,12 @@ public:
 
     jucator();
 
+    void setOvr(const int ovr);
+
     virtual float calculeaza_impact_meci() const = 0;
 
 
-    virtual ~jucator() = default;
+    virtual ~jucator() override = default;
 
     void transferabil(bool tranfer);
     bool get_transferabil() const ;

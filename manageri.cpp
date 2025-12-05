@@ -21,10 +21,19 @@ manageri::manageri()
     :  nume("Necunoscut"),
        lista({}),
        baza(make_shared<BazaDeDate>()),
-       echipa(make_shared<Echipe>())
-{
+       echipa(make_shared<Echipe>()){
     this->echipa->set_buget(250000);
     transferuri_manager = make_shared<Transferuri>(baza, this->echipa);
+
+    this->jucatorgratis2 = make_shared<Setter>();
+
+    this->jucatorgratis1 = make_shared<OutsideHitter>();
+
+    jucatorgratis1->setOvr(78);
+    jucatorgratis2->setOvr(75);
+
+    this->echipa->get_jucatori().push_back(jucatorgratis1);
+    this->echipa->get_jucatori().push_back(jucatorgratis2);
 }
 
 

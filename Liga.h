@@ -40,7 +40,7 @@ public:
 
     Echipeptr getNextAdversarPentruManager() const;
 
-    Liga(BazaDeDateptr baza);
+    explicit Liga(BazaDeDateptr baza);
 
     Liga();
 
@@ -48,7 +48,7 @@ public:
 
     void creare_liga() ;
 
-    Echipeptr meci();
+    Echipeptr meciliga();
     void afisare_punctaje();
     const std::vector<Echipeptr>& getEchipe() const;
     void meciuri();

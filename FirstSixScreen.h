@@ -3,7 +3,7 @@
 #include "Screen.h"
 #include "Button.h"
 #include "Echipe.h"
-#include "ListaJucatoriGui.h" // Presupunem ca ai separat lista vizuala intr-un fisier
+#include "ListaJucatoriGui.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <map>
@@ -24,7 +24,7 @@ private:
 
     ListaJucatoriGui listaVizuala;
 
-    void handleInput(const sf::Event& event, sf::RenderWindow& window);
+    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
     void handlePlayerClick(sf::Vector2i mousePos);
     void handleStartButton();
     void updateInfoText();
@@ -35,8 +35,7 @@ public:
 
     int run(sf::RenderWindow& window) override;
 
-    void update_jucatori(vector<jucatorptr> jucatori);
+    void update_jucatori(const vector<jucatorptr>& jucatori);
 
-    void update() override;
     void render(sf::RenderWindow& window) override;
 };

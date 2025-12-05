@@ -16,11 +16,10 @@ private:
     std::vector<sf::Text> scoreTexts;
 
     void updateScoreDisplay();
-    void handleInput(const sf::Event& event, sf::RenderWindow& window);
+    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
 
 public:
     ScoreboardScreen(std::shared_ptr<Liga> currentLiga, sf::Font& font);
     int run(sf::RenderWindow& window) override;
-    void render(sf::RenderWindow& window);
-    void update();
+    void render(sf::RenderWindow& window) override;
 };

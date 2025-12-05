@@ -39,7 +39,7 @@ LigaScreen::LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam, 
     }
 }
 
-std::string LigaScreen::formatScoreboard() const {
+/*std::string LigaScreen::formatScoreboard() const {
     const auto& echipe_lista = liga->getEchipe();
 
     std::stringstream ss;
@@ -54,7 +54,7 @@ std::string LigaScreen::formatScoreboard() const {
     liga->afisare_punctaje();
     ss << "Punctajele au fost afisate in consola. \nVezi ordinea actuala a echipelor.";
     return ss.str();
-}
+}*/
 
 void LigaScreen::updateButtonText() {
     if (!liga->isSeasonFinished()) {

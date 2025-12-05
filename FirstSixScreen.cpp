@@ -165,8 +165,7 @@ void FirstSixScreen::updateInfoText() {
     infoText.setString(s);
 }
 
-void FirstSixScreen::update() {
-}
+
 
 void FirstSixScreen::render(sf::RenderWindow& window) {
     window.clear(sf::Color(30, 30, 40));
@@ -183,6 +182,6 @@ void FirstSixScreen::render(sf::RenderWindow& window) {
 
 
 
-void FirstSixScreen::update_jucatori(vector<jucatorptr> jucatori) {
+void FirstSixScreen::update_jucatori(const vector<jucatorptr>& jucatori) {
     listaVizuala.setLista(jucatori);
 }

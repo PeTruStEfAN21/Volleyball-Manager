@@ -24,6 +24,10 @@ private:
     BazaDeDateptr baza;
     Transferuriptr transferuri_manager;
 
+    jucatorptr jucatorgratis1;
+    jucatorptr jucatorgratis2;
+
+
 public:
     manageri(int buget, Echipeptr echipa, const std::string &nume);
     manageri();

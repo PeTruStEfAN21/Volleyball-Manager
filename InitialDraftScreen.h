@@ -29,7 +29,6 @@ private:
 
     long long bugetCurent;
     std::vector<jucatorptr> selectieTemporara;
-    int next_screen_id;
 
     Button finalizeButton;
     sf::Text mesajStatus;

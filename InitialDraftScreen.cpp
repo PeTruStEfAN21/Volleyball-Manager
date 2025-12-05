@@ -13,7 +13,6 @@ InitialDraftScreen::InitialDraftScreen(Echipeptr echipa, BazaDeDateptr db, sf::F
       baza(db),
       fontRef(font),
       bugetCurent(echipa->get_buget()),
-      next_screen_id(SCREEN_DRAFT),
       finalizeButton(800.0f, 600.0f, 180.0f, 40.0f, "Finalizeaza Echipa (0/6)", font),
       mesajStatus(font),
       listaVizuala(font, baza->getLista(), LISTA_X_START, LISTA_Y_START),
@@ -126,7 +125,7 @@ void InitialDraftScreen::handlePlayerClick(sf::Vector2i mousePos) {
              bugetCurent -= pretJucator;
              selectieTemporara.push_back(jucatorAles);
              mesajStatus.setString("Jucator adaugat! Buget ramas: " + std::to_string(bugetCurent) + " lei.");
-             mesajStatus.setFillColor(sf::Color(0, 255, 0)); // Verde
+             mesajStatus.setFillColor(sf::Color(sf::Color::Green)); // Verde
              finalizeButton.setString("Finalizeaza Echipa (" + std::to_string(selectieTemporara.size()) + "/6)");
          } catch (const std::runtime_error& e) {
              mesajStatus.setString("EROARE INTERNĂ: " + std::string(e.what()));

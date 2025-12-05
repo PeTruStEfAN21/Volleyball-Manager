@@ -21,7 +21,7 @@ enum ScreenState {
 class Screen {
 protected:
 
-    int next_screen_id;
+    int next_screen_id = -1;
 
     static std::shared_ptr<sf::RenderTexture> globalFont;
 

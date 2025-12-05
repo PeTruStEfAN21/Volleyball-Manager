@@ -173,6 +173,11 @@ jucator &jucator::operator=(const jucator &j) {
     return *this;
 }
 
+void jucator::setOvr(const int ovr) {
+    this->ovr = ovr;
+}
+
+
  void jucator::citeste(ifstream &in) {
     std::string temp_nume;
     in >> temp_nume;
