@@ -28,7 +28,7 @@ public:
     static float getStep() ;
 
 
-    //void afisare_jucatori_necontractati();
+    void afisare_jucatori_necontractati();
 
     static float getGlobalMarketModifier() ;
     static void applyInflation(float step);
@@ -45,7 +45,7 @@ public:
     Echipeptr getEchipe(size_t index) const;
 
 
-    //void afiseazaEchipe() const;
+    void afiseazaEchipe() const;
 
     const std::vector<jucatorptr>& getLista() const;
 

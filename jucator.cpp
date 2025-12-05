@@ -88,7 +88,7 @@ jucator::jucator(const string &nume_pers, const string &pozitie, int ovr, int sp
       pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
       spike_accuracy(spike_accuracy), serve_power(serve_power), serve_accuracy(serve_accuracy),
       vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
-      ales(ales),  echipa_curenta(echipa), lista_transferuri({})
+      ales(ales),  echipa_curenta(echipa), lista_transferuri(false)
       {}
 
 jucator::jucator()

@@ -10,7 +10,7 @@ using namespace std;
 
 
 
-Transferuri::Transferuri():echipa(nullptr,)
+Transferuri::Transferuri():echipa(nullptr),
                             baza(nullptr)            
 {
 }
