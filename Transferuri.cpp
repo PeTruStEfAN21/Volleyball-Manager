@@ -18,8 +18,8 @@ Transferuri::Transferuri():echipa(nullptr),
 Transferuri::~Transferuri() {
 }
 
-Transferuri::Transferuri(BazaDeDateptr baza, Echipeptr echipa) : baza(baza),
-                                                                echipa(echipa)
+Transferuri::Transferuri(BazaDeDateptr baza, Echipeptr echipa) :  echipa(echipa),
+                                                                baza(baza)
 {
 }
 
