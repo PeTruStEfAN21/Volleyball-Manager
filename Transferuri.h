@@ -11,8 +11,9 @@ using jucatorptr = std::shared_ptr<jucator>;
 using Echipeptr = std::shared_ptr<Echipe>;
 
 class Transferuri {
-    BazaDeDateptr baza;
     Echipeptr echipa;
+
+    BazaDeDateptr baza;
 
     public:
 
