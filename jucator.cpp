@@ -14,11 +14,13 @@ Persoana::Persoana(const std::string& nume) : nume(nume) {}
 
 Persoana::Persoana() : nume("Necunoscut") {}
 
+
+// cppcheck-suppress unusedFunction
 float Persoana::obtine_rating_risc_total() const {
     return 0.1f * calculeaza_indice_risc_financiar();
 }
 
-const std::string Persoana::get_nume() const {
+const std::string& Persoana::get_nume() const {
     return nume;
 }
 
@@ -81,18 +83,42 @@ void jucator::set_pret() {
 jucator::jucator(const string &nume_pers, const string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
         int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
         bool ales, Echipeptr echipa)
-    : Persoana(nume_pers),
+    :
+     Persoana(nume_pers),
       pozitie(pozitie), ovr(ovr), spike_power(spike_power), receive(receive),
       spike_accuracy(spike_accuracy), serve_power(serve_power), serve_accuracy(serve_accuracy),
       vertical_jump(vertical_jump), mobility(mobility), speed(speed), pret(pret), height(height),
-      ales(ales),  echipa_curenta(echipa)
+      ales(ales),  echipa_curenta(echipa), lista_transferuri({})
       {}
 
 jucator::jucator()
-    : Persoana("Necunoscut"),
-      ovr(0), spike_power(0), receive(0), spike_accuracy(0), serve_power(0), serve_accuracy(0),
-      vertical_jump(0), mobility(0), speed(0), pret(0), height(0), ales(false),
-      pozitie("necunoscut"), lista_transferuri(true) {}
+
+    : Persoana(), 
+    
+
+      pozitie("Necunoscuta"),
+      ovr(0),
+      spike_power(0),
+      receive(0),
+      spike_accuracy(0),
+      serve_power(0),
+      serve_accuracy(0),
+      vertical_jump(0),
+      mobility(0),
+      speed(0),
+      pret(0),
+      height(0),
+      ales(false),
+      
+
+      echipa_curenta(nullptr),
+      lista_transferuri(false) 
+{
+   
+}
+
+
+  
 
 
 void jucator::adaugare_echipe(Echipeptr echipa) {
@@ -243,6 +269,8 @@ float OutsideHitter::calculeaza_impact_meci() const {
     return impact;
 }
 
+
+// cppcheck-suppress unusedFunction
 Persoanaptr OutsideHitter::clone() const {
 
     return std::make_shared<OutsideHitter>(*this);
@@ -298,6 +326,8 @@ void Setter::overall() {
            speed * 2 + set_precision * 3 + set_iq * 3 + height) / 17;
 }
 
+
+// cppcheck-suppress unusedFunction
 Persoanaptr Setter::clone() const {
     return std::make_shared<Setter>(*this);
 }
@@ -340,7 +370,7 @@ void Setter::citeste(std::ifstream &in) {
     set_pret();
 }
 
-const string jucator::get_poz() const {
+const string& jucator::get_poz() const {
     return pozitie;
 }
 
@@ -388,7 +418,7 @@ void Libero::set_pret() {
     if (ales == true) pret = (int)(pret * 1.5);
 }
 
-
+// cppcheck-suppress unusedFunction
 Persoanaptr Libero::clone() const {
     return std::make_shared<Libero>(*this);
 }
@@ -448,7 +478,7 @@ void MiddleBlocker::set_pret() {
 
     if (ales == true) pret = (int)(pret * 1.5);
 }
-
+// cppcheck-suppress unusedFunction
 Persoanaptr MiddleBlocker::clone() const {
     return std::make_shared<MiddleBlocker>(*this);
 }
@@ -510,7 +540,7 @@ void OppositeHitter::set_pret() {
 
     if (ales == true) pret = (int)(pret * 1.5);
 }
-
+// cppcheck-suppress unusedFunction
 Persoanaptr OppositeHitter::clone() const {
     return std::make_shared<OppositeHitter>(*this);
 }

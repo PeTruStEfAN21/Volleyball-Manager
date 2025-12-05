@@ -10,22 +10,22 @@ using namespace std;
 
 
 
-Transferuri::Transferuri() {
-    echipa = nullptr;
-    baza = nullptr;
+Transferuri::Transferuri():echipa(nullptr,)
+                            baza(nullptr)            
+{
 }
 
 Transferuri::~Transferuri() {
 }
 
-Transferuri::Transferuri(BazaDeDateptr baza, Echipeptr echipa) {
-    this->baza = baza;
-    this->echipa = echipa;
+Transferuri::Transferuri(BazaDeDateptr baza, Echipeptr echipa) : baza(baza),
+                                                                echipa(echipa)
+{
 }
 
 
 
-
+// cppcheck-suppress unusedFunction
 void Transferuri::transfer_manager() {
         std::string s;
         int index = 0;
@@ -141,7 +141,7 @@ void Transferuri::transfer_manager() {
         }
     }
 
-
+// cppcheck-suppress unusedFunction
 void Transferuri::transferuri_ai() {
     cout<<" a inceput!\n";
     bool valid = true;

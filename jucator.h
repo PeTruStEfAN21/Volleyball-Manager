@@ -41,7 +41,7 @@ public:
 
     float obtine_rating_risc_total() const;
 
-    const std::string get_nume() const;
+    const std::string& get_nume() const;
     void set_nume(const std::string& nume);
 
     float obtine_scor_tactica_final() const;
@@ -96,10 +96,12 @@ public:
     int get_ovr() const;
     virtual std::string to_string() const;
 
+    jucator(const jucator& other) = default;
+
     jucator &operator=(const jucator &j);
 
     virtual void citeste(std::ifstream &in);
-    const std::string get_poz() const;
+    const std::string& get_poz() const;
 
 
 };

@@ -142,7 +142,7 @@ Echipeptr Meci::meci() {
     }
 }
 
-
+// cppcheck-suppress unusedFunction
 void Meci::simuleazaUrmatoareActiune() {
     while (echipa1->getPunctaj() < 25 && echipa2->getPunctaj() < 25) {
         char castigator = punct();

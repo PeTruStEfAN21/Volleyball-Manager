@@ -78,8 +78,8 @@ void BazaDeDate::afiseazaJucatori() const {
     }
 }
 
-
-/*void BazaDeDate::afisare_jucatori_necontractati() {
+// cppcheck-suppress unusedFunction
+void BazaDeDate::afisare_jucatori_necontractati() {
     cout << "\n=== Lista jucatorilor necontractati valabili ===\n";
     for (size_t i = 0; i < jucatori.size(); i++) {
         if (jucatori[i]->get_transferabil() == true){
@@ -88,7 +88,7 @@ void BazaDeDate::afiseazaJucatori() const {
         }
     }
 }
-    */
+    
 
 Echipeptr BazaDeDate::getEchipe(size_t index) const {
     return echipe_disponibile[index]; 
@@ -108,13 +108,13 @@ Echipeptr BazaDeDate::alege_echipa_random() {
     int idx = rand() % echipe_disponibile.size();
     return echipe_disponibile[idx];
 }
-
-/*void BazaDeDate::afiseazaEchipe() const {
+// cppcheck-suppress unusedFunction
+void BazaDeDate::afiseazaEchipe() const {
     for (size_t i = 0; i < echipe_disponibile.size(); i++) {
         cout<<"Echipa "<<i+1<<": \n"
         << echipe_disponibile[i];
     }
-}*/
+}
 // cppcheck-suppress unusedFunction
 jucatorptr BazaDeDate::getJucator(int index) const {
     return jucatori[index];
