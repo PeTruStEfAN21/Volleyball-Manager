@@ -18,15 +18,16 @@ private:
     Echipeptr echipaMea;
     BazaDeDateptr baza;
     sf::Font& fontRef;
+    ListaJucatoriGui listaTeren;
+    ListaJucatoriGui listaBanca;
 
-    sf::Text mesajStatus;
     Button finalizeButton;
     Button continueButton;
+    sf::Text mesajStatus;
     sf::Text labelTeren, labelBanca;
 
     int returnScreenId = SCREEN_MAIN_MENU;
-    ListaJucatoriGui listaTeren;
-    ListaJucatoriGui listaBanca;
+
 
     jucatorptr playerOut = nullptr;
     jucatorptr playerIn = nullptr;

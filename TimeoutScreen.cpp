@@ -46,8 +46,7 @@ TimeoutScreen::TimeoutScreen(Echipeptr echipa, BazaDeDateptr db, sf::Font& font)
 
 
 
-void TimeoutScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
-    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+void TimeoutScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
 
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         continueButton.setHover(continueButton.isClicked(moved->position));

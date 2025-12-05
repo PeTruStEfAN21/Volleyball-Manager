@@ -131,7 +131,7 @@ void TransferScreen::render(sf::RenderWindow& window) {
     window.draw(messageText);
     backButton.draw(window);
 
-    for (auto i = 0; i < playerRows.size(); ++i) {
+    for (size_t i = 0; i < playerRows.size(); ++i) {
         if (i == hoverIndex) {
             playerRows[i].bgRect.setFillColor(sf::Color(80, 80, 120));
         } else {
