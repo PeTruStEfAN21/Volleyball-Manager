@@ -80,7 +80,7 @@ void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
         backButton.setHover(backButton.isClicked(mousePos));
 
         hoverIndex = -1;
-        for (int i = 0; i < playerRows.size(); ++i) {
+        for (size_t i = 0; i < playerRows.size(); ++i) {
             if (playerRows[i].bgRect.getGlobalBounds().contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) {
                 hoverIndex = i;
                 break;
