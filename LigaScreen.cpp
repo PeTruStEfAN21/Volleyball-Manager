@@ -11,7 +11,6 @@
 LigaScreen::LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam,  sf::Font& font, sf::RenderWindow& window)
     : echipaMea(playerTeam),
       liga(currentLiga),
-      windowRef(window),
 
       btnTabelaPunctaje(50.0f, 100.0f, 300.0f, 50.0f, "1. Tabela de Punctaje", font),
       btnTransferuri(50.0f, 170.0f, 300.0f, 50.0f, "2. Lista de Transferuri", font),

@@ -24,7 +24,6 @@ private:
     Echipeptr echipaMea;
 
     std::shared_ptr<Liga> liga;
-    sf::RenderWindow& windowRef;
 
 
     Button btnTabelaPunctaje;
