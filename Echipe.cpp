@@ -349,8 +349,8 @@ void Echipe::vinde(jucatorptr j) {
 }
 
 
-void Echipe::set_nume(const string& nume) {
-    this->nume = nume;
+void Echipe::set_nume(const string& numelocal) {
+    this->nume = numelocal;
 }
 // cppcheck-suppress unusedFunction
 jucatorptr Echipe::get_jucator(int index) const {
@@ -647,8 +647,8 @@ int Echipe::get_buget() const {
     return buget;
 }
 
-void Echipe::set_buget(const int buget) {
-    this->buget = buget;
+void Echipe::set_buget(const int bugetlocal) {
+    this->buget = bugetlocal;
 }
 ostream& operator<<(ostream& os, const Echipe& e) {
     os << "\n=== Echipa: " << e.nume << " ===\n";

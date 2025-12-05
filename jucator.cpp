@@ -24,8 +24,8 @@ const std::string& Persoana::get_nume() const {
     return nume;
 }
 
-void Persoana::set_nume(const std::string& nume) {
-    this->nume = nume;
+void Persoana::set_nume(const std::string& numelocal) {
+    this->nume = numelocal;
 }
 
 std::ostream& operator<<(std::ostream& os, const Persoana& p) {
@@ -199,8 +199,8 @@ jucator &jucator::operator=(const jucator &j) {
     return *this;
 }
 
-void jucator::setOvr(const int ovr) {
-    this->ovr = ovr;
+void jucator::setOvr(const int ovrlocal) {
+    this->ovr = ovrlocal;
 }
 
 

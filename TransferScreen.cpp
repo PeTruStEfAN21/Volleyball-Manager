@@ -45,7 +45,7 @@ int TransferScreen::run(sf::RenderWindow& window) {
 
 void TransferScreen::refreshPlayerList() {
     playerRows.clear();
-    hoverIndex = 0;
+    hoverIndex = -1;
 
     std::vector<jucatorptr> jucatoriDisponibili;
     for (const auto& jucator : baza->getLista()) {
@@ -79,10 +79,10 @@ void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
         sf::Vector2i mousePos = moved->position;
         backButton.setHover(backButton.isClicked(mousePos));
 
-        hoverIndex = 0;
+        hoverIndex = -1;
         for (size_t i = 0; i < playerRows.size(); ++i) {
             if (playerRows[i].bgRect.getGlobalBounds().contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) {
-                hoverIndex = i;
+                hoverIndex = static_cast<int>(i);
                 break;
             }
         }
@@ -95,7 +95,7 @@ void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
             if (backButton.isClicked(mousePos)) {
                 this->next_screen_id = SCREEN_MAIN_MENU;
             }
-            else if (hoverIndex != 0) {
+            else if (hoverIndex != -1) {
                 jucatorptr jucatorAles = playerRows[hoverIndex].player;
 
                 if (echipaManager->get_buget() < jucatorAles->get_pret()) {
@@ -132,7 +132,7 @@ void TransferScreen::render(sf::RenderWindow& window) {
     backButton.draw(window);
 
     for (size_t i = 0; i < playerRows.size(); ++i) {
-        if (i == hoverIndex) {
+        if (static_cast<int>(i) == hoverIndex) {
             playerRows[i].bgRect.setFillColor(sf::Color(80, 80, 120));
         } else {
             playerRows[i].bgRect.setFillColor((i % 2 == 0) ? sf::Color(50, 50, 70) : sf::Color(45, 45, 65));
