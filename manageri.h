@@ -64,7 +64,7 @@ public:
     void adaugare_jucatori_valabili(BazaDeDateptr baza);
     void alegere_echipa();
     void numeEchipa();
-    std::string get_nume() const;
+   std::string get_nume() const;
 
     int cariera();
 
