@@ -15,9 +15,11 @@ using namespace std;
 
 
 
-Liga::Liga(BazaDeDateptr baza) : baza(baza)  {
-    ales = vector<vector<bool>>(12, vector<bool>(12, false));
-    etapa_jucat = vector<bool>(12, false);
+Liga::Liga(BazaDeDateptr baza) : baza(baza),
+ales(12, vector<bool>(12, false)), 
+      etapa_jucat(12, false)
+        {
+   
     punctaje.resize(12, 0);
     for (int i = 0; i < 12; i++) {
         ales[i][i] = true;

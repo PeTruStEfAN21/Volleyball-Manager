@@ -234,7 +234,10 @@ void Echipe::creare_in_gui(const std::vector<jucatorptr>& selectie_finala) {
 
 //FUNCTII PENTRU CONSOLA
 Echipe::Echipe(const string &nume, const vector<jucatorptr> &jucatori, float ovr, int punctaj, int seturi,int buget, array<jucatorptr, 6> jucatori_fixi)
-    : nume(nume),
+    :ovr_primii_6(0.0f), 
+      serve(false),         
+      momentumFactor(1.0f), 
+      nume(nume),
       jucatori(jucatori),
       jucatori_fixi(jucatori_fixi),
       ovr_tot(ovr),
@@ -348,7 +351,7 @@ void Echipe::vinde(jucatorptr j) {
 }
 
 
-void Echipe::set_nume(string nume) {
+void Echipe::set_nume(string& nume) {
     this->nume = nume;
 }
 
@@ -362,7 +365,10 @@ void Echipe::adaugare_buget(int n) {
 }
 
 Echipe::Echipe(const Echipe &other)
-    : nume(other.nume),
+    :ovr_primii_6(other.ovr_primii_6),
+      serve(other.serve),
+      momentumFactor(other.momentumFactor)
+     nume(other.nume),
       jucatori(other.jucatori),
       jucatori_fixi(other.jucatori_fixi),
       ovr_tot(other.ovr_tot),
@@ -390,6 +396,9 @@ Echipe & Echipe::operator=(const Echipe &other) {
     punctaj = other.punctaj;
     seturi = other.seturi;
     buget = other.buget;
+    ovr_primii_6 = other.ovr_primii_6;  
+    momentumFactor = other.momentumFactor;
+    serve = other.serve;
     return *this;
 }
 
@@ -441,12 +450,12 @@ void Echipe::set_overall() {
     ovr_primii_6 = ovr_tot;
 }
 
-vector<jucatorptr> Echipe::get_jucatori() const {
+vector<jucatorptr>& Echipe::get_jucatori() const {
     return jucatori;
 }
 
 
-std::vector<jucatorptr> Echipe::get_jucatori_pe_teren() const {
+std::vector<jucatorptr>& Echipe::get_jucatori_pe_teren() const {
     std::vector<jucatorptr> teren;
     for (const auto& j : jucatori_fixi) {
         if (j != nullptr) {
@@ -456,7 +465,7 @@ std::vector<jucatorptr> Echipe::get_jucatori_pe_teren() const {
     return teren;
 }
 
-std::vector<jucatorptr> Echipe::get_jucatori_de_pe_banca() const {
+std::vector<jucatorptr>& Echipe::get_jucatori_de_pe_banca() const {
     std::vector<jucatorptr> banca;
 
     const auto& toti_jucatorii = get_jucatori();
