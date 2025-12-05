@@ -19,6 +19,8 @@ using Echipeptr = std::shared_ptr<Echipe>;
 class LigaScreen : public Screen {
 private:
 
+
+
     bool justFinishedMatch = false;
 
     Echipeptr echipaMea;
