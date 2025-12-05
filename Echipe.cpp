@@ -451,7 +451,7 @@ void Echipe::set_overall() {
     ovr_primii_6 = ovr_tot;
 }
 
-const vector<jucatorptr>& Echipe::get_jucatori() const {
+const vector<jucatorptr>& Echipe::get_jucatori()  {
     return jucatori;
 }
 

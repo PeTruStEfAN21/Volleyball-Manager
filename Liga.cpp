@@ -178,7 +178,7 @@ void Liga::meciuri() {
     int n = echipe.size();
     int index_echipa_manager = n - 1;
 
-    if (punctaje.size() != n)
+    if (punctaje.size() != static_cast<size_t>(n))
         punctaje.resize(n, 0);
 
 
