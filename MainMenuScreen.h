@@ -5,7 +5,6 @@
 
 class MainMenuScreen : public Screen {
 private:
-    sf::Font& font;
 
     Button transferButton;
     Button ligaButton;
@@ -13,7 +12,6 @@ private:
     Button firstSixButton;
     Button exitButton;
 
-    bool ignoreNextClick = true;
 
     void handleInput(const sf::Event& event, sf::RenderWindow& ) override;
     void update() override;
