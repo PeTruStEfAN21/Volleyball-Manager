@@ -92,6 +92,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         ScoreboardScreen.h
         MatchLeague.cpp
         MatchLeague.h
+        manageri.h manageri.cpp
+        BazeDeDate.h BazeDeDate.cpp
+        Liga.h Liga.cpp
+        Echipe.h Echipe.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
