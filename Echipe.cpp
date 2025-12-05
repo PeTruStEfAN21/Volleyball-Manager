@@ -451,7 +451,7 @@ void Echipe::set_overall() {
     ovr_primii_6 = ovr_tot;
 }
 
-const vector<jucatorptr>& Echipe::get_jucatori()  {
+ vector<jucatorptr>& Echipe::get_jucatori()  {
     return jucatori;
 }
 
@@ -466,10 +466,14 @@ std::vector<jucatorptr> Echipe::get_jucatori_pe_teren() const {
     return teren;
 }
 
+const vector<jucatorptr>& Echipe::get_jucatori_citire() const {
+    return jucatori;
+}
+
 std::vector<jucatorptr> Echipe::get_jucatori_de_pe_banca() const {
     std::vector<jucatorptr> banca;
 
-    const auto& toti_jucatorii = get_jucatori();
+    const auto& toti_jucatorii = get_jucatori_citire();
 
     for (const auto& j_contractat : toti_jucatorii) {
 

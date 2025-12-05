@@ -73,10 +73,11 @@ manageri& manageri::operator=(const manageri& other) {
 manageri::~manageri() {
 }
 
+/*
 Echipeptr manageri::get_echipa() const {
     return echipa;
 }
-
+*/
 void manageri::set_overall() {
     if (echipa) echipa->set_overall();
 }
@@ -87,20 +88,26 @@ void manageri::alegere_echipa() {
     echipa->creare(baza->getLista());
 }
 
+/*
 void manageri::numeEchipa() {
     if (!echipa) return;
     cout<<"Dati numele echipei voastre:\n";
     echipa->set_nume();
 }
+    */
 
 string manageri::get_nume() const {
     if (!echipa) return "Echipa Invalida";
     return echipa->getNume();
 }
 
+
+/*
 void manageri::adaugare_jucatori_valabili(BazaDeDateptr baza) {
     this->baza = baza;
 }
+
+*/
 
 ostream & operator<<(ostream &os, const manageri &obj) {
     os << "buget: " << obj.get_buget() << "\n";
@@ -110,11 +117,13 @@ ostream & operator<<(ostream &os, const manageri &obj) {
     return os;
 }
 
+/*
 
 void manageri::schimba_ovr(float ovr) {
     if (echipa) this->echipa->set_overall(ovr);
 }
 
+*/
 
 
 int manageri::citire_toti_jucatorii_si_echipe(){
@@ -206,15 +215,20 @@ int manageri::citire_toti_jucatorii_si_echipe(){
     fin.close();
 
 
-    for (const Echipeptr e : echipe_ai)
+    for (const Echipeptr& e : echipe_ai)
         cout << *e;
 
     return 0;
 }
 
+
+
+/*
 BazaDeDateptr manageri::get_baza_manager() {
     return baza;
 }
+
+*/
 
 
 int manageri::citire_baza_managerGUI() {
@@ -448,6 +462,8 @@ void manageri::meci_amical() {
     echipa->adaugare_buget(20000);
 }
 
+
+/*
 int manageri::cariera() {
     string pref;
     if (!echipa || !baza) {
@@ -543,6 +559,7 @@ int manageri::cariera() {
 
 return 0;
 }
+*/
 
 
 

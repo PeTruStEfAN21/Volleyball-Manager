@@ -80,7 +80,10 @@ public:
 
     jucatorptr get_jucator(int index) const;
 
-    const vector<jucatorptr>& get_jucatori();
+
+    const vector<jucatorptr>& get_jucatori_citire() const;
+
+    vector<jucatorptr>& get_jucatori();
     int pret_jucator(int index) const;
 
     int get_nr_jucatori() const;
