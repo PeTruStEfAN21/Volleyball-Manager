@@ -50,7 +50,6 @@ const std::map<std::string, int> Echipe::REGULI_START_6 = {
 
 bool Echipe::adaugare_jucatorGUI(jucatorptr jucator) {
 
-    string input;
 
 
 
@@ -350,7 +349,7 @@ void Echipe::vinde(jucatorptr j) {
 }
 
 
-void Echipe::set_nume(string& nume) {
+void Echipe::set_nume(const string& nume) {
     this->nume = nume;
 }
 // cppcheck-suppress unusedFunction
@@ -414,7 +413,8 @@ bool Echipe::get_serve() const {
     return serve;
 }
 
-Echipe::Echipe(const string& nume) {
+Echipe::Echipe(const string& nume): serve(false)
+ {
     ovr_tot = 0;
     this->nume = nume;
     punctaj = 0;
@@ -424,7 +424,8 @@ Echipe::Echipe(const string& nume) {
     momentumFactor = 1.0f;
 }
 
-Echipe::Echipe() {
+Echipe::Echipe() : serve(false)
+{
     ovr_tot = 0;
     punctaj = 0;
     seturi = 0;
@@ -455,7 +456,7 @@ const vector<jucatorptr>& Echipe::get_jucatori() const {
 }
 
 
-std::vector<jucatorptr>& Echipe::get_jucatori_pe_teren() const {
+std::vector<jucatorptr> Echipe::get_jucatori_pe_teren() const {
     std::vector<jucatorptr> teren;
     for (const auto& j : jucatori_fixi) {
         if (j != nullptr) {
@@ -465,7 +466,7 @@ std::vector<jucatorptr>& Echipe::get_jucatori_pe_teren() const {
     return teren;
 }
 
-std::vector<jucatorptr>& Echipe::get_jucatori_de_pe_banca() const {
+std::vector<jucatorptr> Echipe::get_jucatori_de_pe_banca() const {
     std::vector<jucatorptr> banca;
 
     const auto& toti_jucatorii = get_jucatori();

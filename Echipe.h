@@ -53,9 +53,9 @@ public:
     bool adaugare_jucatorGUI(jucatorptr jucator) ;
 
 
-    std::vector<jucatorptr>& get_jucatori_pe_teren() const;
+    std::vector<jucatorptr> get_jucatori_pe_teren() const;
 
-    std::vector<jucatorptr>& get_jucatori_de_pe_banca() const;
+    std::vector<jucatorptr> get_jucatori_de_pe_banca() const;
 
     void schimba_jucator_pe_teren(jucatorptr out, jucatorptr in);
 
@@ -127,7 +127,7 @@ public:
 
 
     void set_nume();
-    void set_nume(string& nume);
+    void set_nume(const string& nume);
     void adaugare_buget(int n);
     void set_overall(int ovr);
     void adaugare_jucator(BazaDeDateptr baza);
