@@ -39,7 +39,7 @@ public:
 
     void setReturnScreenId(int id) ;
     TimeoutScreen(Echipeptr echipa, BazaDeDateptr db, sf::Font& font);
-    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
+    void handleInput(const sf::Event& event, sf::RenderWindow& ) override;
     void render(sf::RenderWindow& window) override;
     int run(sf::RenderWindow& window) override;
 };

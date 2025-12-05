@@ -77,10 +77,9 @@ public:
     jucatorptr get_jucator(int index) const;
 
     vector<jucatorptr> get_jucatori() const;
+    int pret_jucator(int index) const;
 
-    const int pret_jucator(int index) const;
-
-    const int get_nr_jucatori() const;
+    int get_nr_jucatori() const;
 
     void eliminaJucator(jucatorptr j) ;
 
@@ -90,7 +89,7 @@ public:
 
     void serve_off();
 
-    const bool get_serve() const;
+    bool get_serve() const;
 
     void construire_echipa_primii_6();
 

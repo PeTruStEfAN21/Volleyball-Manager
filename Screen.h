@@ -31,11 +31,11 @@ public:
     
     virtual ~Screen() = default;
 
-    virtual void render(sf::RenderWindow& window){};
+    virtual void render(sf::RenderWindow& ){};
 
     virtual void update(){};
 
-    virtual void handleInput(const sf::Event& event, sf::RenderWindow& window){};
+    virtual void handleInput(const sf::Event& , sf::RenderWindow& ){};
 
     static sf::Font& getGlobalFont();
 

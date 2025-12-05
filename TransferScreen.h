@@ -43,13 +43,13 @@ public:
     TransferScreen(BazaDeDateptr baza, Echipeptr echipa, sf::Font& font);
 
     int run(sf::RenderWindow& window) override;
-    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
+    void handleInput(const sf::Event& event, sf::RenderWindow& ) override;
     void update() override;
     void render(sf::RenderWindow& window) override;
 
 private:
-    Echipeptr echipaManager;
     BazaDeDateptr baza;
+    Echipeptr echipaManager;
     sf::Font& fontRef;
 
     std::vector<PlayerRow> playerRows;

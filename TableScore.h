@@ -7,14 +7,17 @@
 
 class TableScore {
 private:
+    Echipeptr echipa1, echipa2;
+    sf::Vector2f position;
+    sf::Font& fontRef;
+
+
+
     sf::Text numeEchipa1, scorEchipa1Puncte, scorEchipa1Seturi;
     sf::Text numeEchipa2, scorEchipa2Puncte, scorEchipa2Seturi;
 
-    Echipeptr echipa1, echipa2;
 
-    sf::Font& fontRef;
 
-    sf::Vector2f position;
 
 
 

@@ -84,7 +84,7 @@ int main() {
             firstSixScreenPtr->update_jucatori(echipaMea->get_jucatori());
         }
 
-        if (current_screen >= 0 && current_screen < screens.size() && screens[current_screen] != nullptr) {
+        if (current_screen >= 0 && current_screen < static_cast<int>(screens.size()) && screens[current_screen] != nullptr) {
 
             int prev_screen = current_screen;
             next_screen_id = screens[current_screen]->run(window);

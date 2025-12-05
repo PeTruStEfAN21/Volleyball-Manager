@@ -17,14 +17,15 @@ private:
 
     std::vector<jucatorptr> titulariSelectati;
 
+    ListaJucatoriGui listaVizuala;
+
     Button startMatchButton;
     sf::Text titluText;
     sf::Text statusText;
     sf::Text infoText;
 
-    ListaJucatoriGui listaVizuala;
 
-    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
+    void handleInput(const sf::Event& event, sf::RenderWindow& ) override;
     void handlePlayerClick(sf::Vector2i mousePos);
     void handleStartButton();
     void updateInfoText();

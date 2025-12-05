@@ -66,7 +66,7 @@ void LigaScreen::updateButtonText() {
 
 
 
-void LigaScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void LigaScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
 
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         sf::Vector2i mousePos = moved->position;

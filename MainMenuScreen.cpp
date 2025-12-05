@@ -15,7 +15,7 @@ MainMenuScreen::MainMenuScreen(sf::Font& f)
     matchButton.setBaseColor(sf::Color(0, 100, 150));
 }
 
-void MainMenuScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void MainMenuScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         sf::Vector2i mousePos = moved->position;
         transferButton.setHover(transferButton.isClicked(mousePos));

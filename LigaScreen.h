@@ -35,7 +35,7 @@ private:
     sf::Text titleText;
 
     void updateButtonText();
-    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
+    void handleInput(const sf::Event& event, sf::RenderWindow& ) override;
 
    // std::string formatScoreboard() const;
 

@@ -371,11 +371,12 @@ Echipe::Echipe(const Echipe &other)
       buget(other.buget){
 }
 
-const int Echipe::pret_jucator(int index) const {
+int Echipe::pret_jucator(int index) const {
     return jucatori[index]->get_pret();
 }
 
-const int Echipe::get_nr_jucatori() const {
+
+int Echipe::get_nr_jucatori() const {
     return jucatori.size();
 }
 
@@ -400,7 +401,7 @@ void Echipe::serve_off() {
     serve = false;
 }
 
-const bool Echipe::get_serve() const {
+bool Echipe::get_serve() const {
     return serve;
 }
 

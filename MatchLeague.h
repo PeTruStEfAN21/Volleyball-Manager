@@ -46,7 +46,7 @@ public:
     Echipeptr getMatchWinner() const;
 
 private:
-    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
+    void handleInput(const sf::Event& event, sf::RenderWindow& ) override;
     void update() override;
     void render(sf::RenderWindow& window) override;
     void simulatePoint();

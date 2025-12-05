@@ -208,7 +208,7 @@ void MatchScreen::update() {
     }
 }
 
-void MatchScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void MatchScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         sf::Vector2i mousePos = moved->position;
         if (currentState == SIMULATION_IN_PROGRESS) {

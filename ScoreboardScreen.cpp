@@ -39,7 +39,7 @@ void ScoreboardScreen::updateScoreDisplay() {
     }
 }
 
-void ScoreboardScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void ScoreboardScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         backButton.setHover(backButton.isClicked(moved->position));
     }

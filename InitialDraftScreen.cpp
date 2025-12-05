@@ -65,7 +65,7 @@ int InitialDraftScreen::run(sf::RenderWindow& window) {
     return next_screen_id;
 }
 
-void InitialDraftScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void InitialDraftScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         finalizeButton.setHover(finalizeButton.isClicked(moved->position));
     }

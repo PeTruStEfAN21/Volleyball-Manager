@@ -59,7 +59,7 @@ int FirstSixScreen::run(sf::RenderWindow& window) {
     }
     return next_screen_id;
 }
-void FirstSixScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void FirstSixScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         sf::Vector2i mousePos = moved->position;
         startMatchButton.setHover(startMatchButton.isClicked(mousePos));

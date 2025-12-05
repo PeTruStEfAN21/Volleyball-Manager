@@ -74,7 +74,7 @@ void TransferScreen::refreshPlayerList() {
 }
 
 
-void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         sf::Vector2i mousePos = moved->position;
         backButton.setHover(backButton.isClicked(mousePos));
@@ -131,7 +131,7 @@ void TransferScreen::render(sf::RenderWindow& window) {
     window.draw(messageText);
     backButton.draw(window);
 
-    for (int i = 0; i < playerRows.size(); ++i) {
+    for (auto i = 0; i < playerRows.size(); ++i) {
         if (i == hoverIndex) {
             playerRows[i].bgRect.setFillColor(sf::Color(80, 80, 120));
         } else {
