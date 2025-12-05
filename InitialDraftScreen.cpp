@@ -172,7 +172,6 @@ void InitialDraftScreen::handleFinalizeButton() {
     }
 }
 
-void InitialDraftScreen::update() { }
 
 void InitialDraftScreen::render(sf::RenderWindow& window) {
     window.clear(sf::Color(30, 30, 40));
