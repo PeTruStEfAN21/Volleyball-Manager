@@ -294,7 +294,7 @@ int manageri::citire_baza_managerGUI() {
     return 0;
 }
 
-
+// cppcheck-suppress unusedFunction
 int manageri::citire_baza_manager() {
      ifstream finn("tastatura.txt");
     if (!finn) {
@@ -367,6 +367,8 @@ int manageri::citire_baza_manager() {
 
 }
 
+
+// cppcheck-suppress unusedFunction
 int manageri::citire_jucatori_liberi() {
     ifstream fin("jucatori.txt");
     if (!fin) {

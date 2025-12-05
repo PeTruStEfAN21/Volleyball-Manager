@@ -96,6 +96,9 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         BazaDeDate.h BazaDeDate.cpp
         Liga.h Liga.cpp
         Echipe.h Echipe.cpp
+        jucator.h jucator.cpp
+        Meci.h Meci.cpp
+        Transferuri.h Transferuri.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

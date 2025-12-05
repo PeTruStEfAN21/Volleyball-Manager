@@ -367,7 +367,7 @@ void Liga::registerMatchResult(Echipeptr echipaAdversa, Echipeptr castigator) {
 }
 
 
-
+// cppcheck-suppress unusedFunction
 int Liga::liga() {
 
 
