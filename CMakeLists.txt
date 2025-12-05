@@ -45,7 +45,9 @@ FetchContent_Declare(
                 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 
                 -DSFML_SKIP_MANDATORY_DEPENDENCY_SEARCH=TRUE
                 
-                -DSFML_BUILD_DEPENDENCIES=OFF
+                -D**SFML_WANT_X11**=FALSE # (Încercare, dar pe macOS nu e X11)
+                
+                -DSFML_DEPENDENCIES_INSTALL_PREFIX="/usr/local"
                 -DSFML_BUILD_EXAMPLES=OFF
                 -DSFML_BUILD_TESTS=OFF
                 -DSFML_BUILD_NETWORK=OFF 
