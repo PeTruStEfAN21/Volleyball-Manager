@@ -93,7 +93,7 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         MatchLeague.cpp
         MatchLeague.h
         manageri.h manageri.cpp
-        BazeDeDate.h BazeDeDate.cpp
+        BazaDeDate.h BazaDeDate.cpp
         Liga.h Liga.cpp
         Echipe.h Echipe.cpp
 )
