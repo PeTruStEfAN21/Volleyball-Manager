@@ -21,28 +21,31 @@ private:
 
     bool justFinishedMatch = false;
 
+    Echipeptr echipaMea;
+
     sf::Font& fontRef;
     std::shared_ptr<Liga> liga;
-    Echipeptr echipaMea;
+    sf::RenderWindow& windowRef;
+
 
     Button btnTabelaPunctaje;
     Button btnTransferuri;
     Button btnFirstSix;
     Button btnMeciLiga;
     Button btnExit;
+    sf::Text titleText;
+
 
     sf::Text statusText;
-    sf::Text titleText;
 
     void updateButtonText();
     void handleInput(const sf::Event& event, sf::RenderWindow& ) override;
 
    // std::string formatScoreboard() const;
 
-    sf::RenderWindow& windowRef;
 
 public:
-    LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam, BazaDeDateptr db, sf::Font& font, sf::RenderWindow& window);
+    LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam,  sf::Font& font, sf::RenderWindow& window);
     int run(sf::RenderWindow& window) override;
     void render(sf::RenderWindow& window) override;
     void update() override;
