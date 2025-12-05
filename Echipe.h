@@ -19,14 +19,18 @@ using Echipeptr = std::shared_ptr<Echipe>;
 
 class Echipe: public std::enable_shared_from_this<Echipe>{
 private:
+    float ovr_primii_6;
+
+    bool serve;
+    float momentumFactor;
+
+
     string nume;
     vector<jucatorptr> jucatori;
     array<jucatorptr, 6> jucatori_fixi;
-    float ovr_tot,ovr_primii_6;
+    float ovr_tot;
     int punctaj, seturi;
     int buget;
-    bool serve;
-    float momentumFactor;
 
 
 public:
@@ -76,7 +80,7 @@ public:
 
     jucatorptr get_jucator(int index) const;
 
-    vector<jucatorptr>& get_jucatori() const;
+    const vector<jucatorptr>& get_jucatori() const;
     int pret_jucator(int index) const;
 
     int get_nr_jucatori() const;

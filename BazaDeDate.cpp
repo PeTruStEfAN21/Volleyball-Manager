@@ -13,18 +13,18 @@ using namespace std;
 float BazaDeDate::globalMarketModifier = 1.0f;
 const float BazaDeDate::INFLATION_STEP = 0.015f;
 const float BazaDeDate::MAX_INFLATION = 1.50f;  // Se opreste la 50% inflatie
-
+// cppcheck-suppress unusedFunction
 float BazaDeDate::getGlobalMarketModifier() {
     return globalMarketModifier;
 }
-
+// cppcheck-suppress unusedFunction
 void BazaDeDate::applyInflation(float step) {
     globalMarketModifier += step;
     if (globalMarketModifier > MAX_INFLATION) {
         globalMarketModifier = MAX_INFLATION;
     }
 }
-
+// cppcheck-suppress unusedFunction
 float BazaDeDate::getStep() {
     return INFLATION_STEP;
 }
@@ -79,7 +79,7 @@ void BazaDeDate::afiseazaJucatori() const {
 }
 
 
-void BazaDeDate::afisare_jucatori_necontractati() {
+/*void BazaDeDate::afisare_jucatori_necontractati() {
     cout << "\n=== Lista jucatorilor necontractati valabili ===\n";
     for (size_t i = 0; i < jucatori.size(); i++) {
         if (jucatori[i]->get_transferabil() == true){
@@ -88,6 +88,7 @@ void BazaDeDate::afisare_jucatori_necontractati() {
         }
     }
 }
+    */
 
 Echipeptr BazaDeDate::getEchipe(size_t index) const {
     return echipe_disponibile[index]; 
@@ -108,17 +109,17 @@ Echipeptr BazaDeDate::alege_echipa_random() {
     return echipe_disponibile[idx];
 }
 
-void BazaDeDate::afiseazaEchipe() const {
+/*void BazaDeDate::afiseazaEchipe() const {
     for (size_t i = 0; i < echipe_disponibile.size(); i++) {
         cout<<"Echipa "<<i+1<<": \n"
         << echipe_disponibile[i];
     }
-}
-
+}*/
+// cppcheck-suppress unusedFunction
 jucatorptr BazaDeDate::getJucator(int index) const {
     return jucatori[index];
 }
-
+// cppcheck-suppress unusedFunction
 int BazaDeDate::alege_echipa_random_index() {
     if (echipe_disponibile.empty()) return -1;
     return rand() % echipe_disponibile.size();

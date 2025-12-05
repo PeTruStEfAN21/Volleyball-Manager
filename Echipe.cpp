@@ -24,7 +24,7 @@ const float Echipe::MOMENTUM_MAX = 1.30f;
 float Echipe::getMomentum() const {
     return momentumFactor;
 }
-
+// cppcheck-suppress unusedFunction
 void Echipe::resetMomentum() {
     momentumFactor = 1.0f;
 }
@@ -51,7 +51,6 @@ const std::map<std::string, int> Echipe::REGULI_START_6 = {
 bool Echipe::adaugare_jucatorGUI(jucatorptr jucator) {
 
     string input;
-    int index;
 
 
 
@@ -341,7 +340,7 @@ void Echipe::construire_echipa_primii_6() {
     }
     cout << "\n Overall-ul acesteia este " << ovr_primii_6 << endl;
 }
-
+// cppcheck-suppress unusedFunction
 void Echipe::vinde(jucatorptr j) {
     auto poz = find(jucatori.begin(), jucatori.end(), j);
     j->setAles(false);
@@ -354,7 +353,7 @@ void Echipe::vinde(jucatorptr j) {
 void Echipe::set_nume(string& nume) {
     this->nume = nume;
 }
-
+// cppcheck-suppress unusedFunction
 jucatorptr Echipe::get_jucator(int index) const {
     return jucatori[index];
 }
@@ -365,9 +364,10 @@ void Echipe::adaugare_buget(int n) {
 }
 
 Echipe::Echipe(const Echipe &other)
-    :ovr_primii_6(other.ovr_primii_6),
+    :std::enable_shared_from_this<Echipe>(other),
+    ovr_primii_6(other.ovr_primii_6),
       serve(other.serve),
-      momentumFactor(other.momentumFactor)
+      momentumFactor(other.momentumFactor),
      nume(other.nume),
       jucatori(other.jucatori),
       jucatori_fixi(other.jucatori_fixi),
@@ -376,12 +376,12 @@ Echipe::Echipe(const Echipe &other)
       seturi(other.seturi),
       buget(other.buget){
 }
-
+// cppcheck-suppress unusedFunction
 int Echipe::pret_jucator(int index) const {
     return jucatori[index]->get_pret();
 }
 
-
+// cppcheck-suppress unusedFunction
 int Echipe::get_nr_jucatori() const {
     return jucatori.size();
 }
@@ -450,7 +450,7 @@ void Echipe::set_overall() {
     ovr_primii_6 = ovr_tot;
 }
 
-vector<jucatorptr>& Echipe::get_jucatori() const {
+const vector<jucatorptr>& Echipe::get_jucatori() const {
     return jucatori;
 }
 
@@ -652,14 +652,14 @@ ostream& operator<<(ostream& os, const Echipe& e) {
     os << "Overall-ul echipei este: " << e.ovr_tot << "\n";
     return os;
 }
-
+// cppcheck-suppress unusedFunction
 void Echipe::eliminaJucator(jucatorptr j) {
     jucatori.erase(
         std::remove(jucatori.begin(), jucatori.end(), j),
         jucatori.end()
     );
 }
-
+// cppcheck-suppress unusedFunction
 void Echipe::adaugare_jucatori(const vector<jucatorptr>& lista) {
     for(auto j : lista){
         jucatori.push_back(j);
@@ -697,6 +697,8 @@ void Echipe::adaugaJucatorExistent(jucatorptr j) {
         this->set_overall();
     }
 }
+
+// cppcheck-suppress unusedFunction
 void Echipe::adaugare_jucator(BazaDeDateptr baza) {
     cout << "Alegeti jucatorul dorit din urmatoarea lista:\n";
     baza->afiseazaJucatori();

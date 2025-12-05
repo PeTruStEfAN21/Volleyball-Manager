@@ -45,9 +45,11 @@ void Liga::creare_liga() {
 
     }
 }
-Liga::Liga() {
-    ales = vector<vector<bool>>(12, vector<bool>(12, false));
-    etapa_jucat = vector<bool>(12, false);
+Liga::Liga()
+:ales(12, vector<bool>(12, false)),     
+      etapa_jucat(12, false)
+ {
+    
     punctaje.resize(12, 0);
     for (int i = 0; i < 12; i++) {
         ales[i][i] = true;
@@ -60,7 +62,7 @@ void Liga::reset_etapa() {
     int n = lista.size();
     etapa_jucat = vector<bool>(n, false);
 }
-
+// cppcheck-suppress unusedFunction
 Echipeptr Liga::meciliga() {
     int n = echipe.size();
 
@@ -247,7 +249,7 @@ void Liga::meciuri() {
     cout << "S-a terminat o serie de partide";
 }
 
-
+// cppcheck-suppress unusedFunction
 void Liga::meciGUI() {
     int n = echipe.size();
 

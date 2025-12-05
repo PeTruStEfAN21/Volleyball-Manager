@@ -18,10 +18,11 @@ using Transferuriptr = std::shared_ptr<Transferuri>;
 
 class manageri {
 private:
-    Echipeptr echipa;
     std::string nume;
     std::vector<jucatorptr> lista;
     BazaDeDateptr baza;
+
+    Echipeptr echipa;
     Transferuriptr transferuri_manager;
 
     jucatorptr jucatorgratis1;
