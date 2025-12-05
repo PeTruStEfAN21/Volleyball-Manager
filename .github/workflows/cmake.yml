@@ -178,6 +178,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name:  Set CMake Version (Workaround for FreeType) 
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.29.0'
+
       - name: Set timestamp and zip name
         run: |
           echo "TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)" >> ${GITHUB_ENV}
