@@ -43,7 +43,7 @@ private:
 
 
 public:
-    LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam,  sf::Font& font, sf::RenderWindow& window);
+    LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam,  sf::Font& font);
     int run(sf::RenderWindow& window) override;
     void render(sf::RenderWindow& window) override;
     void update() override;

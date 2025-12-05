@@ -8,7 +8,7 @@
 
 
 
-LigaScreen::LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam,  sf::Font& font, sf::RenderWindow& window)
+LigaScreen::LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam,  sf::Font& font)
     : echipaMea(playerTeam),
       liga(currentLiga),
 
