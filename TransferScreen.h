@@ -9,6 +9,7 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <climits>
 
 
 using BazaDeDateptr = std::shared_ptr<BazaDeDate>;
@@ -53,7 +54,7 @@ private:
     sf::Font& fontRef;
 
     std::vector<PlayerRow> playerRows;
-    size_t hoverIndex = -1;
+    size_t hoverIndex = SIZE_MAX;
     const float LIST_START_X = 50.0f;
     const float LIST_START_Y = 100.0f;
     const float ROW_HEIGHT = 35.0f;
