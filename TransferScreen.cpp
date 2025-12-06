@@ -7,13 +7,8 @@
 #include <chrono>
 
 
-const float LIST_START_Y = 100.0f;
-const float ROW_WIDTH = 500.0f;
-const float ROW_HEIGHT = 30.0f; 
-
-
 TransferScreen::TransferScreen(BazaDeDateptr baza, Echipeptr echipa, sf::Font& font)
-    : baza(baza), echipaManager(echipa), 
+    : baza(baza), echipaManager(echipa), fontRef(font),
       backButton(800.0f, 50.0f, 150.0f, 40.0f, "Inapoi", font),
       bugetText(font), messageText(font)
 {
@@ -50,7 +45,7 @@ int TransferScreen::run(sf::RenderWindow& window) {
 
 void TransferScreen::refreshPlayerList() {
     playerRows.clear();
-    hoverIndex = (size_t)-1; 
+    hoverIndex = (size_t)-1;
 
     std::vector<jucatorptr> jucatoriDisponibili;
     for (const auto& jucator : baza->getLista()) {
@@ -68,23 +63,23 @@ void TransferScreen::refreshPlayerList() {
 
     float currentY = LIST_START_Y;
 
+
     const size_t MAX_DISPLAY = 20;
 
     for (size_t i = 0; i < jucatoriDisponibili.size() && i < MAX_DISPLAY; ++i) {
-      
+
         playerRows.emplace_back(jucatoriDisponibili[i], fontRef, LIST_START_X, currentY, ROW_WIDTH, ROW_HEIGHT);
         currentY += ROW_HEIGHT + 2.0f;
     }
 }
 
 
-void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& /*window*/) {
+void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         sf::Vector2i mousePos = moved->position;
         backButton.setHover(backButton.isClicked(mousePos));
 
-        hoverIndex = (size_t)-1; 
-        
+        hoverIndex = (size_t)-1;
         for (size_t i = 0; i < playerRows.size(); ++i) {
             if (playerRows[i].bgRect.getGlobalBounds().contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) {
                 hoverIndex = i;
@@ -100,7 +95,7 @@ void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& /*win
             if (backButton.isClicked(mousePos)) {
                 this->next_screen_id = SCREEN_MAIN_MENU;
             }
-            else if (hoverIndex != (size_t)-1) { 
+            else if (hoverIndex != (size_t)-1) {
                 jucatorptr jucatorAles = playerRows[hoverIndex].player;
 
                 if (echipaManager->get_buget() < jucatorAles->get_pret()) {
