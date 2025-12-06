@@ -45,7 +45,7 @@ int TransferScreen::run(sf::RenderWindow& window) {
 
 void TransferScreen::refreshPlayerList() {
     playerRows.clear();
-    hoverIndex = SIZE_MAX;
+    hoverIndex = 1000;
 
     std::vector<jucatorptr> jucatoriDisponibili;
     for (const auto& jucator : baza->getLista()) {
@@ -79,7 +79,7 @@ void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
         sf::Vector2i mousePos = moved->position;
         backButton.setHover(backButton.isClicked(mousePos));
 
-        hoverIndex = SIZE_MAX;
+        hoverIndex = 1000;
         for (size_t i = 0; i < playerRows.size(); ++i) {
             if (playerRows[i].bgRect.getGlobalBounds().contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) {
                 hoverIndex = i;
@@ -95,7 +95,7 @@ void TransferScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
             if (backButton.isClicked(mousePos)) {
                 this->next_screen_id = SCREEN_MAIN_MENU;
             }
-            else if (hoverIndex != SIZE_MAX) {
+            else if (hoverIndex != 1000) {
                 jucatorptr jucatorAles = playerRows[hoverIndex].player;
 
                 if (echipaManager->get_buget() < jucatorAles->get_pret()) {
