@@ -1,73 +1,81 @@
-cmake_minimum_required(VERSION 3.10)
-project(oop)
+cmake_minimum_required(VERSION 3.26)
 
-# SFML 3 cere C++17 minim.
-set(CMAKE_CXX_STANDARD 17)
+# NOTE: update executable name in .github/workflows/cmake.yml:25 when changing executable name in this file
+# for now, the project name is used as the executable name
+set(MAIN_PROJECT_NAME "oop")
+set(MAIN_EXECUTABLE_NAME "${MAIN_PROJECT_NAME}")
+
+
+project(${MAIN_PROJECT_NAME})
+# set(CMAKE_PROJECT_VERSION_MAJOR 0)
+# set(CMAKE_PROJECT_VERSION_MINOR 0)
+# set(CMAKE_PROJECT_VERSION_PATCH 1)
+
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# ====================================================================
-# PASUL 1: CONFIGURARE SFML 3.0.0 (FETCHCONTENT)
-# ====================================================================
-# Aici cerem explicit versiunea 3.
-find_package(SFML 3 QUIET COMPONENTS Graphics Window System Audio)
+include(cmake/Options.cmake)
+include(cmake/CompilerFlags.cmake)
+include(cmake/CopyHelper.cmake)
 
-if(NOT SFML_FOUND)
-    message(STATUS "SFML 3 not found. Fetching SFML 3.0.0 from GitHub...")
-    include(FetchContent)
-    set(FETCHCONTENT_QUIET OFF)
+###############################################################################
 
-    FetchContent_Declare(
-            sfml
-            GIT_REPOSITORY https://github.com/SFML/SFML.git
-            GIT_TAG        3.0.0
-            GIT_SHALLOW    1
+# external dependencies with FetchContent
 
-            # -----------------------------------------------------------------
-            # MODIFICĂRI PENTRU A REZOLVA DEPENDENȚELE LIPSĂ (X11)
-            # Aceste argumente sunt transmise direct la CMake-ul intern al SFML.
-            # -----------------------------------------------------------------
-            CMAKE_ARGS
-            # Dezactiveaza cautarea X11. SFML va trebui sa se bazeze pe alte metode (Wayland/etc.)
-            # sau sa treaca peste eroarea de configurare.
-            -DSFML_SKIP_MANDATORY_DEPENDENCY_SEARCH=TRUE
+include(FetchContent)
 
-            # Dezactivam modulele si testele care pot cere si mai multe dependinte.
-            -DSFML_BUILD_EXAMPLES=OFF
-            -DSFML_BUILD_TESTS=OFF
-            -DSFML_BUILD_NETWORK=OFF # Nu ai cerut network, dezactivam explicit
-            -DSFML_BUILD_GRAPHICS=ON
-            -DSFML_BUILD_WINDOW=ON
-            -DSFML_BUILD_SYSTEM=ON
-            -DSFML_BUILD_AUDIO=ON
-    )
+set(FETCHCONTENT_QUIET OFF)
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
-    # Reconfirmam setarile pentru build-ul intern al SFML:
-    set(SFML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-    set(SFML_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+# din cauza SFML
+set(WARNINGS_AS_ERRORS OFF)
 
-    FetchContent_MakeAvailable(sfml)
-    message(STATUS "SFML 3.0.0 fetch done.")
-endif()
+# NOTE: Also update SFML_VERSION env var in .github/workflows/cmake.yml:33
+FetchContent_Declare(
+    SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG        3.0.0
+    # GIT_TAG        7f1162dfea4969bc17417563ac55d93b72e84c1e # 3.0.0
+    # GIT_TAG        origin/master
+    GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
 
-# ====================================================================
-# PASUL 2: DEFINIȚII FIȘIERE SURSĂ
-# ====================================================================
-
-# PO CORE FILES (Logica Jocului)
-set(PO_BASE_FILES
-        jucator.cpp jucator.h
-        Echipe.cpp Echipe.h
-        BazaDeDate.cpp BazaDeDate.h
-        Meci.cpp
-        Liga.cpp Liga.h
-        manageri.cpp manageri.h
-        Turneu.cpp Turneu.h
-        Transferuri.cpp Transferuri.h
+    CMAKE_ARGS 
+               
+                -DCMAKE_POLICY_VERSION_MINIMUM=3.5 
+                -DSFML_SKIP_MANDATORY_DEPENDENCY_SEARCH=TRUE
+                
+                -D**SFML_WANT_X11**=FALSE # (Încercare, dar pe macOS nu e X11)
+                
+                -DSFML_DEPENDENCIES_INSTALL_PREFIX="/usr/local"
+                -DSFML_BUILD_EXAMPLES=OFF
+                -DSFML_BUILD_TESTS=OFF
+                -DSFML_BUILD_NETWORK=OFF 
+                -DSFML_BUILD_GRAPHICS=ON
+                -DSFML_BUILD_WINDOW=ON
+                -DSFML_BUILD_SYSTEM=ON
+                -DSFML_BUILD_AUDIO=ON
 )
 
-# GUI FILES (SFML Dependent)
-set(GUI_SOURCE_FILES
-        ListaJucatoriGui.cpp ListaJucatoriGui.h
+FetchContent_MakeAvailable(SFML)
+
+###############################################################################
+
+# external dependencies with find_package
+
+find_package(Threads REQUIRED)
+if(APPLE)
+elseif(UNIX)
+    find_package(X11)
+endif()
+
+###############################################################################
+
+# NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
+add_executable(${MAIN_EXECUTABLE_NAME}
+    main.cpp
+    generated/src/Helper.cpp
+    ListaJucatoriGui.cpp ListaJucatoriGui.h
         Screen.h
         TransferScreen.cpp TransferScreen.h
         Button.cpp Button.h
@@ -84,53 +92,46 @@ set(GUI_SOURCE_FILES
         ScoreboardScreen.h
         MatchLeague.cpp
         MatchLeague.h
+        manageri.h manageri.cpp
+        BazaDeDate.h BazaDeDate.cpp
+        Liga.h Liga.cpp
+        Echipe.h Echipe.cpp
+        jucator.h jucator.cpp
+        Meci.h Meci.cpp
+        Transferuri.h Transferuri.cpp
 )
 
-# ====================================================================
-# PASUL 3: DEFINIREA EXECUTABILELOR
-# ====================================================================
+# NOTE: Add all defined targets (e.g. executables, libraries, etc. )
+# NOTE: RUN_SANITIZERS is optional, if it's not present it will default to true
+set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
+# set_compiler_flags(TARGET_NAMES ${MAIN_EXECUTABLE_NAME} ${FOO} ${BAR})
+# where ${FOO} and ${BAR} represent additional executables or libraries
+# you want to compile with the set compiler flags
 
-# --- 1. TARGETUL GUI (VoleiManager_GUI) ---
-add_executable(VoleiManager_GUI
-        main.cpp
-        ${PO_BASE_FILES}
-        ${GUI_SOURCE_FILES}
-)
+###############################################################################
 
-# Linkarea pentru SFML 3 e la fel
-target_link_libraries(VoleiManager_GUI
-        PRIVATE
-        SFML::Graphics
-        SFML::Window
-        SFML::System
-        SFML::Audio
-)
+# use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
+target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE generated/include)
+# target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
+target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${SFML_SOURCE_DIR}/include)
+target_link_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${SFML_BINARY_DIR}/lib)
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System Threads::Threads)
 
-# --- FIXUL SUPREM PENTRU DLL-uri PE WINDOWS (Functioneaza si la SFML 3) ---
-if(WIN32 AND TARGET SFML::Graphics)
-    add_custom_command(TARGET VoleiManager_GUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:SFML::Graphics>
-            $<TARGET_FILE:SFML::Window>
-            $<TARGET_FILE:SFML::System>
-            $<TARGET_FILE:SFML::Audio>
-            $<TARGET_FILE_DIR:VoleiManager_GUI>
-            COMMENT "Copiere DLL-uri SFML 3 langa executabil..."
-    )
+if(APPLE)
+elseif(UNIX)
+    target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE X11)
 endif()
 
-# --- FIXUL PENTRU RESURSE (Working Directory) ---
-set_target_properties(VoleiManager_GUI PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-)
+###############################################################################
 
-# --- 2. TARGETUL CONSOLĂ (VoleiManager_Console) ---
-add_executable(VoleiManager_Console
-        main_console.cpp
-        ${PO_BASE_FILES}
-)
+# copy binaries to "bin" folder; these are uploaded as artifacts on each release
+# DESTINATION_DIR is set as "bin" in cmake/Options.cmake:6
+install(TARGETS ${MAIN_EXECUTABLE_NAME} DESTINATION ${DESTINATION_DIR})
+if(APPLE)
+    install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
+endif()
 
-target_link_libraries(VoleiManager_Console
-        PRIVATE
-        SFML::System
-)
+
+copy_files(FILES tastatura.txt COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+# copy_files(FILES tastatura.txt config.json DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+# copy_files(DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
