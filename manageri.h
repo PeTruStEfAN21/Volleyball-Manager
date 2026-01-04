@@ -28,8 +28,10 @@ private:
     jucatorptr jucatorgratis1;
     jucatorptr jucatorgratis2;
 
-
 public:
+
+    static manageri& getInstance() ;
+
     manageri(int buget, Echipeptr echipa, const std::string &nume);
     manageri();
 

@@ -10,6 +10,9 @@ private:
     Button ligaButton;
     Button matchButton;
     Button firstSixButton;
+    Button historyMatchesButton;
+    Button historyTransfersButton;
+    Button packsButton;
     Button exitButton;
     void handleInput(const sf::Event& event, sf::RenderWindow& ) override;
     void update() override;

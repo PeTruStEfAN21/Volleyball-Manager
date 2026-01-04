@@ -34,6 +34,18 @@ std::ostream& operator<<(std::ostream& os, const Persoana& p) {
     return os;
 }
 
+float jucator::obtine_scor_tactica_final() {
+    if (strategie) {
+        return strategie->calculate(static_cast<float>(this->ovr));
+    }
+    return static_cast<float>(this->ovr);
+}
+
+
+void jucator::setStrategie(std::unique_ptr<ImpactStrategy> s) {
+    strategie = std::move(s);
+}
+
 
 float jucator::calculeaza_indice_risc_financiar() const {
     return (float)std::max(0, pret) / 1000.0f;

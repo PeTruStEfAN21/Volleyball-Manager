@@ -16,6 +16,13 @@
 
 using namespace std;
 
+//Design Pattern
+
+manageri& manageri::getInstance() {
+    static manageri instance;
+    return instance;
+}
+
 
 manageri::manageri()
     :  nume("Necunoscut"),
@@ -206,6 +213,7 @@ int manageri::citire_toti_jucatorii_si_echipe(){
 
             e->adaugaJucatorExistent(j);
             baza->adaugaJucator(j);
+          //  baza->adaugaJucator(std::dynamic_pointer_cast<jucator>(j->clone()));
             i++;
         }
         e->get_overall();

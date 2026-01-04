@@ -13,7 +13,22 @@ using namespace std;
 float BazaDeDate::globalMarketModifier = 1.0f;
 const float BazaDeDate::INFLATION_STEP = 0.015f;
 const float BazaDeDate::MAX_INFLATION = 1.50f;  // Se opreste la 50% inflatie
+
+//Design Pattern
+
+std::shared_ptr<BazaDeDate> BazaDeDate::instance = nullptr;
+
+std::shared_ptr<BazaDeDate> BazaDeDate::getInstance() {
+    if (!instance) instance = shared_ptr<BazaDeDate>(new BazaDeDate());
+    return instance;
+}
+
+
+
 // cppcheck-suppress unusedFunction
+
+
+
 float BazaDeDate::getGlobalMarketModifier() {
     return globalMarketModifier;
 }
@@ -39,7 +54,7 @@ BazaDeDate::BazaDeDate() = default;
 BazaDeDate::~BazaDeDate() {
 }
 
-BazaDeDate::BazaDeDate(const BazaDeDate &other)
+/*BazaDeDate::BazaDeDate(const BazaDeDate &other)
     : jucatori(other.jucatori),
       echipe_disponibile(other.echipe_disponibile) {
 }
@@ -51,7 +66,7 @@ BazaDeDate & BazaDeDate::operator=(const BazaDeDate &other) {
     echipe_disponibile = other.echipe_disponibile;
     return *this;
 }
-
+*/
 
 void BazaDeDate::adaugaJucator(jucatorptr j) {
     jucatori.push_back(j);

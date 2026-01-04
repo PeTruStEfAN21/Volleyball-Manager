@@ -20,6 +20,9 @@ private:
 public:
     ListaJucatoriGui(sf::Font& font, const std::vector<jucatorptr>& listaInitiala, float x, float y);
 
+    void setItemColor(size_t index, sf::Color color);
+
+    void resetColors() ;
     const std::vector<jucatorptr>& getLista() const;
     void setLista(const std::vector<jucatorptr>& listaNoua);
     void draw(sf::RenderWindow& window, const std::vector<jucatorptr>& playersHighlighted);

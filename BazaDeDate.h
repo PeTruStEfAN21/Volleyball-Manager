@@ -18,9 +18,16 @@ private:
     static float globalMarketModifier;
     static const float MAX_INFLATION;
     static const float INFLATION_STEP;
+    static std::shared_ptr<BazaDeDate> instance;
 
 
 public:
+
+    //Design Pattern
+    static std::shared_ptr<BazaDeDate> getInstance();
+    BazaDeDate(const BazaDeDate&) = delete;
+    void operator=(const BazaDeDate&) = delete;
+
     void eliminaEchipa(Echipeptr e);
     explicit BazaDeDate(const std::vector<jucatorptr> &jucatori);
     BazaDeDate();
@@ -55,7 +62,7 @@ public:
 
     int alege_echipa_random_index();
 
-    BazaDeDate(const BazaDeDate &other);
+   // BazaDeDate(const BazaDeDate &other);
 
-    BazaDeDate & operator=(const BazaDeDate &other);
+    //BazaDeDate & operator=(const BazaDeDate &other);
 };

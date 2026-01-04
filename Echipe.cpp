@@ -40,8 +40,8 @@ void Echipe::updateMomentum(float change) {
 }
 
 const std::map<std::string, int> Echipe::REGULI_START_6 = {
-    {"Setter", 1},
     {"OutsideHitter", 2},
+    {"Setter", 1},
     {"MiddleBlocker", 1},
     {"OppositeHitter", 1},
     {"Libero", 1}
@@ -86,7 +86,7 @@ float Echipe::valideaza_si_set_start_6(const std::vector<jucatorptr>& selection)
 
     for (const auto& jucatorAles : selection) {
         counts[jucatorAles->get_poz()]++;
-        suma_ovr += jucatorAles->get_ovr();
+        suma_ovr += jucatorAles->obtine_scor_tactica_final();
     }
 
     for (const auto& pair : REGULI_START_6) {
@@ -142,7 +142,7 @@ float Echipe::valideaza_si_set_start_6(const std::vector<jucatorptr>& selection)
     else if (pozitieNoua == "OppositeHitter") nr_oppo++;
     else if (pozitieNoua == "MiddleBlocker") nr_middle++;
 
-    if (nr_outside > 2 || nr_setter > 1 || nr_libero > 1 || nr_oppo > 1 || nr_middle > 1) {
+    if (nr_outside > 2 || nr_setter > 2 || nr_libero > 1 || nr_oppo > 1 || nr_middle > 1) {
         return false;
     }
 
@@ -439,7 +439,7 @@ void Echipe::set_overall() {
     float suma = 0;
     int j = 0;
     for (size_t i = 0; i < jucatori.size(); i++) {
-        suma = suma + jucatori[i]->get_ovr();
+        suma = suma + jucatori[i]->obtine_scor_tactica_final();
         j++;
     }
     if (j > 0) {
@@ -447,7 +447,6 @@ void Echipe::set_overall() {
     } else {
         ovr_tot = 0;
     }
-
     ovr_primii_6 = ovr_tot;
 }
 
@@ -517,21 +516,20 @@ void Echipe::schimba_jucator_pe_teren(jucatorptr out, jucatorptr in) {
 
     float suma_ovr = 0;
     for (const auto& j : jucatori_fixi) {
-        suma_ovr += j->get_ovr();
+        suma_ovr += j->obtine_scor_tactica_final();
     }
     ovr_primii_6 = suma_ovr / 6;
 
 }
 
 int Echipe::get_overall() {
-
-    if (ovr_primii_6 !=0)
-        return ovr_primii_6;
+    if (ovr_primii_6 != 0)
+        return (int)ovr_primii_6;
 
     float suma = 0;
     int j = 0;
     for (size_t i = 0; i < jucatori.size(); i++) {
-        suma = suma + jucatori[i]->get_ovr();
+        suma = suma + jucatori[i]->obtine_scor_tactica_final();
         j++;
     }
     if (j > 0) {

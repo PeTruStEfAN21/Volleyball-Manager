@@ -6,6 +6,7 @@
 #include <fstream>
 #include <ostream>
 #include <memory>
+#include "Strategies.h"
 
 
 class BazaDeDate;
@@ -68,8 +69,15 @@ protected:
     float calculeaza_indice_risc_financiar() const override;
     void afiseaza_detalii_specifice(std::ostream& os) const override;
 
+    std::shared_ptr<ImpactStrategy> strategie;
+
 
 public:
+
+
+    void setStrategie(std::unique_ptr<ImpactStrategy> s) ;
+
+
     jucator(const std::string &nume, const std::string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
             int serve_power, int serve_accuracy, int vertical_jump, int mobility, int speed, int pret, int height,
             bool ales, Echipeptr echipa);
@@ -83,6 +91,7 @@ public:
 
     virtual ~jucator() override = default;
 
+    float obtine_scor_tactica_final() ;
     void transferabil(bool tranfer);
     bool get_transferabil() const ;
     void adaugare_echipe(Echipeptr echipa);

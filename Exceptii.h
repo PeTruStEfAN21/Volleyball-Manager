@@ -14,7 +14,7 @@ public:
 class BugetDepasitException : public JocLogicException {
 public:
     explicit BugetDepasitException(const std::string& msg)
-        : JocLogicException("Buget depasit. " + msg) {}
+        : JocLogicException("Buget depășit. " + msg) {}
 };
 
 
@@ -22,7 +22,7 @@ public:
 class CompozitieInvalidaException : public JocLogicException {
 public:
     explicit CompozitieInvalidaException(const std::string& msg)
-        : JocLogicException("Compozitie invalida. " + msg) {}
+        : JocLogicException("Compoziție invalidă. " + msg) {}
 };
 
 
@@ -30,5 +30,5 @@ public:
 class SchimbareInvalidaException : public JocLogicException {
 public:
     explicit SchimbareInvalidaException(const std::string& msg)
-        : JocLogicException("Schimbare invalida. " + msg) {}
+        : JocLogicException("Schimbare invalidă. " + msg) {}
 };

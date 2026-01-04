@@ -65,9 +65,12 @@ int InitialDraftScreen::run(sf::RenderWindow& window) {
     return next_screen_id;
 }
 
+
+
 void InitialDraftScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
-        finalizeButton.setHover(finalizeButton.isClicked(moved->position));
+        sf::Vector2i mousePos = moved->position;
+        finalizeButton.setHover(finalizeButton.isClicked(mousePos));
     }
 
     if (const auto* released = event.getIf<sf::Event::MouseButtonReleased>()) {
@@ -83,6 +86,8 @@ void InitialDraftScreen::handleInput(const sf::Event& event, sf::RenderWindow& )
         }
     }
 }
+
+
 
 void InitialDraftScreen::handlePlayerClick(sf::Vector2i mousePos) {
     int indexSelectat = listaVizuala.getIndexFromClick(mousePos);
@@ -175,13 +180,28 @@ void InitialDraftScreen::handleFinalizeButton() {
 
 void InitialDraftScreen::render(sf::RenderWindow& window) {
     window.clear(sf::Color(30, 30, 40));
+
     sf::Text bugetText(fontRef);
     bugetText.setCharacterSize(20);
     bugetText.setPosition(sf::Vector2f(50.0f, 30.0f));
     bugetText.setString("Buget: " + std::to_string(bugetCurent) + " lei");
     window.draw(bugetText);
 
-    listaVizuala.draw(window);
+
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+    int hoverIndex = listaVizuala.getIndexFromClick(mousePos);
+    jucatorptr playerSubMouse = nullptr;
+
+    if (hoverIndex != -1 && hoverIndex < (int)listaVizuala.getLista().size()) {
+        playerSubMouse = listaVizuala.getLista()[hoverIndex];
+    }
+
+    listaVizuala.draw(window, selectieTemporara);
+
+    if (playerSubMouse) {
+        listaVizuala.draw(window, playerSubMouse);
+    }
 
     finalizeButton.draw(window);
     window.draw(mesajStatus);
