@@ -1,145 +1,111 @@
 cmake_minimum_required(VERSION 3.26)
 
-# NOTE: update executable name in .github/workflows/cmake.yml:25 when changing executable name in this file
-# for now, the project name is used as the executable name
 set(MAIN_PROJECT_NAME "oop")
 set(MAIN_EXECUTABLE_NAME "${MAIN_PROJECT_NAME}")
 
-
 project(${MAIN_PROJECT_NAME})
-# set(CMAKE_PROJECT_VERSION_MAJOR 0)
-# set(CMAKE_PROJECT_VERSION_MINOR 0)
-# set(CMAKE_PROJECT_VERSION_PATCH 1)
 
-set(CMAKE_CXX_STANDARD 23)
+# C++ Standard
+set(CMAKE_CXX_STANDARD 17) # SFML 3 cere minim 17. 23 e cam nou, dar poti lasa 20 sau 23.
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Include helpers
 include(cmake/Options.cmake)
 include(cmake/CompilerFlags.cmake)
 include(cmake/CopyHelper.cmake)
 
+# Unde cautam headere (.h)
+include_directories(src)
+include_directories(include)
+
 ###############################################################################
-
-# external dependencies with FetchContent
-
+# SFML FETCH CONTENT
+###############################################################################
 include(FetchContent)
 
 set(FETCHCONTENT_QUIET OFF)
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
-# din cauza SFML
+# Oprim warning-urile din biblioteci externe
 set(WARNINGS_AS_ERRORS OFF)
 
-# NOTE: Also update SFML_VERSION env var in .github/workflows/cmake.yml:33
 FetchContent_Declare(
     SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG        3.0.0
-    # GIT_TAG        7f1162dfea4969bc17417563ac55d93b72e84c1e # 3.0.0
-    # GIT_TAG        origin/master
-    GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
-
-    CMAKE_ARGS 
-               
-                -DCMAKE_POLICY_VERSION_MINIMUM=3.5 
-                -DSFML_SKIP_MANDATORY_DEPENDENCY_SEARCH=TRUE
-                
-                -D**SFML_WANT_X11**=FALSE # (Încercare, dar pe macOS nu e X11)
-                
-                -DSFML_DEPENDENCIES_INSTALL_PREFIX="/usr/local"
-                -DSFML_BUILD_EXAMPLES=OFF
-                -DSFML_BUILD_TESTS=OFF
-                -DSFML_BUILD_NETWORK=OFF 
-                -DSFML_BUILD_GRAPHICS=ON
-                -DSFML_BUILD_WINDOW=ON
-                -DSFML_BUILD_SYSTEM=ON
-                -DSFML_BUILD_AUDIO=ON
+    GIT_TAG        master  # Folosim master pentru SFML 3 pana iese tag-ul oficial
+    GIT_SHALLOW    1
+    
+    CMAKE_ARGS
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+        -DSFML_SKIP_MANDATORY_DEPENDENCY_SEARCH=TRUE
+        -DSFML_BUILD_EXAMPLES=OFF
+        -DSFML_BUILD_TESTS=OFF
+        -DSFML_BUILD_NETWORK=OFF
+        -DSFML_BUILD_GRAPHICS=ON
+        -DSFML_BUILD_WINDOW=ON
+        -DSFML_BUILD_SYSTEM=ON
+        -DSFML_BUILD_AUDIO=ON
 )
 
 FetchContent_MakeAvailable(SFML)
 
 ###############################################################################
-
-# external dependencies with find_package
-
+# FIND PACKAGES (Linux/Mac)
+###############################################################################
 find_package(Threads REQUIRED)
-if(APPLE)
-elseif(UNIX)
+if(UNIX AND NOT APPLE)
     find_package(X11)
 endif()
 
 ###############################################################################
-
-# NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${MAIN_EXECUTABLE_NAME}
-    main.cpp
-    generated/src/Helper.cpp
-    ListaJucatoriGui.cpp ListaJucatoriGui.h
-        Screen.h
-        TransferScreen.cpp TransferScreen.h
-        Button.cpp Button.h
-        MainMenuScreen.cpp MainMenuScreen.h
-        InitialDraftScreen.cpp InitialDraftScreen.h
-        FirstSixScreen.cpp FirstSixScreen.h
-        TableScore.cpp TableScore.h
-        MatchScreen.cpp MatchScreen.h
-        TimeoutScreen.cpp TimeoutScreen.h
-        Exceptii.h
-        LigaScreen.cpp
-        LigaScreen.h
-        ScoreboardScreen.cpp
-        ScoreboardScreen.h
-        MatchLeague.cpp
-        MatchLeague.h
-        manageri.h manageri.cpp
-        BazaDeDate.h BazaDeDate.cpp
-        Liga.h Liga.cpp
-        Echipe.h Echipe.cpp
-        jucator.h jucator.cpp
-        Meci.h Meci.cpp
-        Transferuri.h Transferuri.cpp
-	UsernameScreen.cpp
-	UsernameScreen.h
-   	PachetScreen.cpp
-    	Pachete.cpp
-	HistoryScreen.h
-	Utilitare.h
-	Gestiune.h
-	Strategies.h
-)
-
-# NOTE: Add all defined targets (e.g. executables, libraries, etc. )
-# NOTE: RUN_SANITIZERS is optional, if it's not present it will default to true
-set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
-# set_compiler_flags(TARGET_NAMES ${MAIN_EXECUTABLE_NAME} ${FOO} ${BAR})
-# where ${FOO} and ${BAR} represent additional executables or libraries
-# you want to compile with the set compiler flags
-
+# EXECUTABLE
 ###############################################################################
 
-# use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
-target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE generated/include)
-# target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
-target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${SFML_SOURCE_DIR}/include)
-target_link_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${SFML_BINARY_DIR}/lib)
-target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System Threads::Threads)
+# AICI ESTE FIX-UL MAJOR:
+# In loc sa scriem manual src/Main.cpp, src/Liga.cpp etc., 
+# ii spunem sa ia TOT ce gaseste in src/
+file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.h")
 
-if(APPLE)
-elseif(UNIX)
+# Adaugam si fisierul generat daca e in alt folder
+list(APPEND SOURCES "generated/src/Helper.cpp")
+
+add_executable(${MAIN_EXECUTABLE_NAME} ${SOURCES})
+
+# Optiuni compilator
+set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
+
+###############################################################################
+# INCLUDES & LINKING
+###############################################################################
+
+# Include directoare
+target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE generated/include)
+target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${sfml_SOURCE_DIR}/include)
+
+# Link Libraries
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE 
+    SFML::Graphics 
+    SFML::Window 
+    SFML::System 
+    SFML::Audio 
+    Threads::Threads
+)
+
+if(UNIX AND NOT APPLE)
     target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE X11)
 endif()
 
 ###############################################################################
+# INSTALL & COPY FILES
+###############################################################################
 
-# copy binaries to "bin" folder; these are uploaded as artifacts on each release
-# DESTINATION_DIR is set as "bin" in cmake/Options.cmake:6
 install(TARGETS ${MAIN_EXECUTABLE_NAME} DESTINATION ${DESTINATION_DIR})
 if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-
+# Copiem tastatura.txt langa executabil
 copy_files(FILES tastatura.txt COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
-# copy_files(FILES tastatura.txt config.json DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+# Decomenteaza liniile de mai jos daca ai imagini sau sunete
 # copy_files(DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
