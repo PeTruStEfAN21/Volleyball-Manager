@@ -105,7 +105,7 @@ void LigaScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
 }
 
 
-//void LigaScreen::notifyMatchFinished() { justFinishedMatch = true; }
+void LigaScreen::notifyMatchFinished() { justFinishedMatch = true; }
 
 
 int LigaScreen::run(sf::RenderWindow& window) {
