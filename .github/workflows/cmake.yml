@@ -2,7 +2,7 @@ name: C++ CI
 
 on:
   push:
-    branches: ['**'] 
+    branches: ['**']
     tags: ['**']
   workflow_dispatch:
     inputs:
@@ -30,7 +30,6 @@ defaults:
     shell: bash
 
 jobs:
-  # Job-ul de verificare cod (Cppcheck)
   cppcheck:
     name: "Cppcheck"
     runs-on: ubuntu-22.04
@@ -43,7 +42,6 @@ jobs:
       - name: Run cppcheck
         uses: ./.github/actions/cppcheck
 
-  # Job-ul de verificare stil (Clang-Tidy)
   clang-tidy:
     name: "Clang-Tidy"
     runs-on: ubuntu-22.04
@@ -51,21 +49,23 @@ jobs:
     env:
       CLANG_VER: 18
     steps:
+      # AICI AM REPARAT INDENTAREA CARE DADEA EROARE DE SINTAXA
       - name: Install Linux Dependencies
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libharfbuzz-dev libfreetype6-dev libx11-dev libxrandr-dev libxcursor-dev libudev-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev
+      
       - name: Checkout repo
         uses: actions/checkout@v4
+      
       - name: Run clang-tidy
         uses: ./.github/actions/clang-tidy
 
-  # Job-ul principal de compilare (Build)
   build:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15 # Am marit putin timpul
+    timeout-minutes: 10
     permissions:
       attestations: write
       contents: write
@@ -103,8 +103,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # --- AICI ESTE FIX-UL CRITIC PENTRU HARFBUZZ ---
-      # Instalam dependintele pe Linux INAINTE de orice configurare CMake
+      # Dependinte necesare pentru Job-ul de Build pe Linux
       - name: Install Linux Dependencies (Build Job)
         if: runner.os == 'Linux'
         run: |
@@ -121,8 +120,7 @@ jobs:
           echo "TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)" >> ${GITHUB_ENV}
           echo "ZIP_NAME=$(echo "${GITHUB_REPOSITORY}_${{ env.BUILD_TYPE }}_${{ matrix.os }}" | sed 's|/|_|')" >> ${GITHUB_ENV}
 
-      # Incercam sa folosim actiunea din repo, dar pasul de mai sus cu apt-get e siguranta noastra
-      - name: Install packages (Repo Action)
+      - name: Install packages
         continue-on-error: true
         uses: ./.github/actions/install-packages
 
@@ -133,20 +131,16 @@ jobs:
           warnings_as_errors: 'OFF'
 
       - name: Build
-        run: |
-          bash ./scripts/cmake.sh build -c ${{ env.BUILD_TYPE }}
+        run: bash ./scripts/cmake.sh build -c ${{ env.BUILD_TYPE }}
 
       - name: Install
-        run: |
-          bash ./scripts/cmake.sh install -c ${{ env.BUILD_TYPE }} -i artifacts
+        run: bash ./scripts/cmake.sh install -c ${{ env.BUILD_TYPE }} -i artifacts
 
       - name: Move artifacts
         run: |
           mkdir ${{ env.ZIP_NAME }}
           shopt -s dotglob
-          # Ignoram erorile daca folderul e gol momentan
           mv artifacts/${{ env.BIN_DIR }}/* ${{ env.ZIP_NAME }} || true
-          ls -la ${{ env.ZIP_NAME }}
 
       - name: Process artifacts
         uses: ./.github/actions/process-artifacts
