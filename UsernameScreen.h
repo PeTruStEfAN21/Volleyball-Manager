@@ -12,7 +12,7 @@ private:
     std::string inputNume;
     sf::RectangleShape box;
 
-    void handleInput(const sf::Event& event, sf::RenderWindow& window) override;
+    void handleInput(const sf::Event& event, sf::RenderWindow&) override;
     void update() override;
     void render(sf::RenderWindow& window) override;
 

@@ -1,6 +1,6 @@
 #include "UsernameScreen.h"
 #include "manageri.h"
-#include "Echipe.h"   // Include obligatoriu pentru set_nume
+#include "Echipe.h"
 #include <iostream>
 
 UsernameScreen::UsernameScreen(sf::Font& f)
@@ -10,6 +10,7 @@ UsernameScreen::UsernameScreen(sf::Font& f)
       inputNume(""),
       box(sf::Vector2f(400.0f, 60.0f))
 {
+    (void)font;
     textPrompt.setPosition({250.0f, 200.0f});
 
     textInput.setFillColor(sf::Color::Yellow);
@@ -21,7 +22,7 @@ UsernameScreen::UsernameScreen(sf::Font& f)
     box.setOutlineColor(sf::Color::White);
 }
 
-void UsernameScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void UsernameScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     if (const auto* textEv = event.getIf<sf::Event::TextEntered>()) {
         if (textEv->unicode == 8) {
             if (!inputNume.empty()) inputNume.pop_back();

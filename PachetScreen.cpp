@@ -15,6 +15,7 @@ PackScreen::PackScreen(sf::Font& f, Echipeptr ech, const std::vector<jucatorptr>
       ultimulCastigat(nullptr),
       istoricRef(ist)
 {
+    (void)font;
     textStatus.setPosition({50.0f, 50.0f});
     textStatus.setFillColor(sf::Color::White);
 
@@ -41,7 +42,7 @@ int PackScreen::run(sf::RenderWindow& window) {
     return next_screen_id;
 }
 
-void PackScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
+void PackScreen::handleInput(const sf::Event& event, sf::RenderWindow&) {
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         sf::Vector2i mousePos = moved->position;
         btnBronze.setHover(btnBronze.isClicked(mousePos));
