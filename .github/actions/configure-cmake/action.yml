@@ -1,5 +1,6 @@
 name: 'Configure CMake'
 description: 'Common logic for CMake configuration'
+
 inputs:
   warnings_as_errors:
     description: 'Treat warnings as errors'
@@ -16,19 +17,16 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # Uncomment when using external dependencies, so they will be cached
+    # Cache external dependencies (_deps from FetchContent)
     - name: Cache deps
       uses: actions/cache@v4
       id: cache-deps
-      # make the key depend on the dependency version
       with:
         path: |
           ${{ env.BUILD_DIR }}/_deps
         key: ${{ inputs.cache_key }}-${{ matrix.cmake_generator }}-${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.asan_name }}-${{ env.BUILD_TYPE }}-${{ env.SFML_VERSION }}
 
-    # NOTE: GH Actions does not allow updating the cache yet
-    # Using the workaround found here: https://github.com/actions/cache/issues/171
-    # Since this cache is small, it should not fill the cache too much
+    # Cache Ninja build metadata
     - name: Cache Ninja deps
       uses: actions/cache@v4
       if: matrix.cmake_generator == 'Ninja'
@@ -38,8 +36,10 @@ runs:
           ${{ env.BUILD_DIR }}/.ninja_deps
           ${{ env.BUILD_DIR }}/.ninja_log
         key: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.asan_name }}-ninja-cache-${{ hashFiles('CMakeLists.txt') }}
-        restore-keys: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.asan_name }}-ninja-cache-
+        restore-keys: |
+          ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.asan_name }}-ninja-cache-
 
+    # Cache MinGW toolchain
     - name: Cache MinGW
       uses: actions/cache@v4
       id: cache-mingw
@@ -48,27 +48,28 @@ runs:
         path: gcc
         key: ${{ runner.os }}-${{ env.MINGW_VER }}
 
+    # Download MinGW toolchain (FIXED)
     - name: Download toolchain (MinGW)
       uses: suisei-cn/actions-download-file@v1.6.0
       id: download-mingw-gcc
       if: runner.os == 'Windows' && matrix.cxx == 'g++' && steps.cache-mingw.outputs.cache-hit != 'true'
       with:
-        url: "https://github.com/brechtsanders/winlibs_mingw/releases/download/${{ env.MINGW_VER }}"
+        url: "https://github.com/brechtsanders/winlibs_mingw/releases/download/${{ env.MINGW_VER }}/winlibs-x86_64-posix-seh-gcc-13.3.0-mingw-w64msvcrt-11.0.1-r1.7z"
         target: compiler/
 
+    # Extract MinGW
     - name: Install toolchain (MinGW)
       shell: bash
       if: runner.os == 'Windows' && matrix.cxx == 'g++' && steps.cache-mingw.outputs.cache-hit != 'true'
       run: |
         7z x compiler/${{ steps.download-mingw-gcc.outputs.filename }} -ogcc
 
+    # Configure CMake (MinGW)
     - name: Configure CMake (MinGW)
       shell: bash
       if: runner.os == 'Windows' && matrix.cxx == 'g++'
       run: |
         PATH="$(pwd)/gcc/mingw64/bin:${PATH}"
-        # because GH Actions does not properly prepend to $PATH and still chooses VM gcc
-        # CMake generator not passed as option to script since it might not be defined
         export CMAKE_GENERATOR=${{ matrix.cmake_generator }}
         bash ./scripts/cmake.sh configure \
           -b ${{ env.BUILD_DIR }} \
@@ -77,6 +78,7 @@ runs:
           -i ${GITHUB_WORKSPACE}/artifacts \
           -s ${GITHUB_WORKSPACE}
 
+    # Configure CMake (non-MinGW)
     - name: Configure CMake
       shell: bash
       if: ${{ !(runner.os == 'Windows' && matrix.cxx == 'g++') }}
@@ -88,6 +90,3 @@ runs:
           -e "-DPROJECT_WARNINGS_AS_ERRORS=${{ inputs.warnings_as_errors }} -DGITHUB_ACTIONS=${GITHUB_ACTIONS} ${{ inputs.custom_flags }}" \
           -i ${GITHUB_WORKSPACE}/artifacts \
           -s ${GITHUB_WORKSPACE}
-
-# https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
-# https://github.com/GuillaumeFalourd/poc-github-actions/blob/main/.github/workflows/36-local-action.yml
