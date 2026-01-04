@@ -27,6 +27,7 @@ MatchLeague::MatchLeague(Echipeptr myTeam, Echipeptr opponent, sf::Font& font, G
       continueButton(50.0f, 600.0f, 200.0f, 50.0f, "Continua (Meniu)", font),
       istoricMeciuri(istoric)
 {
+    (void)istoricMeciuri;
     echipaMea->resetPunctaj();
     echipaMea->resetSetur();
     echipaAdversa->resetPunctaj();

@@ -34,6 +34,8 @@ int main() {
     Gestiune<std::string> istoricMeciuri("Istoric Rezultate");
     Gestiune<jucatorptr> istoricAchizitii("Jucatori Contractati");
 
+    istoricMeciuri.afiseazaStatus();
+
     cout << istoricMeciuri.getNrElemente()
          << gasesteMaxim<int>(10, 20)
          << constringeValoare<int>(150, 0, 100) << endl;
@@ -50,14 +52,16 @@ int main() {
 
     if (!baza->getLista().empty()) {
         istoricAchizitii.adauga(baza->getLista()[0]);
+
+        auto jucatorTest = baza->getLista()[0];
+        auto strategieTest = std::make_shared<SetterStrategy>();
+        jucatorTest->setStrategie(strategieTest);
     }
 
     shared_ptr<Liga> ligaProgres = make_shared<Liga>(baza);
 
-    // --- MODIFICAREA CRITICA PENTRU A NU JUCA CONTRA TA ---
-    ligaProgres->creare_liga();            // 1. Intai bagam robotii
-    ligaProgres->adaugare_echipa(echipaMea); // 2. Tu esti ultimul (index n-1)
-    // -----------------------------------------------------
+    ligaProgres->creare_liga();
+    ligaProgres->adaugare_echipa(echipaMea);
 
     sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1000, 700)), "Volei Manager PO", sf::Style::Close | sf::Style::Titlebar);
     window.setFramerateLimit(60);
@@ -109,13 +113,11 @@ int main() {
                     if (auto mlPtr = dynamic_pointer_cast<MatchLeague>(screens[SCREEN_MATCH_LEAGUE])) {
                         Echipeptr adv = ligaProgres->getNextAdversarPentruManager();
 
-                        // Protectie: Daca nu gaseste adversar, reseteaza etapa si cauta iar
                         if (!adv) {
                             ligaProgres->reset_etapa();
                             adv = ligaProgres->getNextAdversarPentruManager();
                         }
 
-                        // Protectie suplimentara: nu juca contra ta
                         if (adv == echipaMea) {
                             ligaProgres->reset_etapa();
                             adv = ligaProgres->getNextAdversarPentruManager();
