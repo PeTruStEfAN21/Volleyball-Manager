@@ -101,7 +101,7 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         Transferuri.h Transferuri.cpp
 	UsernameScreen.cpp
 	UsernameScreen.h
-   	PackScreen.cpp
+   	PachetScreen.cpp
     	Pachete.cpp
 	HistoryScreen.h
 	Utilitare.h
