@@ -320,7 +320,7 @@ void Liga::finalizeSeason(Echipeptr echipaMea) {
     }
 
     cout << "\n============================================\n";
-    cout << "🎉 FINAL SEZON! 🎉\n";
+    cout << "FINAL SEZON! \n";
     if (managerRank != -1) {
         cout << "Echipa ta (" << echipaMea->getNume() << ") a terminat pe locul " << managerRank << "!\n";
         cout << "Ai castigat un bonus de " << finalPrize << " lei!\n";
@@ -332,6 +332,7 @@ void Liga::finalizeSeason(Echipeptr echipaMea) {
     resetSeason();
 }
 
+// cppcheck-suppress unusedFunction
 
 void Liga::registerMatchResult(Echipeptr echipaAdversa, Echipeptr castigator) {
     int n = echipe.size();

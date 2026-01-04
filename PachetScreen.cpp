@@ -3,7 +3,7 @@
 #include <optional>
 
 
-PackScreen::PackScreen(sf::Font& f, Echipeptr ech, const std::vector<jucatorptr>& b)
+PackScreen::PackScreen(sf::Font& f, Echipeptr ech, const std::vector<jucatorptr>& b, Gestiune<jucatorptr>& ist)
     : font(f),
       btnBronze(100.0f, 200.0f, 250.0f, 100.0f, "Bronze Pack (5000)", f),
       btnGold(450.0f, 200.0f, 250.0f, 100.0f, "Gold Pack (25000)", f),
@@ -12,7 +12,8 @@ PackScreen::PackScreen(sf::Font& f, Echipeptr ech, const std::vector<jucatorptr>
       textCastig(f, "", 35),
       echipaMea(ech),
       bazaJucatori(b),
-      ultimulCastigat(nullptr)
+      ultimulCastigat(nullptr),
+      istoricRef(ist)
 {
     textStatus.setPosition({50.0f, 50.0f});
     textStatus.setFillColor(sf::Color::White);
@@ -67,6 +68,7 @@ void PackScreen::handleInput(const sf::Event& event, sf::RenderWindow& window) {
 
                     if (ultimulCastigat) {
                         echipaMea->adaugaJucatorExistent(ultimulCastigat);
+                        istoricRef.adauga(ultimulCastigat);
                         textCastig.setString("FELICITARI! L-ai primit pe:\n" + ultimulCastigat->get_nume() + " (OVR: " + std::to_string((int)ultimulCastigat->get_ovr()) + ")");
                     }
                 } else {

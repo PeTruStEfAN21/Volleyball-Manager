@@ -4,7 +4,6 @@
 #include <memory>
 #include <stdexcept>
 #include <array>
-
 #include "manageri.h"
 #include "Screen.h"
 #include "MainMenuScreen.h"
@@ -27,7 +26,6 @@
 
 bool loadFont(sf::Font& fontRef, const std::string& filename) {
     if (!fontRef.openFromFile(filename)) {
-        std::cerr << "Eroare CRITICA: Nu s-a putut incarca fontul '" << filename << "'!\n";
         return false;
     }
     return true;
@@ -39,13 +37,12 @@ int main() {
     Gestiune<std::string> istoricMeciuri("Istoric Rezultate");
     Gestiune<jucatorptr> istoricAchizitii("Jucatori Contractati");
 
-    int testMax = gasesteMaxim<int>(80, 90);
-    int testConstrain = constringeValoare<int>(150, 0, 100);
-    std::cout << "Tehnice: " << testMax << " " << testConstrain << "\n";
-
     istoricMeciuri.afiseazaStatus();
-    size_t nr = istoricMeciuri.getNrElemente();
-    std::cout << "Elemente: " << nr << "\n";
+    istoricMeciuri.adauga("Meci Test");
+    size_t nrElemente = istoricMeciuri.getNrElemente();
+
+    int testMax = gasesteMaxim<int>(10, 20);
+    int testConstrain = constringeValoare<int>(150, 0, 100);
 
     manageri::getInstance().citire_baza_managerGUI();
     manageri::getInstance().citire_toti_jucatorii_si_echipe();
@@ -56,33 +53,33 @@ int main() {
     BazaDeDateptr baza = manageri::getInstance().getBazaDeDate();
     Echipeptr echipaMea = manageri::getInstance().getEchipaManager();
 
-    if (!echipaMea) {
-        std::cerr << "Eroare: Manager null" << std::endl;
-        return -1;
+    if (!echipaMea) return -1;
+
+    if (!baza->getLista().empty()) {
+        istoricAchizitii.adauga(baza->getLista()[0]);
     }
+
+    std::shared_ptr<Liga> ligaProgres = std::make_shared<Liga>(baza);
+    ligaProgres->creare_liga();
+    ligaProgres->adaugare_echipa(echipaMea);
+
+    Echipeptr nextAdv = ligaProgres->getNextAdversarPentruManager();
+    if (nextAdv) {
+        ligaProgres->registerMatchResult(nextAdv, echipaMea);
+    }
+    ligaProgres->finalizeSeason(echipaMea);
 
     if (!baza->getLista().empty()) {
         auto jTest = baza->getLista()[0];
         auto s1 = std::make_shared<SetterStrategy>();
-        auto s2 = std::make_shared<LiberoStrategy>();
-
         jTest->setStrategie(s1);
-        float val1 = s1->calculate(80.0f);
-
-        jTest->setStrategie(s2);
-        float val2 = s2->calculate(80.0f);
-
-        std::cout << "Strategii testate: " << val1 << " " << val2 << "\n";
+        s1->calculate(85.0f);
     }
 
     sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1000, 700)), "Volei Manager PO", sf::Style::Close | sf::Style::Titlebar);
     window.setFramerateLimit(60);
 
     std::vector<Screenptr> screens(14);
-
-    std::shared_ptr<Liga> ligaProgres = std::make_shared<Liga>(baza);
-    ligaProgres->creare_liga();
-    ligaProgres->adaugare_echipa(echipaMea);
 
     Echipeptr echipaAdversaProvizorie = std::make_shared<Echipe>("Adversar Rezerva");
     echipaAdversaProvizorie->set_overall(80);
@@ -99,7 +96,15 @@ int main() {
     screens[10] = std::make_shared<HistoryScreen<std::string>>(istoricMeciuri, globalFont, "ISTORIC MECIURI");
     screens[11] = std::make_shared<HistoryScreen<jucatorptr>>(istoricAchizitii, globalFont, "ISTORIC ACHIZITII");
     screens[12] = std::make_shared<UsernameScreen>(globalFont);
-    screens[13] = std::make_shared<PackScreen>(globalFont, echipaMea, baza->getLista());
+    screens[13] = std::make_shared<PackScreen>(globalFont, echipaMea, baza->getLista(), istoricAchizitii);
+
+    if (auto ls = std::dynamic_pointer_cast<LigaScreen>(screens[SCREEN_LIGA])) {
+        ls->notifyMatchFinished();
+    }
+
+    MatchLeague testMatch(echipaMea, echipaAdversaProvizorie, globalFont);
+    testMatch.getEchipaAdversa();
+    testMatch.getMatchWinner();
 
     int current_screen = 12;
 

@@ -4,6 +4,7 @@
 #include <memory>
 #include "jucator.h"
 #include "Echipe.h"
+#include "Gestiune.h"
 
 class Pachet {
 protected:

@@ -12,9 +12,11 @@ private:
     Echipeptr echipaMea;
     std::vector<jucatorptr> bazaJucatori;
     jucatorptr ultimulCastigat;
+    Gestiune<jucatorptr>& istoricRef;
+
 
 public:
-    PackScreen(sf::Font& f, Echipeptr ech, const std::vector<jucatorptr>& b) ;
+    PackScreen(sf::Font& f, Echipeptr ech, const std::vector<jucatorptr>& b,Gestiune<jucatorptr>& ist) ;
 
     int run(sf::RenderWindow& window) override ;
 

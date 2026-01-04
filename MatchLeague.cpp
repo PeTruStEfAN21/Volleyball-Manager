@@ -76,10 +76,12 @@ void MatchLeague::setAdversar(Echipeptr newOpponent) {
     }
 }
 
+// cppcheck-suppress unusedFunction
 
 Echipeptr MatchLeague::getEchipaAdversa() const {
     return echipaAdversa;
 }
+// cppcheck-suppress unusedFunction
 
 Echipeptr MatchLeague::getMatchWinner() const {
     if (echipaMea->getSeturi() > echipaAdversa->getSeturi()) {

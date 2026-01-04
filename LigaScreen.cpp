@@ -59,6 +59,7 @@ void LigaScreen::updateButtonText() {
         btnMeciLiga.setString("4. Joaca Urmatorul Meci");
     } else {
         btnMeciLiga.setString("Sezonul Ligii s-a terminat!");
+        liga->finalizeSeason(echipaMea);
     }
 }
 
@@ -104,7 +105,7 @@ void LigaScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
 }
 
 
-void LigaScreen::notifyMatchFinished() { justFinishedMatch = true; }
+//void LigaScreen::notifyMatchFinished() { justFinishedMatch = true; }
 
 
 int LigaScreen::run(sf::RenderWindow& window) {
