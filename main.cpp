@@ -39,10 +39,17 @@ int main() {
 
     istoricMeciuri.afiseazaStatus();
     istoricMeciuri.adauga("Meci Test");
+    std::cout << istoricMeciuri.getNrElemente() << "\n";
+
+    std::cout << gasesteMaxim<int>(10, 20) << "\n";
+    std::cout << constringeValoare<int>(150, 0, 100) << "\n";
     size_t nrElemente = istoricMeciuri.getNrElemente();
 
     int testMax = gasesteMaxim<int>(10, 20);
     int testConstrain = constringeValoare<int>(150, 0, 100);
+
+
+    cout<< nrElemente << testMax << testConstrain;
 
     manageri::getInstance().citire_baza_managerGUI();
     manageri::getInstance().citire_toti_jucatorii_si_echipe();

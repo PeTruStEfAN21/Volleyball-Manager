@@ -5,7 +5,7 @@ Pachet::Pachet(std::string n, int c) : nume(n), cost(c) {}
 
 int Pachet::getCost() const { return cost; }
 
-std::string Pachet::getNume() const { return nume; }
+const std::string Pachet::getNume() const { return nume; }
 
 jucatorptr Pachet::extrageDupaOvr(const std::vector<jucatorptr>& lista, int minOvr, int maxOvr) {
     std::vector<jucatorptr> filtrati;

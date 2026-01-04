@@ -15,7 +15,7 @@ public:
     virtual ~Pachet() = default;
 
     int getCost() const;
-    std::string getNume() const;
+    const std::string getNume() const;
 
     virtual jucatorptr deschide(const std::vector<jucatorptr>& baza) = 0;
     jucatorptr extrageDupaOvr(const std::vector<jucatorptr>& lista, int minOvr, int maxOvr);
