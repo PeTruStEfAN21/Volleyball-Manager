@@ -70,6 +70,11 @@ jobs:
     env:
       CLANG_VER: 18
     steps:
+      - name: Install Linux Dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libharfbuzz-dev libfreetype6-dev libx11-dev libxrandr-dev libxcursor-dev libudev-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev
       - name: Checkout repo
 
         uses: actions/checkout@v4

@@ -5,85 +5,59 @@ set(MAIN_EXECUTABLE_NAME "${MAIN_PROJECT_NAME}")
 
 project(${MAIN_PROJECT_NAME})
 
-# C++ Standard
-set(CMAKE_CXX_STANDARD 17) # SFML 3 cere minim 17. 23 e cam nou, dar poti lasa 20 sau 23.
+# Setam standardul C++ (SFML 3 cere minim 17)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Include helpers
-include(cmake/Options.cmake)
-include(cmake/CompilerFlags.cmake)
-include(cmake/CopyHelper.cmake)
-
-# Unde cautam headere (.h)
+# Include directoare
 include_directories(src)
 include_directories(include)
 
-###############################################################################
-# SFML FETCH CONTENT
-###############################################################################
+# ---------------------------------------------------------
+# 1. DEPENDINTE EXTERNE (SFML)
+# ---------------------------------------------------------
 include(FetchContent)
 
-set(FETCHCONTENT_QUIET OFF)
-set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
-
-# Oprim warning-urile din biblioteci externe
-set(WARNINGS_AS_ERRORS OFF)
+# Setam optiunile SFML inainte sa il descarcam
+set(SFML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_DOC OFF CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
     SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG        master  # Folosim master pentru SFML 3 pana iese tag-ul oficial
+    GIT_TAG        master  # Folosim master pt SFML 3
     GIT_SHALLOW    1
-    
-    CMAKE_ARGS
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-        -DSFML_SKIP_MANDATORY_DEPENDENCY_SEARCH=TRUE
-        -DSFML_BUILD_EXAMPLES=OFF
-        -DSFML_BUILD_TESTS=OFF
-        -DSFML_BUILD_NETWORK=OFF
-        -DSFML_BUILD_GRAPHICS=ON
-        -DSFML_BUILD_WINDOW=ON
-        -DSFML_BUILD_SYSTEM=ON
-        -DSFML_BUILD_AUDIO=ON
 )
-
 FetchContent_MakeAvailable(SFML)
 
-###############################################################################
-# FIND PACKAGES (Linux/Mac)
-###############################################################################
-find_package(Threads REQUIRED)
-if(UNIX AND NOT APPLE)
-    find_package(X11)
-endif()
-
-###############################################################################
-# EXECUTABLE
-###############################################################################
-
-# AICI ESTE FIX-UL MAJOR:
-# In loc sa scriem manual src/Main.cpp, src/Liga.cpp etc., 
-# ii spunem sa ia TOT ce gaseste in src/
+# ---------------------------------------------------------
+# 2. GASIREA FISIERELOR SURSA (FIX-UL TAU)
+# ---------------------------------------------------------
+# Comanda asta cauta recursiv orice fisier .cpp si .h in folderul src/
 file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.h")
 
-# Adaugam si fisierul generat daca e in alt folder
-list(APPEND SOURCES "generated/src/Helper.cpp")
+# Daca nu gaseste nimic, da eroare (ca sa stii sigur)
+if(NOT SOURCES)
+    message(FATAL_ERROR "Nu am gasit niciun fisier sursa in folderul src/ !")
+endif()
 
+# Adaugam si helper-ul generat daca exista
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/generated/src/Helper.cpp")
+    list(APPEND SOURCES "generated/src/Helper.cpp")
+endif()
+
+# ---------------------------------------------------------
+# 3. CREAREA EXECUTABILULUI
+# ---------------------------------------------------------
 add_executable(${MAIN_EXECUTABLE_NAME} ${SOURCES})
 
-# Optiuni compilator
-set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
+# ---------------------------------------------------------
+# 4. LINK-AREA BIBLIOTECILOR
+# ---------------------------------------------------------
+# Cautam dependinte de sistem pentru Linux
+find_package(Threads REQUIRED)
 
-###############################################################################
-# INCLUDES & LINKING
-###############################################################################
-
-# Include directoare
-target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE generated/include)
-target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${sfml_SOURCE_DIR}/include)
-
-# Link Libraries
 target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE 
     SFML::Graphics 
     SFML::Window 
@@ -92,20 +66,24 @@ target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE
     Threads::Threads
 )
 
+# Pe Linux avem nevoie de X11 explicit uneori
 if(UNIX AND NOT APPLE)
-    target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE X11)
+    find_package(X11)
+    if(X11_FOUND)
+        target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE X11)
+    endif()
 endif()
 
-###############################################################################
-# INSTALL & COPY FILES
-###############################################################################
+# ---------------------------------------------------------
+# 5. INSTALARE SI COPIERE RESURSE
+# ---------------------------------------------------------
+# (Pastram ce aveai tu pentru copierea tastatura.txt)
+include(cmake/CopyHelper.cmake OPTIONAL_RESULT VARIABLE) 
+# Daca ai fisierul CopyHelper, il folosim, daca nu, folosim comanda standard:
 
-install(TARGETS ${MAIN_EXECUTABLE_NAME} DESTINATION ${DESTINATION_DIR})
-if(APPLE)
-    install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tastatura.txt")
+    add_custom_command(TARGET ${MAIN_EXECUTABLE_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/tastatura.txt"
+            "$<TARGET_FILE_DIR:${MAIN_EXECUTABLE_NAME}>")
 endif()
-
-# Copiem tastatura.txt langa executabil
-copy_files(FILES tastatura.txt COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
-# Decomenteaza liniile de mai jos daca ai imagini sau sunete
-# copy_files(DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
