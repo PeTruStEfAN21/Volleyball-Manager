@@ -99,6 +99,14 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         jucator.h jucator.cpp
         Meci.h Meci.cpp
         Transferuri.h Transferuri.cpp
+	UsernameScreen.cpp
+	UsernameScreen.h
+   	PackScreen.cpp
+    	Pachete.cpp
+	HistoryScreen.h
+	Utilitare.h
+	Gestiune.h
+	Strategies.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
