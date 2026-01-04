@@ -34,7 +34,7 @@ std::ostream& operator<<(std::ostream& os, const Persoana& p) {
     return os;
 }
 
-float jucator::obtine_scor_tactica_final() {
+float jucator::obtine_scor_tactica_final() const{
     if (strategie) {
         return strategie->calculate(static_cast<float>(this->ovr));
     }
@@ -42,7 +42,7 @@ float jucator::obtine_scor_tactica_final() {
 }
 
 
-void jucator::setStrategie(std::unique_ptr<ImpactStrategy> s) {
+void jucator::setStrategie(std::shared_ptr<ImpactStrategy> s) {
     strategie = std::move(s);
 }
 

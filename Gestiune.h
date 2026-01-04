@@ -10,8 +10,7 @@ private:
     std::string numeCategorie;
 
 public:
-    Gestiune(const std::string& nume) : numeCategorie(nume) {}
-
+    explicit Gestiune(const std::string& nume) : numeCategorie(nume) {}
     void adauga(const T& element) {
         elemente.push_back(element);
     }

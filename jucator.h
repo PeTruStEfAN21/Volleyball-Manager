@@ -45,7 +45,7 @@ public:
     const std::string& get_nume() const;
     void set_nume(const std::string& nume);
 
-    float obtine_scor_tactica_final() const;
+    virtual float obtine_scor_tactica_final() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Persoana& p);
 };
@@ -75,7 +75,7 @@ protected:
 public:
 
 
-    void setStrategie(std::unique_ptr<ImpactStrategy> s) ;
+    void setStrategie(std::shared_ptr<ImpactStrategy> s) ;
 
 
     jucator(const std::string &nume, const std::string &pozitie, int ovr, int spike_power, int receive, int spike_accuracy,
@@ -91,7 +91,7 @@ public:
 
     virtual ~jucator() override = default;
 
-    float obtine_scor_tactica_final() ;
+    float obtine_scor_tactica_final() const override;
     void transferabil(bool tranfer);
     bool get_transferabil() const ;
     void adaugare_echipe(Echipeptr echipa);

@@ -8,8 +8,9 @@ class HistoryScreen : public Screen {
 private:
     Gestiune<T>& sursaDate;
     sf::Font& font;
-    Button backButton;
     std::string titlu;
+    Button backButton;
+
 
 public:
     HistoryScreen(Gestiune<T>& sursa, sf::Font& f, std::string t) 
@@ -55,7 +56,7 @@ public:
         return SCREEN_MAIN_MENU;
     }
 
-    void handleInput(const sf::Event&, sf::RenderWindow&) override {}
-    void update() override {}
-    void render(sf::RenderWindow&) override {}
+   // void handleInput(const sf::Event&, sf::RenderWindow&) override {}
+  //  void update() override {}
+   // void render(sf::RenderWindow&) override {}
 };
