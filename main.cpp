@@ -18,13 +18,12 @@
 #include "LigaScreen.h"
 #include "ScoreboardScreen.h"
 #include "MatchLeague.h"
-#include "PachetScreen.h"
-
-// INCLUDE-URI TEMA 3
 #include "Gestiune.h"
 #include "Utilitare.h"
 #include "HistoryScreen.h"
 #include "UsernameScreen.h"
+#include "PachetScreen.h"
+#include "Strategies.h"
 
 bool loadFont(sf::Font& fontRef, const std::string& filename) {
     if (!fontRef.openFromFile(filename)) {
@@ -37,9 +36,16 @@ bool loadFont(sf::Font& fontRef, const std::string& filename) {
 int main() {
     srand(static_cast<unsigned int>(time(0)));
 
-    // --- INSTANȚIERI ȘABLOANĂ TEMA 3 ---
     Gestiune<std::string> istoricMeciuri("Istoric Rezultate");
     Gestiune<jucatorptr> istoricAchizitii("Jucatori Contractati");
+
+    int testMax = gasesteMaxim<int>(80, 90);
+    int testConstrain = constringeValoare<int>(150, 0, 100);
+    std::cout << "Tehnice: " << testMax << " " << testConstrain << "\n";
+
+    istoricMeciuri.afiseazaStatus();
+    size_t nr = istoricMeciuri.getNrElemente();
+    std::cout << "Elemente: " << nr << "\n";
 
     manageri::getInstance().citire_baza_managerGUI();
     manageri::getInstance().citire_toti_jucatorii_si_echipe();
@@ -47,16 +53,30 @@ int main() {
     sf::Font globalFont;
     if (!loadFont(globalFont, "ARIAL.ttf")) return -1;
 
-    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1000, 700)), "Volei Manager PO", sf::Style::Close | sf::Style::Titlebar);
-    window.setFramerateLimit(60);
-
     BazaDeDateptr baza = manageri::getInstance().getBazaDeDate();
     Echipeptr echipaMea = manageri::getInstance().getEchipaManager();
 
     if (!echipaMea) {
-        std::cerr << "EROARE: Echipa managerului nu a fost creata!" << std::endl;
+        std::cerr << "Eroare: Manager null" << std::endl;
         return -1;
     }
+
+    if (!baza->getLista().empty()) {
+        auto jTest = baza->getLista()[0];
+        auto s1 = std::make_shared<SetterStrategy>();
+        auto s2 = std::make_shared<LiberoStrategy>();
+
+        jTest->setStrategie(s1);
+        float val1 = s1->calculate(80.0f);
+
+        jTest->setStrategie(s2);
+        float val2 = s2->calculate(80.0f);
+
+        std::cout << "Strategii testate: " << val1 << " " << val2 << "\n";
+    }
+
+    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1000, 700)), "Volei Manager PO", sf::Style::Close | sf::Style::Titlebar);
+    window.setFramerateLimit(60);
 
     std::vector<Screenptr> screens(14);
 
@@ -76,81 +96,34 @@ int main() {
     screens[SCREEN_MATCH_LEAGUE] =  std::make_shared<MatchLeague>(echipaMea, echipaAdversaProvizorie, globalFont);
     screens[SCREEN_LIGA] = std::make_shared<LigaScreen>(ligaProgres, echipaMea, globalFont);
     screens[SCREEN_SCOREBOARD] = std::make_shared<ScoreboardScreen>(ligaProgres, globalFont);
-
     screens[10] = std::make_shared<HistoryScreen<std::string>>(istoricMeciuri, globalFont, "ISTORIC MECIURI");
     screens[11] = std::make_shared<HistoryScreen<jucatorptr>>(istoricAchizitii, globalFont, "ISTORIC ACHIZITII");
     screens[12] = std::make_shared<UsernameScreen>(globalFont);
     screens[13] = std::make_shared<PackScreen>(globalFont, echipaMea, baza->getLista());
-
 
     int current_screen = 12;
 
     while (current_screen != SCREEN_EXIT && window.isOpen()) {
         int next_screen_id = SCREEN_EXIT;
 
-        if (auto* f6 = dynamic_cast<FirstSixScreen*>(screens[SCREEN_FIRST_SIX].get())) {
-            f6->update_jucatori(echipaMea->get_jucatori());
+        if (current_screen == SCREEN_FIRST_SIX) {
+            if (auto* f6 = dynamic_cast<FirstSixScreen*>(screens[SCREEN_FIRST_SIX].get())) {
+                f6->update_jucatori(echipaMea->get_jucatori());
+            }
         }
 
         if (current_screen >= 0 && current_screen < static_cast<int>(screens.size()) && screens[current_screen] != nullptr) {
             int prev_screen = current_screen;
             next_screen_id = screens[current_screen]->run(window);
 
-            // 1. REPARARE LOGICĂ MECI AMICAL (MATCH_SCREEN)
-            if (next_screen_id == MATCH_SCREEN) {
+            if (next_screen_id == MATCH_SCREEN && prev_screen != SCREEN_TIMEOUT) {
                 if (auto msPtr = std::dynamic_pointer_cast<MatchScreen>(screens[MATCH_SCREEN])) {
-                    if (prev_screen != SCREEN_TIMEOUT) {
-                        // AICI: Alegem o echipă reală din baza de date, nu placeholder
-                        Echipeptr advRandom = baza->alege_echipa_random();
-                        msPtr->setAdversar(advRandom ? advRandom : echipaAdversaProvizorie);
-                        msPtr->resetare_scoruri();
-                    }
+                    Echipeptr advRandom = baza->alege_echipa_random();
+                    msPtr->setAdversar(advRandom ? advRandom : echipaAdversaProvizorie);
+                    msPtr->resetare_scoruri();
                 }
             }
 
-            // 2. REPARARE LOGICĂ MECI LIGĂ (SCREEN_MATCH_LEAGUE)
-            else if (next_screen_id == SCREEN_MATCH_LEAGUE) {
-                if (auto matchLeaguePtr = std::dynamic_pointer_cast<MatchLeague>(screens[SCREEN_MATCH_LEAGUE])) {
-                    if (prev_screen == SCREEN_LIGA) {
-                        // AICI: Extragem adversarul corect din calendarul ligii
-                        Echipeptr adv = ligaProgres->getNextAdversarPentruManager();
-                        if (adv) {
-                            matchLeaguePtr->setAdversar(adv);
-                            matchLeaguePtr->resetare_scoruri();
-                        } else {
-                            next_screen_id = SCREEN_LIGA; // Niciun meci rămas
-                        }
-                    }
-                }
-            }
-
-            // 3. ÎNREGISTRARE REZULTATE MECI LIGĂ ÎN ISTORIC
-            else if (prev_screen == SCREEN_MATCH_LEAGUE && next_screen_id == SCREEN_LIGA) {
-                if (auto mlPtr = std::dynamic_pointer_cast<MatchLeague>(screens[SCREEN_MATCH_LEAGUE])) {
-                    Echipeptr adversar = mlPtr->getEchipaAdversa();
-                    Echipeptr castigator = mlPtr->getMatchWinner();
-
-                    if (adversar && castigator) {
-                        // Salvare în Gestiune<std::string>
-                        std::string res = echipaMea->getNume() + " vs " + adversar->getNume() + " | Final: " + castigator->getNume();
-                        istoricMeciuri.adauga(res);
-
-                        ligaProgres->registerMatchResult(adversar, castigator);
-                        ligaProgres->meciuri();
-
-                        if (ligaProgres->isSeasonFinished()) {
-                            ligaProgres->finalizeSeason(echipaMea);
-                            next_screen_id = SCREEN_MAIN_MENU;
-                        }
-
-                        if (auto lsPtr = std::dynamic_pointer_cast<LigaScreen>(screens[SCREEN_LIGA])) {
-                            lsPtr->notifyMatchFinished();
-                        }
-                    }
-                }
-            }
-
-            // LOGICĂ TIMEOUT (PENTRU REVENIRE CORECTĂ)
             if (next_screen_id == SCREEN_TIMEOUT) {
                 if (auto timeoutPtr = std::dynamic_pointer_cast<TimeoutScreen>(screens[SCREEN_TIMEOUT])) {
                     timeoutPtr->setReturnScreenId(prev_screen);
@@ -159,5 +132,6 @@ int main() {
         }
         current_screen = next_screen_id;
     }
+
     return 0;
 }
