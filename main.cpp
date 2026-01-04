@@ -24,6 +24,8 @@
 #include "PachetScreen.h"
 #include "Strategies.h"
 
+using namespace std;
+
 bool loadFont(sf::Font& fontRef, const std::string& filename) {
     if (!fontRef.openFromFile(filename)) {
         return false;
@@ -133,6 +135,16 @@ int main() {
                     Echipeptr advRandom = baza->alege_echipa_random();
                     msPtr->setAdversar(advRandom ? advRandom : echipaAdversaProvizorie);
                     msPtr->resetare_scoruri();
+                }
+            }
+            if (next_screen_id == SCREEN_MATCH_LEAGUE) {
+                if (auto mlPtr = std::dynamic_pointer_cast<MatchLeague>(screens[SCREEN_MATCH_LEAGUE])) {
+                    Echipeptr advLiga = ligaProgres->getNextAdversarPentruManager();
+                    if (advLiga) {
+                        mlPtr->setAdversar(advLiga);
+                    } else {
+                        mlPtr->setAdversar(echipaAdversaProvizorie);
+                    }
                 }
             }
 
