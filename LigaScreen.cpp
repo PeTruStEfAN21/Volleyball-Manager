@@ -6,18 +6,14 @@
 #include <algorithm>
 #include <cstdlib>
 
-
-
 LigaScreen::LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam,  sf::Font& font)
     : echipaMea(playerTeam),
       liga(currentLiga),
-
       btnTabelaPunctaje(50.0f, 100.0f, 300.0f, 50.0f, "1. Tabela de Punctaje", font),
       btnTransferuri(50.0f, 170.0f, 300.0f, 50.0f, "2. Lista de Transferuri", font),
       btnFirstSix(50.0f, 240.0f, 300.0f, 50.0f, "3. Echipa de Start (First Six)", font),
       btnMeciLiga(50.0f, 310.0f, 300.0f, 50.0f, "4. Joaca Urmatorul Meci", font),
       btnExit(50.0f, 380.0f, 300.0f, 50.0f, "5. Iesi la Meniul Principal", font),
-
       titleText(font),
       statusText(font)
 {
@@ -37,38 +33,18 @@ LigaScreen::LigaScreen(std::shared_ptr<Liga> currentLiga, Echipeptr playerTeam, 
     }
 }
 
-/*std::string LigaScreen::formatScoreboard() const {
-    const auto& echipe_lista = liga->getEchipe();
-
-    std::stringstream ss;
-    ss << "=== Clasament Puncte Curent ===\n";
-
-    if (echipe_lista.empty()) {
-        ss << "Liga nu este inca formata.";
-        return ss.str();
-    }
-
-
-    liga->afisare_punctaje();
-    ss << "Punctajele au fost afisate in consola. \nVezi ordinea actuala a echipelor.";
-    return ss.str();
-}*/
-
 void LigaScreen::updateButtonText() {
     if (!liga->isSeasonFinished()) {
         btnMeciLiga.setString("4. Joaca Urmatorul Meci");
     } else {
         btnMeciLiga.setString("Sezonul Ligii s-a terminat!");
-        liga->finalizeSeason(echipaMea);
     }
 }
 
-
-
 void LigaScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
-
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>()) {
         sf::Vector2i mousePos = moved->position;
+        // Folosim isClicked pentru a detecta pozitia mouse-ului pentru hover
         btnTabelaPunctaje.setHover(btnTabelaPunctaje.isClicked(mousePos));
         btnTransferuri.setHover(btnTransferuri.isClicked(mousePos));
         btnFirstSix.setHover(btnFirstSix.isClicked(mousePos));
@@ -92,9 +68,9 @@ void LigaScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
             else if (btnMeciLiga.isClicked(mousePos)) {
                 if (!liga->isSeasonFinished()) {
                     this->next_screen_id = SCREEN_MATCH_LEAGUE;
-                    statusText.setString("Trecere la meciul de Liga. Revino aici pentru a simula AI-ul.");
                 } else {
-                    statusText.setString("Sezonul Ligii s-a terminat! Nu mai poti juca meciuri.");
+                    liga->finalizeSeason(echipaMea);
+                    statusText.setString("Sezon finalizat!");
                 }
             }
             else if (btnExit.isClicked(mousePos)) {
@@ -104,28 +80,22 @@ void LigaScreen::handleInput(const sf::Event& event, sf::RenderWindow& ) {
     }
 }
 
-
 void LigaScreen::notifyMatchFinished() { justFinishedMatch = true; }
-
 
 int LigaScreen::run(sf::RenderWindow& window) {
     this->next_screen_id = SCREEN_LIGA;
 
-    liga->reset_etapa();
-
     if (justFinishedMatch) {
-        statusText.setString("Rezultat inregistrat! Scorul a fost adaugat in clasament.");
+        statusText.setString("Rezultat inregistrat!");
         justFinishedMatch = false;
     }
 
     while (window.isOpen() && this->next_screen_id == SCREEN_LIGA) {
-
         while (const std::optional<sf::Event> eventOpt = window.pollEvent()) {
             const sf::Event& event = *eventOpt;
             if (event.is<sf::Event::Closed>()) return SCREEN_EXIT;
             handleInput(event, window);
         }
-
         update();
         render(window);
         window.display();
@@ -135,25 +105,15 @@ int LigaScreen::run(sf::RenderWindow& window) {
 
 void LigaScreen::update() {
     updateButtonText();
-
-    sf::Vector2i mousePos = sf::Mouse::getPosition();
-    btnTabelaPunctaje.setHover(btnTabelaPunctaje.isClicked(mousePos));
-    btnTransferuri.setHover(btnTransferuri.isClicked(mousePos));
-    btnFirstSix.setHover(btnFirstSix.isClicked(mousePos));
-    btnMeciLiga.setHover(btnMeciLiga.isClicked(mousePos));
-    btnExit.setHover(btnExit.isClicked(mousePos));
 }
 
 void LigaScreen::render(sf::RenderWindow& window) {
     window.clear(sf::Color(30, 30, 60));
-
     window.draw(titleText);
-
     btnTabelaPunctaje.draw(window);
     btnTransferuri.draw(window);
     btnFirstSix.draw(window);
     btnMeciLiga.draw(window);
     btnExit.draw(window);
-
     window.draw(statusText);
 }

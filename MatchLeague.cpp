@@ -19,12 +19,13 @@ namespace {
 const int PUNCTE_NECESARE_SET = 25;
 const int SETURI_NECESARE_MECI = 3;
 const float RITM_SIMULARE_SEC = 0.5f;
-MatchLeague::MatchLeague(Echipeptr myTeam, Echipeptr opponent, sf::Font& font)
+MatchLeague::MatchLeague(Echipeptr myTeam, Echipeptr opponent, sf::Font& font, Gestiune<std::string>& istoric)
     : echipaMea(myTeam), echipaAdversa(opponent), 
       tablaScor(font, myTeam, opponent, 30.0f, 50.0f),
       statusText(font),
       timeoutButton(50.0f, 600.0f, 200.0f, 50.0f, "Cere Timeout", font),
-      continueButton(50.0f, 600.0f, 200.0f, 50.0f, "Continua (Meniu)", font)
+      continueButton(50.0f, 600.0f, 200.0f, 50.0f, "Continua (Meniu)", font),
+      istoricMeciuri(istoric)
 {
     echipaMea->resetPunctaj();
     echipaMea->resetSetur();
@@ -311,3 +312,4 @@ int MatchLeague::run(sf::RenderWindow& window) {
 
     return next_screen_id;
 }
+Echipeptr MatchLeague::getAdversar() const { return echipaAdversa; }

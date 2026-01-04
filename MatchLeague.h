@@ -8,7 +8,7 @@
 #include <memory>
 #include <optional>
 #include <sstream>
-
+#include "Gestiune.h"
 class MatchLeague : public Screen {
 private:
     Echipeptr echipaMea;
@@ -31,9 +31,10 @@ private:
 
     std::string finalMessage;
     bool isMyTeamServing = true;
+    Gestiune<std::string>& istoricMeciuri;
 
 public:
-    MatchLeague(Echipeptr myTeam, Echipeptr opponent, sf::Font& font);
+    MatchLeague(Echipeptr myTeam, Echipeptr opponent, sf::Font& font, Gestiune<std::string>& istoric);
 
     int run(sf::RenderWindow& window) override;
 
@@ -43,6 +44,9 @@ public:
 
     Echipeptr getEchipaAdversa() const;
     Echipeptr getMatchWinner() const;
+
+    Echipeptr getAdversar() const;
+
 
 private:
     void handleInput(const sf::Event& event, sf::RenderWindow& ) override;

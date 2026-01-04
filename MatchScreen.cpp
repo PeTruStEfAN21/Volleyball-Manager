@@ -293,3 +293,4 @@ int MatchScreen::run(sf::RenderWindow& window) {
 
     return next_screen_id;
 }
+

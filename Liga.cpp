@@ -133,20 +133,15 @@ Echipeptr Liga::getNextAdversarPentruManager() const {
     int n = echipe.size();
     int index_echipa_manager = n - 1;
 
-    if (n < 2) return nullptr;
 
-    for (int tentativa = 0; tentativa < 100; tentativa++) {
-        int index_adversar = rand() % (n - 1);
-
-
-
-        if (!etapa_jucat[index_adversar] && !ales[index_echipa_manager][index_adversar]) {
-            return echipe[index_adversar];
+    for (int i = 0; i < n - 1; i++) {
+        if (!etapa_jucat[i] && !ales[index_echipa_manager][i]) {
+            return echipe[i];
         }
     }
+
     return nullptr;
 }
-
 
 std::vector<TeamScore> Liga::getSortedClasament() const {
     std::vector<TeamScore> clasament;
