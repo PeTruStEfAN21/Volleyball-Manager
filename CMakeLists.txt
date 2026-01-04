@@ -86,7 +86,9 @@ target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE SFML::Graphics SFML::Windo
 target_include_directories(${MAIN_EXECUTABLE_NAME}
     PRIVATE
         src
+	include
 )
+
 
 
 if(UNIX AND NOT APPLE)
