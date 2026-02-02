@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 #include <memory>
 #include "manageri.h"
@@ -46,6 +47,33 @@ int main() {
     sf::Font globalFont;
     if (!loadFont(globalFont, "ARIAL.ttf")) return -1;
 
+    sf::Music musicPlayer;
+
+    vector<string> playlist = {
+        "music/AIN-BLONDETREES-150-eMAJ.wav",
+        "music/ain-bluemoon-150-Bmaj.wav",
+        "music/ain-heartvirus-140-ebmin.wav",
+        "music/Ain-silence-142-Emin.wav",
+        "music/ain-voidender-155G#min.wav",
+        "music/msigoiler.wav"
+
+
+
+
+    };
+
+    int currentTrackIndex = 0;
+
+    if (!playlist.empty()) {
+        if (musicPlayer.openFromFile(playlist[currentTrackIndex])) {
+            musicPlayer.setVolume(15);
+            musicPlayer.play();
+            cout << "[DJ] Now Playing: " << playlist[currentTrackIndex] << endl;
+        } else {
+            cout << "[DJ] Eroare: Nu am putut incarca " << playlist[currentTrackIndex] << endl;
+        }
+    }
+
     BazaDeDateptr baza = manageri::getInstance().getBazaDeDate();
     Echipeptr echipaMea = manageri::getInstance().getEchipaManager();
     if (!echipaMea) return -1;
@@ -87,6 +115,20 @@ int main() {
     int current_screen = 12;
 
     while (current_screen != SCREEN_EXIT && window.isOpen()) {
+
+if (musicPlayer.getStatus() == sf::SoundSource::Status::Stopped && !playlist.empty()) {            currentTrackIndex++;
+            // Daca am ajuns la final, o luam de la capat
+            if (currentTrackIndex >= playlist.size()) {
+                currentTrackIndex = 0;
+            }
+
+            if (musicPlayer.openFromFile(playlist[currentTrackIndex])) {
+                musicPlayer.play();
+                cout << "[DJ] Next Track: " << playlist[currentTrackIndex] << endl;
+            }
+        }
+
+
         int next_screen_id = SCREEN_EXIT;
 
         if (current_screen >= 0 && current_screen < static_cast<int>(screens.size()) && screens[current_screen]) {

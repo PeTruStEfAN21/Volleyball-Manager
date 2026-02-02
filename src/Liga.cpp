@@ -236,7 +236,7 @@ void Liga::meciuri() {
 
 
         if (!progres_facut && etapa_jucat != vector<bool>(n, true)) {
-             cout << "\nATENȚIE: S-au blocat meciurile AI. Etapa este incompletă. Nu se pot forma toate perechile. S-a jucat cu un număr impar de echipe AI.\n";
+             cout << "\nATENTIE: S-au blocat meciurile AI. Etapa este incompleta. Nu se pot forma toate perechile. S-a jucat cu un numar impar de echipe AI.\n";
              break;
         }
     }
@@ -348,6 +348,8 @@ void Liga::registerMatchResult(Echipeptr echipaAdversa, Echipeptr castigator) {
 
     ales[index_echipa_manager][index_adversar] = true;
     ales[index_adversar][index_echipa_manager] = true;
+    etapa_jucat[index_adversar] = true;
+    etapa_jucat[index_echipa_manager] = true;
 
     if (castigator == echipe[index_echipa_manager]) {
         std::cout << "Felicitari, echipa ta a castigat meciul, obtinand 3 puncte in clasament.\n";

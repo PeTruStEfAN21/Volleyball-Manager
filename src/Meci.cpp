@@ -59,8 +59,8 @@ char Meci::punct() {
     if (scor_ponderat_b < 10.0f) scor_ponderat_b = 10.0f;
 
 
-    float sansa_a = pow(scor_ponderat_a, 2.5f) /
-            (pow(scor_ponderat_a, 2.5f) + pow(scor_ponderat_b, 2.5f));
+    float sansa_a = pow(scor_ponderat_a, 1.5f) /
+            (pow(scor_ponderat_a, 1.5f) + pow(scor_ponderat_b, 1.5f));
 
     float r = (float)rand() / RAND_MAX;
 
