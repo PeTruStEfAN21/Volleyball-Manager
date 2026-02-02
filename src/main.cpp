@@ -63,8 +63,7 @@ int main() {
     };
 
     size_t currentTrackIndex = 0;
-
-    if (!playlist.empty()) {
+    
         if (musicPlayer.openFromFile(playlist[currentTrackIndex])) {
             musicPlayer.setVolume(15);
             musicPlayer.play();
@@ -72,7 +71,6 @@ int main() {
         } else {
             cout << "[DJ] Eroare: Nu am putut incarca " << playlist[currentTrackIndex] << endl;
         }
-    }
 
     BazaDeDateptr baza = manageri::getInstance().getBazaDeDate();
     Echipeptr echipaMea = manageri::getInstance().getEchipaManager();
