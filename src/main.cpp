@@ -62,7 +62,7 @@ int main() {
 
     };
 
-    int currentTrackIndex = 0;
+    size_t currentTrackIndex = 0;
 
     if (!playlist.empty()) {
         if (musicPlayer.openFromFile(playlist[currentTrackIndex])) {
